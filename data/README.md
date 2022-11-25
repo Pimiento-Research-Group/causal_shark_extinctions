@@ -12,12 +12,12 @@ temperature:
 
 productivity: 
 	d13C:
-		- Westerhold et al 2020 (raw d13C values of benthic forams) end-Cretaceous to recent
+		- Westerhold et al 2020 (raw d13C values of benthic forams, sheet S34) end-Cretaceous to recent
 		- Katz et al 2005??? 
 		- Veizer and Prokoph (raw d13C values of well preserved fossils) whole Phanerozoic
 
 	87Sr/86Sr:
-		- McArthur, Howarth, Shields 2012 (the lowess fit curve was taken from WebPlotDigitizer)
+		- McArthur, Howarth, Shields 2012 (the lowess fit curve was taken from WebPlotDigitizer) Phanerozoic
 
 	Plankton richness:
 		
@@ -26,7 +26,8 @@ outcrop area:
 	- Wall, Ivany, Wilkinson 2009 (https://www.cambridge.org/core/journals/paleobiology/article/abs/revisiting-raup-exploring-the-influence-of-outcrop-area-on-diversity-in-light-of-modern-samplestandardization-techniques/A1681A7CDCB94EEC7C34161A80E8E4CB) taken from WebPlotDigitizer
 
 shelf area:
-	- Kocsis and Scotese 2021
+	- Kocsis and Scotese 2021 (flooded continental area)
+	- Miller et al 2005
 	
 
 pimientoc
