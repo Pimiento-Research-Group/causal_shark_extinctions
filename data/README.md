@@ -18,10 +18,12 @@ productivity:
 
 	87Sr/86Sr:
 		- McArthur, Howarth, Shields 2012 (the lowess fit curve was taken from WebPlotDigitizer)
+
+	Plankton richness:
 		
 outcrop area: 
-	- macrostrat
-	- Wall, Ivany, Wilkinson 2016
+	- macrostrat (https://macrostrat.org/api/units?age_bottom=150&age_top=0&environ_class=marine&response=longformat=csv) Units with both marine and non-marine environments, need to filter first dat %>% filter(!str_detect(.$environ, "non-marine"))
+	- Wall, Ivany, Wilkinson 2009 (https://www.cambridge.org/core/journals/paleobiology/article/abs/revisiting-raup-exploring-the-influence-of-outcrop-area-on-diversity-in-light-of-modern-samplestandardization-techniques/A1681A7CDCB94EEC7C34161A80E8E4CB) taken from WebPlotDigitizer
 
 shelf area:
 	- Kocsis and Scotese 2021
