@@ -95,7 +95,7 @@ plot_sealevel_ceno <- dat_sealevel_ceno %>%
 # productivity ------------------------------------------------------------
 
 
-### Ceonozoic delta13C values from Westerhold et al 2020 ###
+### Cenozoic delta13C values from Westerhold et al 2020 ###
 # load data
 dat_13C_ceno <- read_xlsx(here("data",
                                 "raw",
@@ -219,12 +219,111 @@ plot_SR_full <- dat_SR_full %>%
 
 
 
-chronosphere::datasets() %>% View()
-dat %>% 
+# outcrop area ------------------------------------------------------------
+
+
+### Phanerozoic rock units from the macrostrat database ###
+# load data
+dat_outcrop_full <- read_csv(here("data",
+                                  "raw",
+                                  "outcrop_area",
+                                  "macrostrat_24_11_2022.csv")) %>% 
+  # select only marine environments
   filter(!str_detect(.$environ, "non-marine")) %>% 
   mutate(mean_age = (t_age+b_age)/2) %>% 
-  ggplot(aes(mean_age)) +
-  stat_density(bounds = c(0, 150), 
-               geom = "line")
+  select(unit_id, t_age, b_age, mean_age, environ) 
 
-str_detect(dat$environ, "non-marine")
+# save
+dat_outcrop_full %>% 
+  write_rds(here("data", 
+                 "outcrop_full.rds"))
+
+# visualize
+plot_outcrop_full <- dat_outcrop_full %>%
+  # bin to 5 myr
+  mutate(bin = cut(mean_age, breaks = seq(70, 0, by = -5))) %>% 
+  count(bin) %>% 
+  drop_na(bin) %>% 
+  mutate(age = seq(2.5, 67.5, by = 5)) %>% 
+  ggplot(aes(age, n)) +
+  geom_line(linewidth = 1.5, colour = "#a6d0c8") +
+  scale_x_reverse() +
+  coord_geo(xlim = c(70, 0), 
+            ylim = c(0, 3200),
+            height = unit(1.2, "line"), 
+            size = 4,
+            alpha = 0.4) +
+  labs(x = "Age [myr]", 
+       y = "Marine rock units", 
+       title = "Macrostrat", 
+       subtitle = "Binned into 5 myr") +
+  theme(plot.title = element_text())
+
+
+### Phanerozoic rock units from the macrostrat database ###
+# load data
+dat_marine_units <- read_csv(here("data",
+                                  "raw",
+                                  "outcrop_area",
+                                  "macrostrat_24_11_2022.csv")) %>% 
+  # select only marine environments
+  filter(!str_detect(.$environ, "non-marine")) %>% 
+  mutate(mean_age = (t_age+b_age)/2) %>% 
+  select(unit_id, t_age, b_age, mean_age, environ) 
+
+# save
+dat_marine_units %>% 
+  write_rds(here("data", 
+                 "marine_units_full.rds"))
+
+# visualize
+plot_marine_units <- dat_marine_units %>%
+  # bin to 5 myr
+  mutate(bin = cut(mean_age, breaks = seq(70, 0, by = -5))) %>% 
+  count(bin) %>% 
+  drop_na(bin) %>% 
+  mutate(age = seq(2.5, 67.5, by = 5)) %>% 
+  ggplot(aes(age, n)) +
+  geom_line(linewidth = 1.5, colour = "#a6d0c8") +
+  scale_x_reverse() +
+  coord_geo(xlim = c(70, 0), 
+            ylim = c(0, 3200),
+            height = unit(1.2, "line"), 
+            size = 4,
+            alpha = 0.4) +
+  labs(x = "Age [myr]", 
+       y = "Marine rock units", 
+       title = "Macrostrat", 
+       subtitle = "Binned into 5 myr") +
+  theme(plot.title = element_text())
+
+
+### Phanerozoic outcrop area from Wall, Ivany, Wilkinson 2009 ###
+# load data
+dat_outcrop_full <- read_xlsx(here("data",
+                                  "raw",
+                                  "outcrop_area",
+                                  "wall_ivany_wilkinson_2009.xlsx")) %>% 
+  # clean up colnames
+  rename(age = "age (ma)", 
+         area = "cumul_area (10^6 km^2)")
+
+# save
+dat_outcrop_full %>% 
+  write_rds(here("data", 
+                 "outcrop_full.rds"))
+
+# visualize
+plot_outcrop_full <- dat_outcrop_full %>%
+  ggplot(aes(age, area)) +
+  geom_line(linewidth = 1.5, colour = "#a6d0c8") +
+  scale_x_reverse() +
+  coord_geo(xlim = c(160, 0), 
+            ylim = c(0, 6),
+            height = unit(1.2, "line"), 
+            size = 4,
+            alpha = 0.4) +
+  labs(x = "Age [myr]", 
+       y = "Marine outcrop area [10^6 km^2", 
+       title = "Wall, Ivany, Wilkinson 2009") +
+  theme(plot.title = element_text())
