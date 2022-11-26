@@ -4,10 +4,10 @@
 
 
 ## Temperature 
-- [Cramer et al 2011](https://agupubs.onlinelibrary.wiley.com/action/downloadSupplement?doi=10.1029%2F2011JC007255&file=jgrc12191-sup-0001-readme.txt), end-Cretaceous deep-ocean temperature
+- **temp_ceno.rds** [Cramer et al 2011](https://agupubs.onlinelibrary.wiley.com/action/downloadSupplement?doi=10.1029%2F2011JC007255&file=jgrc12191-sup-0001-readme.txt), end-Cretaceous deep-ocean temperature
 - [Grossman and Joachimski 2022](https://www.nature.com/articles/s41598-022-11493-1#Sec10), supplement 8 with delta18O seawater to calculate surface temperature, whole Phanerozoic
 - [Westerhold et al 2020](https://www.science.org/doi/full/10.1126/science.aba6853), raw d180 values of benthic forams, need to be transformed to temperature following Cramer et al 2011, end-Cretaceous to recent deep-ocean temperature
-- [Scotese et al 2021](https://www.sciencedirect.com/science/article/pii/S0012825221000027), deep ocean and surface temperatures, whole Phanerozoic, at 2-5 myr resolution
+- **temp_ceno.rds** [Scotese et al 2021](https://www.sciencedirect.com/science/article/pii/S0012825221000027), deep ocean and global average temperatures, whole Phanerozoic, at 2-5 myr resolution
 - [Veizher and Prokoph 2015](https://www.sciencedirect.com/science/article/pii/S0012825215000604), d18O of various well-preserved fossils, whole Phanerozoic
 
 ## Productivity 
@@ -23,8 +23,8 @@
 - **outcrop_full.rds** [Wall, Ivany, Wilkinson 2009](https://www.cambridge.org/core/journals/paleobiology/article/abs/revisiting-raup-exploring-the-influence-of-outcrop-area-on-diversity-in-light-of-modern-samplestandardization-techniques/A1681A7CDCB94EEC7C34161A80E8E4CB) taken from WebPlotDigitizer
 
 ## Shelf area
-- [Kocsis and Scotese 2021](https://www.sciencedirect.com/science/article/pii/S0012825220305092), Phanerozoic flooded continental area as proportion of earths surface area, taken from WebPlotDigitizer
-- [Miller et al 2005](https://www.science.org/doi/full/10.1126/science.1116412) Cenozoic flooded continental area (10^6 km^2), taken from WebPlotDigitizer
+- **cont_area_full.rds** [Kocsis and Scotese 2021](https://www.sciencedirect.com/science/article/pii/S0012825220305092), Phanerozoic flooded continental area as proportion of earths surface area, taken from WebPlotDigitizer
+- **cont_area_ceno.rds** [Miller et al 2005](https://www.science.org/doi/full/10.1126/science.1116412) Cenozoic flooded continental area (10^6 km^2), taken from WebPlotDigitizer
 	
 
 pimientoc
