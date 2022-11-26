@@ -10,19 +10,19 @@
 - [Scotese et al 2021](https://www.sciencedirect.com/science/article/pii/S0012825221000027), deep ocean and surface temperatures, whole Phanerozoic, at 2-5 myr resolution
 - [Veizher and Prokoph 2015](https://www.sciencedirect.com/science/article/pii/S0012825215000604), d18O of various well-preserved fossils, whole Phanerozoic
 
-## Productivity: 
-### d13C:
+## Productivity 
+### d13C
 - **d13C_full.rds** [Westerhold et al 2020](https://www.science.org/doi/full/10.1126/science.aba6853), raw d13C values of benthic forams, sheet S34, end-Cretaceous to recent
 - **d13C_full.rds** [Veizher and Prokoph 2015](https://www.sciencedirect.com/science/article/pii/S0012825215000604), raw d13C values of well preserved fossils, whole Phanerozoic
-### 87Sr/86Sr:
+### 87Sr/86Sr
 - **SR_full.rds** [McArthur, Howarth, Shields 2012](https://books.google.ch/books?hl=en&lr=&id=1M62_rbq70AC&oi=fnd&pg=PA127&ots=MrPJ841jYQ&sig=gmWJQ8LyKANz3F-rccJAFVt0MiA&redir_esc=y#v=onepage&q&f=false), the lowess fit curve was taken from WebPlotDigitizer, Phanerozoic  
 ### Plankton richness:
 
-## Outcrop area: 
+## Outcrop area
 - **marine_units_full.rds** Macrostrat (https://macrostrat.org/api/units?age_bottom=150&age_top=0&environ_class=marine&response=longformat=csv) Units with both marine and non-marine environments, need to filter first dat %>% filter(!str_detect(.$environ, "non-marine"))
 - **outcrop_full.rds** [Wall, Ivany, Wilkinson 2009](https://www.cambridge.org/core/journals/paleobiology/article/abs/revisiting-raup-exploring-the-influence-of-outcrop-area-on-diversity-in-light-of-modern-samplestandardization-techniques/A1681A7CDCB94EEC7C34161A80E8E4CB) taken from WebPlotDigitizer
 
-## Shelf area:
+## Shelf area
 - [Kocsis and Scotese 2021](https://www.sciencedirect.com/science/article/pii/S0012825220305092), flooded continental area
 - [Miller et al 2005](https://www.science.org/doi/full/10.1126/science.1116412)
 	
