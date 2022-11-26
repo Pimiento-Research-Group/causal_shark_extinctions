@@ -86,9 +86,7 @@ plot_sealevel_ceno <- dat_sealevel_ceno %>%
   labs(x = "Age [myr]", 
        y = "Global mean sea level [m]", 
        title = "Miller et al. 2020", 
-       subtitle = "Smoothed to 20ka") +
-  theme(plot.title = element_text())
-
+       subtitle = "Smoothed to 20ka") 
 
 
 
@@ -131,8 +129,7 @@ plot_13C_ceno <- dat_13C_ceno %>%
   labs(x = "Age [myr]", 
        y = "Benthic d13C [‰]", 
        title = "Westerhold et al. 2020", 
-       subtitle = "Smoothed to 20ka (dark yellow) and 1myr (light yellow)") +
-  theme(plot.title = element_text())
+       subtitle = "Smoothed to 20ka (dark yellow) and 1myr (light yellow)") 
 
 
 ### Phanerozoic delta13C values from Veizer and Prokoph ###
@@ -177,8 +174,7 @@ plot_13C_full <- dat_13C_full %>%
   labs(x = "Age [myr]", 
        y = "Benthic d13C [‰]", 
        title = "Veizer and Prokoph 2015", 
-       subtitle = "5 myr moving average") +
-  theme(plot.title = element_text())
+       subtitle = "5 myr moving average") 
 
 
 
@@ -214,8 +210,7 @@ plot_SR_full <- dat_SR_full %>%
   labs(x = "Age [myr]", 
        y = "87Sr / 86Sr", 
        title = "Ccarthur, Howarth, Shields 2012", 
-       subtitle = "Lowess fit curve") +
-  theme(plot.title = element_text())
+       subtitle = "Lowess fit curve") 
 
 
 
@@ -256,8 +251,7 @@ plot_outcrop_full <- dat_outcrop_full %>%
   labs(x = "Age [myr]", 
        y = "Marine rock units", 
        title = "Macrostrat", 
-       subtitle = "Binned into 5 myr") +
-  theme(plot.title = element_text())
+       subtitle = "Binned into 5 myr") 
 
 
 ### Phanerozoic rock units from the macrostrat database ###
@@ -294,8 +288,7 @@ plot_marine_units <- dat_marine_units %>%
   labs(x = "Age [myr]", 
        y = "Marine rock units", 
        title = "Macrostrat", 
-       subtitle = "Binned into 5 myr") +
-  theme(plot.title = element_text())
+       subtitle = "Binned into 5 myr") 
 
 
 ### Phanerozoic outcrop area from Wall, Ivany, Wilkinson 2009 ###
@@ -324,16 +317,160 @@ plot_outcrop_full <- dat_outcrop_full %>%
             size = 4,
             alpha = 0.4) +
   labs(x = "Age [myr]", 
-       y = "Marine outcrop area [10^6 km^2", 
-       title = "Wall, Ivany, Wilkinson 2009") +
-  theme(plot.title = element_text())
+       y = "Marine outcrop area [10^6 km^2]", 
+       title = "Wall, Ivany, Wilkinson 2009") 
 
 
 
 # shelf area --------------------------------------------------------------
 
+### Phanerozoic flooded continental area as proportion of earths surface area from Kocsis and Scotese 2021  ###
+# load data
+dat_cont_area_full <- read_csv(here("data",
+                                    "raw",
+                                    "shelf_area",
+                                    "kocsis_scotese_2021.csv"),
+                               col_names = FALSE) %>% 
+  # clean up colnames
+  rename(age = X1, 
+         area = X2)
+
+# save
+dat_cont_area_full %>% 
+  write_rds(here("data", 
+                 "cont_area_full.rds"))
+
+# visualize
+plot_cont_area_full <- dat_cont_area_full %>%
+  ggplot(aes(age, area)) +
+  geom_line(linewidth = 1.5, colour = "#343c24") +
+  scale_x_reverse() +
+  coord_geo(xlim = c(160, 0), 
+            ylim = c(0, 0.25),
+            height = unit(1.2, "line"), 
+            size = 4,
+            alpha = 0.4) +
+  labs(x = "Age [myr]", 
+       y = "Proportion of Earth`s surface", 
+       title = "Kocsis and Scotese 2021", 
+       subtitle = "Flooded continental area")
+
+
+### Cenozoic flooded continental area (10^6 km^2) from Miller et al 2005  ###
+# load data
+dat_cont_area_ceno <- read_csv(here("data",
+                                    "raw",
+                                    "shelf_area",
+                                    "miller_et_al_2005.csv"),
+                               col_names = FALSE) %>% 
+  # clean up colnames
+  rename(age = X2, 
+         area = X1)
+
+# save
+dat_cont_area_ceno%>% 
+  write_rds(here("data", 
+                 "cont_area_ceno.rds"))
+
+# visualize
+plot_cont_area_ceno <- dat_cont_area_ceno %>%
+  ggplot(aes(age, area)) +
+  geom_line(linewidth = 1.5, colour = "#343c24") +
+  scale_x_reverse() +
+  coord_geo(xlim = c(100, 0), 
+            ylim = c(0, 30),
+            height = unit(1.2, "line"), 
+            size = 4,
+            alpha = 0.4) +
+  labs(x = "Age [myr]", 
+       y = "Flooded continental area [10^6 km^2]", 
+       title = "Miller et al 2005")
+
 
 
 # temperature -------------------------------------------------------------
 
+
+### Cenozoic deep-ocean temperature  used with equation 7afrom Cramer et al 2011 ###
+# load data
+dat_temp_ceno <- read_xlsx(here("data",
+                                  "raw",
+                                  "temperature",
+                                  "cramer_et_al_2011_7a.xlsx")) %>% 
+  # clean up colnames
+  select(age = Age,
+         temp = Temperature,
+         temp_low = "Temperature min",
+         temp_high = "Temperature max", 
+         # smoothed long term
+         temp_long = "Temperature (long)",
+         temp_long_low = "Temperature min (long)",
+         temp_long_high = "Temperature max (long)")
+
+# save
+dat_temp_ceno %>% 
+  write_rds(here("data", 
+                 "temp_ceno.rds"))
+
+# visualize
+plot_temp_ceno <- dat_temp_ceno %>%
+  ggplot(aes(age, temp_long, 
+             ymin = temp_long_low, 
+             ymax = temp_long_high)) +
+  geom_hline(yintercept = 0, linetype = "dashed", 
+             colour = "grey30") +
+  geom_ribbon(fill = "#a65852", 
+              alpha = 0.3) +
+  geom_line(aes(y = temp), 
+            linewidth = 1.5, colour = "grey30") +
+  geom_line(linewidth = 1.5, colour = "#a65852") +
+  scale_x_reverse() +
+  coord_geo(xlim = c(70, 0), 
+            # ylim = c(0, 0.25),
+            height = unit(1.2, "line"), 
+            size = 4,
+            alpha = 0.4) +
+  labs(x = "Age [myr]", 
+       y = "Deep-ocean temperature [°C]", 
+       title = "Cramer et al 2011", 
+       subtitle = "First equation\nSmoothed long-term in red")
+
+
+
+### Phanerozoic deep-ocean and global average temperature from Scotese et al 2021 ###
+# load data
+dat_temp_full <- read_xlsx(here("data",
+                                  "raw",
+                                  "temperature",
+                                  "scotese_et_al_2021.xlsx")) %>% 
+  # clean up colnames
+  select(age = Age,
+         temp_gat = GAT,
+         temp_deep = "Deep Ocean")
+
+# save
+dat_temp_full %>% 
+  write_rds(here("data", 
+                 "temp_full.rds"))
+
+# visualize
+plot_temp_full <- dat_temp_full %>%
+  ggplot(aes(age, temp_gat)) +
+  geom_hline(yintercept = 0, linetype = "dashed", 
+             colour = "grey30") +
+  geom_line(aes(y = temp_deep), 
+            linewidth = 1.5, colour = "coral") +
+  geom_line(linewidth = 1.5, colour = "#a65852") +
+  scale_x_reverse() +
+  coord_geo(xlim = c(160, 0), 
+            ylim = c(-5, 35),
+            height = unit(1.2, "line"), 
+            size = 4,
+            alpha = 0.4) +
+  labs(x = "Age [myr]", 
+       y = "Temperature [°C]", 
+       title = "Scotese et al 2031", 
+       subtitle = "Global average in red\nDeep-ocean in orange")
+
+plot_temp_full
 
