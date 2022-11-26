@@ -327,3 +327,13 @@ plot_outcrop_full <- dat_outcrop_full %>%
        y = "Marine outcrop area [10^6 km^2", 
        title = "Wall, Ivany, Wilkinson 2009") +
   theme(plot.title = element_text())
+
+
+
+# shelf area --------------------------------------------------------------
+
+
+
+# temperature -------------------------------------------------------------
+
+
