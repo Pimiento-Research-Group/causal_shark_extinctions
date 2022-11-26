@@ -1,5 +1,5 @@
 ## Sea level
-- **sealevel_full.rds** Miller et al 2005 (https://www.science.org/doi/full/10.1126/science.1116412, taken from the supplement), global mean sea level ranging from 170ma to the recent
+- **sealevel_full.rds** [Miller et al 2005](https://www.science.org/doi/full/10.1126/science.1116412), taken from the supplement), global mean sea level ranging from 170ma to the recent
 - **sealevel_ceno.rds** Miller et al 2020 (https://www.science.org/doi/full/10.1126/sciadv.aaz1346, taken from the supplement), global mean sea level for the Cenozoic
 
 
@@ -11,22 +11,20 @@
 - Veizher and Prokoph 2015 (d18O of various well-preserved fossils) whole Phanerozoic
 
 ## Productivity: 
-	### d13C:
+### d13C:
 		- **d13C_full.rds** Westerhold et al 2020 (raw d13C values of benthic forams, sheet S34) end-Cretaceous to recent
 		- **d13C_full.rds** Veizer and Prokoph (raw d13C values of well preserved fossils) whole Phanerozoic
-
-	### 87Sr/86Sr:
+### 87Sr/86Sr:
 		- **SR_full.rds** McArthur, Howarth, Shields 2012 (the lowess fit curve was taken from WebPlotDigitizer) Phanerozoic
-
-	### Plankton richness:
+### Plankton richness:
 		
 ## Outcrop area: 
-	- **marine_units_full.rds** Macrostrat (https://macrostrat.org/api/units?age_bottom=150&age_top=0&environ_class=marine&response=longformat=csv) Units with both marine and non-marine environments, need to filter first dat %>% filter(!str_detect(.$environ, "non-marine"))
-	- **outcrop_full.rds** Wall, Ivany, Wilkinson 2009 (https://www.cambridge.org/core/journals/paleobiology/article/abs/revisiting-raup-exploring-the-influence-of-outcrop-area-on-diversity-in-light-of-modern-samplestandardization-techniques/A1681A7CDCB94EEC7C34161A80E8E4CB) taken from WebPlotDigitizer
+- **marine_units_full.rds** Macrostrat (https://macrostrat.org/api/units?age_bottom=150&age_top=0&environ_class=marine&response=longformat=csv) Units with both marine and non-marine environments, need to filter first dat %>% filter(!str_detect(.$environ, "non-marine"))
+- **outcrop_full.rds** Wall, Ivany, Wilkinson 2009 (https://www.cambridge.org/core/journals/paleobiology/article/abs/revisiting-raup-exploring-the-influence-of-outcrop-area-on-diversity-in-light-of-modern-samplestandardization-techniques/A1681A7CDCB94EEC7C34161A80E8E4CB) taken from WebPlotDigitizer
 
 ## Shelf area:
-	- Kocsis and Scotese 2021 (flooded continental area)
-	- Miller et al 2005
+- Kocsis and Scotese 2021 (flooded continental area)
+- Miller et al 2005
 	
 
 pimientoc
