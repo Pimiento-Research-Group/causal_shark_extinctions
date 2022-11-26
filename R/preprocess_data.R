@@ -472,5 +472,23 @@ plot_temp_full <- dat_temp_full %>%
        title = "Scotese et al 2031", 
        subtitle = "Global average in red\nDeep-ocean in orange")
 
-plot_temp_full
 
+
+# save plots --------------------------------------------------------------
+
+# get all plots in a list
+plt_list <- mget(ls()[str_detect(ls(), "plot")])
+
+# get their names
+plt_names <- ls()[str_detect(ls(), "plot")] %>% 
+  str_remove("plot_") %>% 
+  str_c(".png")
+
+# save via walk
+walk2(.x = plt_list, 
+      .y = plt_names, 
+      .f = ~ ggsave(.x, filename = here("figures",
+                                        "data_plots",
+                                        .y), 
+                    width = image_width, height = image_height, units = image_units, 
+                    bg = "white", device = ragg::agg_png))
