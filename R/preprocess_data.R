@@ -22,7 +22,8 @@ dat_sealevel_full <- read_xlsx(here("data",
   # calculate 1 myr moving average
   mutate(bin = cut(age, breaks = seq(180, 0, by = -1))) %>% 
   group_by(bin) %>% 
-  mutate(sea_level_mean = mean(sea_level))
+  mutate(sea_level_mean = mean(sea_level)) %>% 
+  ungroup()
 
 # save
 dat_sealevel_full %>% 
@@ -146,7 +147,8 @@ dat_13C_full <- read_csv(here("data",
   # calculate 5 myr moving average
   mutate(bin = cut(age, breaks = seq(180, -5, by = -5))) %>% 
   group_by(bin) %>% 
-  mutate(d13C_mean = mean(d13C))
+  mutate(d13C_mean = mean(d13C)) %>% 
+  ungroup()
 
 # save
 dat_13C_full %>% 
@@ -209,9 +211,82 @@ plot_SR_full <- dat_SR_full %>%
             alpha = 0.4) +
   labs(x = "Age [myr]", 
        y = "87Sr / 86Sr", 
-       title = "Ccarthur, Howarth, Shields 2012", 
+       title = "Mcarthur, Howarth, Shields 2012", 
        subtitle = "Lowess fit curve") 
 
+### Phanerozoic diatom diversity from the Neptune database ###
+# load data
+dat_diatom_full <- read_tsv(here("data",
+                                 "raw",
+                                 "productivity",
+                                 "diatom_2022-11-27_09-58-09.csv")) %>% 
+  # clean up column names
+  select(age = "Age (Ma) Gradstein et al. 2012", 
+         taxon_id = "Resolved Taxon ID") 
+
+# rarefaction based on this paper: https://www.nature.com/articles/nature07435
+# number of rarefaction iteration
+nr_iter <- 1000
+# number of samples
+nr_samples <- 96
+# pre-allocate list
+dat_diatom_list <- vector(mode = "list", 
+                          length = nr_iter)
+# iterate
+for (i in 1:nr_iter) {
+  
+  dat_diatom_list[[i]] <- dat_diatom_full %>% 
+    # bin data
+    mutate(bin = cut(age, breaks = seq(90, 0, by = -1))) %>% 
+    group_by(bin) %>% 
+    # rarefaction
+    slice_sample(n = 96, replace = TRUE) %>% 
+    # calculate diversity
+    summarise(count = n_distinct(taxon_id)) %>% 
+    # add bins with zero counts
+    complete(bin, fill = list(count = 0)) %>% 
+    ungroup() %>% 
+    # add numeric age for plotting
+    add_column(age = seq(0.5, 89.5), 
+               rare_id = i)
+  
+}
+
+# summarize
+dat_diatom_full <- dat_diatom_list %>% 
+  bind_rows() %>% 
+  group_by(bin, age) %>% 
+  # summarise(mean_cl_normal(count)) %>% 
+  summarise(div_mean = mean(count), 
+            div_sd = sd(count)) %>% 
+  mutate(div_low = div_mean - 1.96*div_sd, 
+         div_high = div_mean + 1.96*div_sd)
+
+# save
+dat_diatom_full %>% 
+  write_rds(here("data", 
+                 "diatom_full.rds"))
+
+# visualize
+# plot_diatom_full <- 
+dat_diatom_full %>%
+  ggplot(aes(age, div_mean, 
+             ymin = div_low, 
+             ymax = div_high)) +
+  geom_ribbon(fill = "#c4aa23", 
+              alpha = 0.6) +
+  geom_line(colour = "#fbe45b", 
+            linewidth = 1.3) +
+  scale_x_reverse() +
+  coord_geo(xlim = c(70, 0), 
+            ylim = c(-1, 70),
+            height = unit(1.2, "line"), 
+            size = 4,
+            alpha = 0.4) +
+  labs(x = "Age [myr]", 
+       y = "Diatom diversity", 
+       title = "Neptune database", 
+       subtitle = "Rarefied and trimmed data") 
 
 
 # outcrop area ------------------------------------------------------------
