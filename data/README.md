@@ -16,7 +16,7 @@
 - **d13C_full.rds** [Veizher and Prokoph 2015](https://www.sciencedirect.com/science/article/pii/S0012825215000604), raw d13C values of well preserved fossils, whole Phanerozoic
 ### 87Sr/86Sr
 - **SR_full.rds** [McArthur, Howarth, Shields 2012](https://books.google.ch/books?hl=en&lr=&id=1M62_rbq70AC&oi=fnd&pg=PA127&ots=MrPJ841jYQ&sig=gmWJQ8LyKANz3F-rccJAFVt0MiA&redir_esc=y#v=onepage&q&f=false), the lowess fit curve was taken from WebPlotDigitizer, Phanerozoic  
-### Plankton richness:
+### Diatom richness:
 - downloaded from Neptune on the 27.11.2022 with TNL taxonomic resolving, without questionable identifications and open-nomenclature taxa and problematic samples or occurrences, using the Gradstein et al al 2012 age scale, filtering out samples with age quality less than medium, and pacman trimming with 5% on both the lower and upper bound
 
 ## Outcrop area
@@ -27,7 +27,3 @@
 - **cont_area_full.rds** [Kocsis and Scotese 2021](https://www.sciencedirect.com/science/article/pii/S0012825220305092), Phanerozoic flooded continental area as proportion of earths surface area, taken from WebPlotDigitizer
 - **cont_area_ceno.rds** [Miller et al 2005](https://www.science.org/doi/full/10.1126/science.1116412) Cenozoic flooded continental area (10^6 km^2), taken from WebPlotDigitizer
 	
-
-pimientoc
-
-dsilvestro

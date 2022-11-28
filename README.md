@@ -1,2 +1,2 @@
-# causal_shark_extinctions
-Add later
+# Environmental shark extinction drivers
+This is the repo for the current project from the Pimiento lab under the lead of G. Mathes, where we try to estimate the true (unbiased) effect of various environmental parameters on shark extinction risk using a newly compiled database of fossil shark occurrences. 
