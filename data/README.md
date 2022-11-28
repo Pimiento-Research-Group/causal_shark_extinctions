@@ -17,7 +17,7 @@
 ### 87Sr/86Sr
 - **SR_full.rds** [McArthur, Howarth, Shields 2012](https://books.google.ch/books?hl=en&lr=&id=1M62_rbq70AC&oi=fnd&pg=PA127&ots=MrPJ841jYQ&sig=gmWJQ8LyKANz3F-rccJAFVt0MiA&redir_esc=y#v=onepage&q&f=false), the lowess fit curve was taken from WebPlotDigitizer, Phanerozoic  
 ### Diatom richness:
-- downloaded from Neptune on the 27.11.2022 with TNL taxonomic resolving, without questionable identifications and open-nomenclature taxa and problematic samples or occurrences, using the Gradstein et al al 2012 age scale, filtering out samples with age quality less than medium, and pacman trimming with 5% on both the lower and upper bound
+- **diatom_full.rds** downloaded from [Neptune](https://nsb.mfn-berlin.de/) on the 27.11.2022 with TNL taxonomic resolving, without questionable identifications and open-nomenclature taxa and problematic samples or occurrences, using the Gradstein et al al 2012 age scale, filtering out samples with age quality less than medium, and pacman trimming with 5% on both the lower and upper bound
 
 ## Outcrop area
 - **marine_units_full.rds** Macrostrat (https://macrostrat.org/api/units?age_bottom=150&age_top=0&environ_class=marine&response=longformat=csv) Units with both marine and non-marine environments, need to filter first dat %>% filter(!str_detect(.$environ, "non-marine"))
