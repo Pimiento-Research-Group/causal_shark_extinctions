@@ -20,7 +20,8 @@ dat_sealevel_full <- read_xlsx(here("data",
   rename(sea_level = "Sea level best estimate", 
          age = "Age for best estimate (MA)")  %>% 
   # calculate 1 myr moving average
-  mutate(bin = cut(age, breaks = seq(180, 0, by = -1))) %>% 
+  mutate(bin = cut(age, breaks = seq(180, 0, by = -1), 
+                   include.lowest = TRUE)) %>% 
   group_by(bin) %>% 
   mutate(sea_level_mean = mean(sea_level)) %>% 
   ungroup()
@@ -118,7 +119,7 @@ plot_13C_ceno <- dat_13C_ceno %>%
              colour = "grey70", 
              linetype = "dashed") +
   geom_line(colour = "#c4aa23", 
-            linewidth = 1.3) +
+            linewidth = 0.8) +
   geom_line(aes(y = coarse_loess), 
             colour = "#fbe45b", 
             linewidth = 1.3) +
@@ -190,6 +191,7 @@ dat_SR_full <- read_csv(here("data",
   # clean up column names
   select(age = X1, 
          sr_value = X2) 
+
 # save
 dat_SR_full %>% 
   write_rds(here("data", 
@@ -213,6 +215,7 @@ plot_SR_full <- dat_SR_full %>%
        y = "87Sr / 86Sr", 
        title = "Mcarthur, Howarth, Shields 2012", 
        subtitle = "Lowess fit curve") 
+
 
 ### Phanerozoic diatom diversity from the Neptune database ###
 # load data
@@ -256,7 +259,6 @@ for (i in 1:nr_iter) {
 dat_diatom_full <- dat_diatom_list %>% 
   bind_rows() %>% 
   group_by(bin, age) %>% 
-  # summarise(mean_cl_normal(count)) %>% 
   summarise(div_mean = mean(count), 
             div_sd = sd(count)) %>% 
   mutate(div_low = div_mean - 1.96*div_sd, 
@@ -268,8 +270,7 @@ dat_diatom_full %>%
                  "diatom_full.rds"))
 
 # visualize
-# plot_diatom_full <- 
-dat_diatom_full %>%
+plot_diatom_full <- dat_diatom_full %>%
   ggplot(aes(age, div_mean, 
              ymin = div_low, 
              ymax = div_high)) +
@@ -286,7 +287,8 @@ dat_diatom_full %>%
   labs(x = "Age [myr]", 
        y = "Diatom diversity", 
        title = "Neptune database", 
-       subtitle = "Rarefied and trimmed data") 
+       subtitle = "Rarefied (n = 96) and cleaned data,\nbinned to one myr") 
+
 
 
 # outcrop area ------------------------------------------------------------
@@ -311,14 +313,15 @@ dat_outcrop_full %>%
 # visualize
 plot_outcrop_full <- dat_outcrop_full %>%
   # bin to 5 myr
-  mutate(bin = cut(mean_age, breaks = seq(70, 0, by = -5))) %>% 
+  mutate(bin = cut(mean_age, breaks = seq(170, 0, by = -2))) %>% 
   count(bin) %>% 
-  drop_na(bin) %>% 
-  mutate(age = seq(2.5, 67.5, by = 5)) %>% 
+  # add bins with zero counts
+  complete(bin, fill = list(n = 0)) %>% 
+  mutate(age = seq(1, 171, by = 2)) %>% 
   ggplot(aes(age, n)) +
   geom_line(linewidth = 1.5, colour = "#a6d0c8") +
   scale_x_reverse() +
-  coord_geo(xlim = c(70, 0), 
+  coord_geo(xlim = c(160, 0), 
             ylim = c(0, 3200),
             height = unit(1.2, "line"), 
             size = 4,
@@ -326,44 +329,9 @@ plot_outcrop_full <- dat_outcrop_full %>%
   labs(x = "Age [myr]", 
        y = "Marine rock units", 
        title = "Macrostrat", 
-       subtitle = "Binned into 5 myr") 
+       subtitle = "Binned into 2 myr") 
 
 
-### Phanerozoic rock units from the macrostrat database ###
-# load data
-dat_marine_units <- read_csv(here("data",
-                                  "raw",
-                                  "outcrop_area",
-                                  "macrostrat_24_11_2022.csv")) %>% 
-  # select only marine environments
-  filter(!str_detect(.$environ, "non-marine")) %>% 
-  mutate(mean_age = (t_age+b_age)/2) %>% 
-  select(unit_id, t_age, b_age, mean_age, environ) 
-
-# save
-dat_marine_units %>% 
-  write_rds(here("data", 
-                 "marine_units_full.rds"))
-
-# visualize
-plot_marine_units <- dat_marine_units %>%
-  # bin to 5 myr
-  mutate(bin = cut(mean_age, breaks = seq(70, 0, by = -5))) %>% 
-  count(bin) %>% 
-  drop_na(bin) %>% 
-  mutate(age = seq(2.5, 67.5, by = 5)) %>% 
-  ggplot(aes(age, n)) +
-  geom_line(linewidth = 1.5, colour = "#a6d0c8") +
-  scale_x_reverse() +
-  coord_geo(xlim = c(70, 0), 
-            ylim = c(0, 3200),
-            height = unit(1.2, "line"), 
-            size = 4,
-            alpha = 0.4) +
-  labs(x = "Age [myr]", 
-       y = "Marine rock units", 
-       title = "Macrostrat", 
-       subtitle = "Binned into 5 myr") 
 
 
 ### Phanerozoic outcrop area from Wall, Ivany, Wilkinson 2009 ###
@@ -429,6 +397,7 @@ plot_cont_area_full <- dat_cont_area_full %>%
        y = "Proportion of Earth`s surface", 
        title = "Kocsis and Scotese 2021", 
        subtitle = "Flooded continental area")
+
 
 
 ### Cenozoic flooded continental area (10^6 km^2) from Miller et al 2005  ###
@@ -544,7 +513,7 @@ plot_temp_full <- dat_temp_full %>%
             alpha = 0.4) +
   labs(x = "Age [myr]", 
        y = "Temperature [°C]", 
-       title = "Scotese et al 2031", 
+       title = "Scotese et al 2021", 
        subtitle = "Global average in red\nDeep-ocean in orange")
 
 
