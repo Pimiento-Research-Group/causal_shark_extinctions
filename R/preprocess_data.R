@@ -372,11 +372,9 @@ plot_outcrop_full <- dat_outcrop_full %>%
 dat_cont_area_full <- read_csv(here("data",
                                     "raw",
                                     "shelf_area",
-                                    "kocsis_scotese_2021.csv"),
-                               col_names = FALSE) %>% 
+                                    "kocsis_scotese_2021.csv")) %>% 
   # clean up colnames
-  rename(age = X1, 
-         area = X2)
+  rename(area = "shelf-rgeos")
 
 # save
 dat_cont_area_full %>% 

@@ -24,6 +24,6 @@
 - **outcrop_full.rds** [Wall, Ivany, Wilkinson 2009](https://www.cambridge.org/core/journals/paleobiology/article/abs/revisiting-raup-exploring-the-influence-of-outcrop-area-on-diversity-in-light-of-modern-samplestandardization-techniques/A1681A7CDCB94EEC7C34161A80E8E4CB) taken from WebPlotDigitizer
 
 ## Shelf area
-- **cont_area_full.rds** [Kocsis and Scotese 2021](https://www.sciencedirect.com/science/article/pii/S0012825220305092), Phanerozoic flooded continental area as proportion of earths surface area, taken from WebPlotDigitizer
+- **cont_area_full.rds** [Kocsis and Scotese 2021](https://www.sciencedirect.com/science/article/pii/S0012825220305092), Phanerozoic flooded continental area as proportion of earths surface area
 - **cont_area_ceno.rds** [Miller et al 2005](https://www.science.org/doi/full/10.1126/science.1116412) Cenozoic flooded continental area (10^6 km^2), taken from WebPlotDigitizer
 	
