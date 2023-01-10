@@ -8,6 +8,20 @@ library(deeptime)
 source(here("R", "config_file.R"))
 
 
+
+# stage data --------------------------------------------------------------
+
+# load 95 bin Phanerozoic time scale based on the stratigraphic stages 
+# of Gradstein et al. 2020
+load(here("data", 
+          "stages.Rdata"))
+
+# clean up for binning
+dat_stages <- stages %>% 
+  as_tibble() %>% 
+  select(stg, bottom, top)
+
+
 # sea level ---------------------------------------------------------------
 
 ### Jurassic to recent sea level from miller et al 2005 ###
@@ -19,9 +33,11 @@ dat_sealevel_full <- read_xlsx(here("data",
   # clean up column names
   rename(sea_level = "Sea level best estimate", 
          age = "Age for best estimate (MA)")  %>% 
-  # calculate 1 myr moving average
-  mutate(bin = cut(age, breaks = seq(180, 0, by = -1), 
-                   include.lowest = TRUE)) %>% 
+  # bin to stages
+  mutate(bin = 95 - cut(age, breaks = dat_stages$bottom,
+                        include.lowest = TRUE,
+                        labels = FALSE)) %>% 
+  drop_na(bin) %>% 
   group_by(bin) %>% 
   mutate(sea_level_mean = mean(sea_level)) %>% 
   ungroup()
@@ -53,7 +69,7 @@ plot_sealevel_full <- dat_sealevel_full %>%
   labs(x = "Age [myr]", 
        y = "Global mean sea level [m]", 
        title = "Miller et al. 2005", 
-       subtitle = "1 myr moving average")
+       subtitle = "Binned to stages")
 
 
   
@@ -148,8 +164,11 @@ dat_13C_full <- read_csv(here("data",
          d13C)  %>% 
   filter(age <= 180) %>% 
   drop_na(age, d13C) %>% 
-  # calculate 5 myr moving average
-  mutate(bin = cut(age, breaks = seq(180, -5, by = -5))) %>% 
+  # bin to stages
+  mutate(bin = 95 - cut(age, breaks = dat_stages$bottom,
+                        include.lowest = TRUE,
+                        labels = FALSE)) %>% 
+  drop_na(bin) %>% 
   group_by(bin) %>% 
   mutate(d13C_mean = mean(d13C)) %>% 
   ungroup()
@@ -181,7 +200,7 @@ plot_13C_full <- dat_13C_full %>%
   labs(x = "Age [myr]", 
        y = "Benthic d13C [‰]", 
        title = "Veizer and Prokoph 2015", 
-       subtitle = "5 myr moving average") 
+       subtitle = "Binned to stages") 
 
 
 
@@ -194,7 +213,16 @@ dat_SR_full <- read_csv(here("data",
                         col_names = FALSE) %>% 
   # clean up column names
   select(age = X1, 
-         sr_value = X2) 
+         sr_value = X2) %>% 
+  # bin to stages
+  mutate(bin = 95 - cut(age, breaks = dat_stages$bottom,
+                        include.lowest = TRUE,
+                        labels = FALSE)) %>% 
+  drop_na(bin) %>% 
+  group_by(bin) %>% 
+  mutate(sr_mean = mean(sr_value)) %>% 
+  ungroup()
+  
 
 # save
 dat_SR_full %>% 
@@ -204,7 +232,7 @@ dat_SR_full %>%
 
 # visualize
 plot_SR_full <- dat_SR_full %>%
-  ggplot(aes(age, sr_value)) +
+  ggplot(aes(age, sr_mean)) +
   geom_hline(yintercept = 0, 
              colour = "grey70", 
              linetype = "dashed") +
@@ -219,7 +247,7 @@ plot_SR_full <- dat_SR_full %>%
   labs(x = "Age [myr]", 
        y = "87Sr / 86Sr", 
        title = "Mcarthur, Howarth, Shields 2012", 
-       subtitle = "Lowess fit curve") 
+       subtitle = "Binned to stages") 
 
 
 ### Phanerozoic diatom diversity from the Neptune database ###
@@ -269,6 +297,17 @@ dat_diatom_full <- dat_diatom_list %>%
   mutate(div_low = div_mean - 1.96*div_sd, 
          div_high = div_mean + 1.96*div_sd)
 
+# bin to stages
+dat_diatom_full <- dat_diatom_full %>% 
+  mutate(bin = 95 - cut(age, breaks = dat_stages$bottom,
+                        include.lowest = TRUE,
+                        labels = FALSE)) %>% 
+  drop_na(bin) %>% 
+  group_by(bin) %>% 
+  mutate(div_mean_binned = mean(div_mean)) %>% 
+  ungroup()
+
+
 # save
 dat_diatom_full %>% 
   write_rds(here("data", 
@@ -280,6 +319,9 @@ plot_diatom_full <- dat_diatom_full %>%
   ggplot(aes(age, div_mean, 
              ymin = div_low, 
              ymax = div_high)) +
+  geom_line(aes(y = div_mean_binned), 
+            colour = "darkblue", 
+            linewidth = 1.3) +
   geom_ribbon(fill = "#c4aa23", 
               alpha = 0.6) +
   geom_line(colour = "#fbe45b", 
@@ -293,7 +335,7 @@ plot_diatom_full <- dat_diatom_full %>%
   labs(x = "Age [myr]", 
        y = "Diatom diversity", 
        title = "Neptune database", 
-       subtitle = "Rarefied (n = 96) and cleaned data,\nbinned to one myr") 
+       subtitle = "Rarefied (n = 96) and cleaned data,\nbinned to one myr (yellow) or stages (blue)") 
 
 
 
@@ -308,8 +350,25 @@ dat_outcrop_full <- read_csv(here("data",
                                   "macrostrat_24_11_2022.csv")) %>% 
   # select only marine environments
   filter(!str_detect(.$environ, "non-marine")) %>% 
-  mutate(mean_age = (t_age+b_age)/2) %>% 
-  select(unit_id, t_age, b_age, mean_age, environ) 
+  # bin to stages
+  mutate(age = (t_age+b_age)/2, 
+         bin = 95 - cut(age, breaks = dat_stages$bottom,
+                        include.lowest = TRUE,
+                        labels = FALSE)) %>% 
+  drop_na(bin) %>% 
+  group_by(bin) %>% 
+  ungroup() %>% 
+  select(bin, unit_id, age, environ) %>% 
+  count(bin) %>% 
+  # add bins with zero counts
+  mutate(bin = factor(bin, levels = 95:1)) %>% 
+  complete(bin, fill = list(n = 0)) %>% 
+  # add age estimates
+  mutate(bin = as.numeric(as.character(bin))) %>% 
+  full_join(dat_stages %>% 
+               select(bin = stg, 
+                      age = bottom))
+  
 
 # save
 dat_outcrop_full %>% 
@@ -319,12 +378,6 @@ dat_outcrop_full %>%
 
 # visualize
 plot_outcrop_full <- dat_outcrop_full %>%
-  # bin to 5 myr
-  mutate(bin = cut(mean_age, breaks = seq(170, 0, by = -2))) %>% 
-  count(bin) %>% 
-  # add bins with zero counts
-  complete(bin, fill = list(n = 0)) %>% 
-  mutate(age = seq(1, 171, by = 2)) %>% 
   ggplot(aes(age, n)) +
   geom_line(linewidth = 1.5, colour = "#a6d0c8") +
   scale_x_reverse() +
@@ -336,28 +389,36 @@ plot_outcrop_full <- dat_outcrop_full %>%
   labs(x = "Age [myr]", 
        y = "Marine rock units", 
        title = "Macrostrat", 
-       subtitle = "Binned into 2 myr") 
+       subtitle = "Binned to stages") 
 
 
 
 
 ### Phanerozoic outcrop area from Wall, Ivany, Wilkinson 2009 ###
 # load data
-dat_outcrop_full <- read_xlsx(here("data",
-                                  "raw",
-                                  "outcrop_area",
-                                  "wall_ivany_wilkinson_2009.xlsx")) %>% 
+dat_outcrop_full2 <- read_xlsx(here("data",
+                                    "raw",
+                                    "outcrop_area",
+                                    "wall_ivany_wilkinson_2009.xlsx")) %>% 
   # clean up colnames
   rename(age = "age (ma)", 
-         area = "cumul_area (10^6 km^2)")
-
+         area = "cumul_area (10^6 km^2)") %>% 
+  # bin to stages
+  mutate(bin = 95 - cut(age, breaks = dat_stages$bottom,
+                        include.lowest = TRUE,
+                        labels = FALSE)) %>% 
+  drop_na(bin) %>% 
+  group_by(bin) %>% 
+  ungroup()
+  
 # save
-dat_outcrop_full %>% 
+dat_outcrop_full2 %>% 
   write_rds(here("data", 
-                 "outcrop_full.rds"))
+                 "proxy_data",
+                 "outcrop_full2.rds"))
 
 # visualize
-plot_outcrop_full <- dat_outcrop_full %>%
+plot_outcrop_full2 <- dat_outcrop_full2 %>%
   ggplot(aes(age, area)) +
   geom_line(linewidth = 1.5, colour = "#a6d0c8") +
   scale_x_reverse() +
@@ -381,7 +442,14 @@ dat_cont_area_full <- read_csv(here("data",
                                     "shelf_area",
                                     "kocsis_scotese_2021.csv")) %>% 
   # clean up colnames
-  rename(area = "shelf-rgeos")
+  rename(area = "shelf-rgeos") %>% 
+  # bin to stages
+  mutate(bin = 95 - cut(age, breaks = dat_stages$bottom,
+                        include.lowest = TRUE,
+                        labels = FALSE)) %>% 
+  drop_na(bin) %>% 
+  group_by(bin) %>% 
+  ungroup()
 
 # save
 dat_cont_area_full %>% 
@@ -498,7 +566,16 @@ dat_temp_full <- read_xlsx(here("data",
   # clean up colnames
   select(age = Age,
          temp_gat = GAT,
-         temp_deep = "Deep Ocean")
+         temp_deep = "Deep Ocean") %>% 
+  # bin to stages
+  mutate(bin = 95 - cut(age, breaks = dat_stages$bottom,
+                        include.lowest = TRUE,
+                        labels = FALSE)) %>% 
+  drop_na(bin) %>% 
+  group_by(bin) %>% 
+  mutate(temp_gat_binned = mean(temp_gat), 
+         temp_deep_binned = mean(temp_deep)) %>% 
+  ungroup() 
 
 # save
 dat_temp_full %>% 
@@ -508,10 +585,10 @@ dat_temp_full %>%
 
 # visualize
 plot_temp_full <- dat_temp_full %>%
-  ggplot(aes(age, temp_gat)) +
+  ggplot(aes(age, temp_gat_binned)) +
   geom_hline(yintercept = 0, linetype = "dashed", 
              colour = "grey30") +
-  geom_line(aes(y = temp_deep), 
+  geom_line(aes(y = temp_deep_binned), 
             linewidth = 1.5, colour = "coral") +
   geom_line(linewidth = 1.5, colour = "#a65852") +
   scale_x_reverse() +
@@ -523,7 +600,7 @@ plot_temp_full <- dat_temp_full %>%
   labs(x = "Age [myr]", 
        y = "Temperature [°C]", 
        title = "Scotese et al 2021", 
-       subtitle = "Global average in red\nDeep-ocean in orange")
+       subtitle = "Binned to stages\nGlobal average in red\nDeep-ocean in orange")
 
 
 
