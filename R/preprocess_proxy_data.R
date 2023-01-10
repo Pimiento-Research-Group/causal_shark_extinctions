@@ -371,7 +371,8 @@ dat_marine_units_full <- read_csv(here("data",
   mutate(bin = as.numeric(as.character(bin))) %>% 
   full_join(dat_stages %>% 
                select(bin = stg, 
-                      age = bottom))
+                      age = bottom)) %>% 
+  rename(n_units = n)
   
 
 # save
@@ -382,7 +383,7 @@ dat_marine_units_full %>%
 
 # visualize
 plot_marine_units_full <- dat_marine_units_full %>%
-  ggplot(aes(age, n)) +
+  ggplot(aes(age, n_units)) +
   geom_line(linewidth = 1.5, colour = "#a6d0c8") +
   scale_x_reverse() +
   coord_geo(xlim = c(160, 0), 
@@ -420,7 +421,7 @@ dat_outcrop_full <- read_xlsx(here("data",
 dat_outcrop_full %>% 
   write_rds(here("data", 
                  "proxy_data",
-                 "outcrop_full2.rds"))
+                 "outcrop_full.rds"))
 
 # visualize
 plot_outcrop_full <- dat_outcrop_full %>%
