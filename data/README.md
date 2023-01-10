@@ -2,6 +2,8 @@
 
 - **stages.RData** 95 bin Phanerozoic time scale based on the stratigraphic stages of [Gradstein et al. 2020](https://www.sciencedirect.com/science/article/pii/B9780128243602000024)
 
+- **species_extinction_signal.rds** the processed FADs and LADs on species level
+
 ## fossil_occurrences
 Shark first and last appearance data on genus and species level, with estimated age uncertainty from PyRate
 
