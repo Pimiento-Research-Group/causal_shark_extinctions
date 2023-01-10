@@ -348,7 +348,7 @@ plot_diatom_full <- dat_diatom_full %>%
 
 ### Phanerozoic rock units from the macrostrat database ###
 # load data
-dat_outcrop_full <- read_csv(here("data",
+dat_marine_units_full <- read_csv(here("data",
                                   "raw",
                                   "outcrop_area",
                                   "macrostrat_24_11_2022.csv")) %>% 
@@ -375,13 +375,13 @@ dat_outcrop_full <- read_csv(here("data",
   
 
 # save
-dat_outcrop_full %>% 
+dat_marine_units_full %>% 
   write_rds(here("data", 
                  "proxy_data",
-                 "outcrop_full.rds"))
+                 "marine_units_full.rds"))
 
 # visualize
-plot_outcrop_full <- dat_outcrop_full %>%
+plot_marine_units_full <- dat_marine_units_full %>%
   ggplot(aes(age, n)) +
   geom_line(linewidth = 1.5, colour = "#a6d0c8") +
   scale_x_reverse() +
@@ -400,10 +400,10 @@ plot_outcrop_full <- dat_outcrop_full %>%
 
 ### Phanerozoic outcrop area from Wall, Ivany, Wilkinson 2009 ###
 # load data
-dat_outcrop_full2 <- read_xlsx(here("data",
-                                    "raw",
-                                    "outcrop_area",
-                                    "wall_ivany_wilkinson_2009.xlsx")) %>% 
+dat_outcrop_full <- read_xlsx(here("data",
+                                   "raw",
+                                   "outcrop_area",
+                                   "wall_ivany_wilkinson_2009.xlsx")) %>% 
   # clean up colnames
   rename(age = "age (ma)", 
          area = "cumul_area (10^6 km^2)") %>% 
@@ -417,13 +417,13 @@ dat_outcrop_full2 <- read_xlsx(here("data",
   select(bin, area, age)
   
 # save
-dat_outcrop_full2 %>% 
+dat_outcrop_full %>% 
   write_rds(here("data", 
                  "proxy_data",
                  "outcrop_full2.rds"))
 
 # visualize
-plot_outcrop_full2 <- dat_outcrop_full2 %>%
+plot_outcrop_full <- dat_outcrop_full %>%
   ggplot(aes(age, area)) +
   geom_line(linewidth = 1.5, colour = "#a6d0c8") +
   scale_x_reverse() +

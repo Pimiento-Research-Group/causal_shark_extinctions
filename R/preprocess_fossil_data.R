@@ -61,7 +61,3 @@ dat_species <- read_delim(here("data",
 dat_species %>% 
   write_rds(here("data", 
                  "species_extinction_signal.rds"))
-
-list.files(here("data"), pattern = "*full*")
-
-divDyn:::stag
