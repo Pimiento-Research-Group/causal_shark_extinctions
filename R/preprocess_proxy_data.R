@@ -414,10 +414,20 @@ dat_outcrop_full <- read_xlsx(here("data",
   drop_na(bin) %>% 
   group_by(bin) %>% 
   ungroup() %>% 
-  select(bin, area, age)
+  select(bin, area, age) 
+
+# use natural spline for interpolation
+
+dat_outcrop_int <- dat_outcrop_full %>% 
+  { spline(.$bin, .$area, 
+           xout = 69:95) } %>% 
+  as_tibble() %>% 
+  rename(bin = x, area = y) %>% 
+  # get ages
+  full_join(dat_stages %>% select(bin = stg, age = bottom))
   
 # save
-dat_outcrop_full %>% 
+dat_outcrop_int %>% 
   write_rds(here("data", 
                  "proxy_data",
                  "outcrop_full.rds"))
