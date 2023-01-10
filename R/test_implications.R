@@ -7,11 +7,17 @@ library(here)
 source(here("R", "config_file.R"))
 
 
-# load data ---------------------------------------------------------------
 
-# species level extinction signal
+# species level extinction signal -----------------------------------------
+
+# load data 
 dat_species <- read_rds(here("data",
                              "species_extinction_signal.rds"))
+
+
+
+# proxy data --------------------------------------------------------------
+
 
 # environmental data on stage level spanning the full time range
 # set up function
@@ -34,8 +40,8 @@ dat_proxy <- map2(
   .x = c(
     "13C_full.rds",
     "cont_area_full.rds",
-    "diatom_full.rds",
     "marine_units_full.rds",
+    "outcrop_full.rds",
     "sealevel_full.rds",
     "SR_full.rds",
     "temp_full.rds",
@@ -43,9 +49,9 @@ dat_proxy <- map2(
   ),
   .y = c(
     as.symbol("d13C"),
-    as.symbol("area"),
-    as.symbol("div_mean"),
+    as.symbol("cont_area"),
     as.symbol("n_units"),
+    as.symbol("outcrop_area"),
     as.symbol("sea_level"),
     as.symbol("sr_value"),
     as.symbol("temp_gat"),
@@ -56,19 +62,30 @@ dat_proxy <- map2(
   reduce(full_join) 
 
 
+
+
+# scale predictors --------------------------------------------------------
+
+dat_proxy %>% 
+  mutate(n_units_log = log(n_units),
+         outcrop_area_std = scale(outcrop_area)[,1]) %>% 
+  ggplot(aes(outcrop_area_std)) +
+  geom_density()
+
+
 lm(area ~ temp_gat + sea_level, data = dat_proxy) %>% 
-  summary()
+  confint()
 
   
 read_rds(here("data",
               "proxy_data",
-              "temp_full.rds")) %>%
+              "outcrop_full.rds")) %>%
   group_by(bin) %>% 
-  summarise(n = mean(n)) %>% 
+  summarise(area = mean(area)) %>% 
   arrange(bin) %>% 
   filter(bin >= min(dat_species$bin)) %>% 
   complete(bin = 69:95) %>% 
-  fill(n, .direction = "downup") 
+  fill(area, .direction = "downup") 
   
   
 
