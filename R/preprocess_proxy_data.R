@@ -40,7 +40,8 @@ dat_sealevel_full <- read_xlsx(here("data",
   drop_na(bin) %>% 
   group_by(bin) %>% 
   mutate(sea_level_mean = mean(sea_level)) %>% 
-  ungroup()
+  ungroup() %>% 
+  select(bin, sea_level_mean, everything())
 
 # save
 dat_sealevel_full %>% 
@@ -171,7 +172,8 @@ dat_13C_full <- read_csv(here("data",
   drop_na(bin) %>% 
   group_by(bin) %>% 
   mutate(d13C_mean = mean(d13C)) %>% 
-  ungroup()
+  ungroup() %>% 
+  select(bin, d13C_mean, everything())
 
 # save
 dat_13C_full %>% 
@@ -221,7 +223,8 @@ dat_SR_full <- read_csv(here("data",
   drop_na(bin) %>% 
   group_by(bin) %>% 
   mutate(sr_mean = mean(sr_value)) %>% 
-  ungroup()
+  ungroup() %>% 
+  select(bin, sr_mean, everything())
   
 
 # save
@@ -305,7 +308,8 @@ dat_diatom_full <- dat_diatom_full %>%
   drop_na(bin) %>% 
   group_by(bin) %>% 
   mutate(div_mean_binned = mean(div_mean)) %>% 
-  ungroup()
+  ungroup() %>% 
+  select(bin, div_mean_binned, everything())
 
 
 # save
@@ -409,7 +413,8 @@ dat_outcrop_full2 <- read_xlsx(here("data",
                         labels = FALSE)) %>% 
   drop_na(bin) %>% 
   group_by(bin) %>% 
-  ungroup()
+  ungroup() %>% 
+  select(bin, area, age)
   
 # save
 dat_outcrop_full2 %>% 
@@ -449,7 +454,8 @@ dat_cont_area_full <- read_csv(here("data",
                         labels = FALSE)) %>% 
   drop_na(bin) %>% 
   group_by(bin) %>% 
-  ungroup()
+  ungroup() %>% 
+  select(bin, area, age)
 
 # save
 dat_cont_area_full %>% 
@@ -575,7 +581,8 @@ dat_temp_full <- read_xlsx(here("data",
   group_by(bin) %>% 
   mutate(temp_gat_binned = mean(temp_gat), 
          temp_deep_binned = mean(temp_deep)) %>% 
-  ungroup() 
+  ungroup() %>% 
+  select(bin, temp_gat_binned, temp_deep_binned, everything())
 
 # save
 dat_temp_full %>% 
