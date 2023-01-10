@@ -29,6 +29,7 @@ dat_sealevel_full <- read_xlsx(here("data",
 # save
 dat_sealevel_full %>% 
   write_rds(here("data", 
+                 "proxy_data",
                  "sealevel_full.rds"))
 
 # visualize
@@ -70,6 +71,7 @@ dat_sealevel_ceno <- read_xlsx(here("data",
 # save
 dat_sealevel_ceno %>% 
   write_rds(here("data", 
+                 "proxy_data",
                  "sealevel_ceno.rds"))
 
 # visualize
@@ -110,6 +112,7 @@ dat_13C_ceno <- read_xlsx(here("data",
 # save
 dat_13C_ceno %>% 
   write_rds(here("data", 
+                 "proxy_data",
                  "d13C_ceno.rds"))
 
 # visualize
@@ -154,6 +157,7 @@ dat_13C_full <- read_csv(here("data",
 # save
 dat_13C_full %>% 
   write_rds(here("data", 
+                 "proxy_data",
                  "13C_full.rds"))
 
 # visualize
@@ -195,6 +199,7 @@ dat_SR_full <- read_csv(here("data",
 # save
 dat_SR_full %>% 
   write_rds(here("data", 
+                 "proxy_data",
                  "SR_full.rds"))
 
 # visualize
@@ -267,6 +272,7 @@ dat_diatom_full <- dat_diatom_list %>%
 # save
 dat_diatom_full %>% 
   write_rds(here("data", 
+                 "proxy_data",
                  "diatom_full.rds"))
 
 # visualize
@@ -308,6 +314,7 @@ dat_outcrop_full <- read_csv(here("data",
 # save
 dat_outcrop_full %>% 
   write_rds(here("data", 
+                 "proxy_data",
                  "outcrop_full.rds"))
 
 # visualize
@@ -379,6 +386,7 @@ dat_cont_area_full <- read_csv(here("data",
 # save
 dat_cont_area_full %>% 
   write_rds(here("data", 
+                 "proxy_data",
                  "cont_area_full.rds"))
 
 # visualize
@@ -412,6 +420,7 @@ dat_cont_area_ceno <- read_csv(here("data",
 # save
 dat_cont_area_ceno%>% 
   write_rds(here("data", 
+                 "proxy_data",
                  "cont_area_ceno.rds"))
 
 # visualize
@@ -452,6 +461,7 @@ dat_temp_ceno <- read_xlsx(here("data",
 # save
 dat_temp_ceno %>% 
   write_rds(here("data", 
+                 "proxy_data",
                  "temp_ceno.rds"))
 
 # visualize
@@ -493,6 +503,7 @@ dat_temp_full <- read_xlsx(here("data",
 # save
 dat_temp_full %>% 
   write_rds(here("data", 
+                 "proxy_data",
                  "temp_full.rds"))
 
 # visualize
