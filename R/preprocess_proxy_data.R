@@ -253,9 +253,9 @@ plot_SR_full <- dat_SR_full %>%
        subtitle = "Binned to stages") 
 
 
-### Phanerozoic diatom diversity from the Neptune database ###
+### Cenozoic diatom diversity from the Neptune database ###
 # load data
-dat_diatom_full <- read_tsv(here("data",
+dat_diatom_ceno <- read_tsv(here("data",
                                  "raw",
                                  "productivity",
                                  "diatom_2022-11-27_09-58-09.csv")) %>% 
@@ -274,7 +274,7 @@ dat_diatom_list <- vector(mode = "list",
 # iterate
 for (i in 1:nr_iter) {
   
-  dat_diatom_list[[i]] <- dat_diatom_full %>% 
+  dat_diatom_list[[i]] <- dat_diatom_ceno %>% 
     # bin data
     mutate(bin = cut(age, breaks = seq(90, 0, by = -1))) %>% 
     group_by(bin) %>% 
@@ -292,16 +292,15 @@ for (i in 1:nr_iter) {
 }
 
 # summarize
-dat_diatom_full <- dat_diatom_list %>% 
+dat_diatom_ceno <- dat_diatom_list %>% 
   bind_rows() %>% 
   group_by(bin, age) %>% 
   summarise(div_mean = mean(count), 
             div_sd = sd(count)) %>% 
   mutate(div_low = div_mean - 1.96*div_sd, 
-         div_high = div_mean + 1.96*div_sd)
-
-# bin to stages
-dat_diatom_full <- dat_diatom_full %>% 
+         div_high = div_mean + 1.96*div_sd) %>% 
+  # bin to stages
+  dat_diatom_ceno %>% 
   mutate(bin = 95 - cut(age, breaks = dat_stages$bottom,
                         include.lowest = TRUE,
                         labels = FALSE)) %>% 
@@ -313,10 +312,10 @@ dat_diatom_full <- dat_diatom_full %>%
 
 
 # save
-dat_diatom_full %>% 
+dat_diatom_ceno %>% 
   write_rds(here("data", 
                  "proxy_data",
-                 "diatom_full.rds"))
+                 "diatom_ceno.rds"))
 
 # visualize
 plot_diatom_full <- dat_diatom_full %>%
