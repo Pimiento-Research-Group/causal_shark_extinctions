@@ -406,7 +406,7 @@ dat_outcrop_full <- read_xlsx(here("data",
                                    "wall_ivany_wilkinson_2009.xlsx")) %>% 
   # clean up colnames
   rename(age = "age (ma)", 
-         area = "cumul_area (10^6 km^2)") %>% 
+         outcrop_area = "cumul_area (10^6 km^2)") %>% 
   # bin to stages
   mutate(bin = 95 - cut(age, breaks = dat_stages$bottom,
                         include.lowest = TRUE,
@@ -414,15 +414,15 @@ dat_outcrop_full <- read_xlsx(here("data",
   drop_na(bin) %>% 
   group_by(bin) %>% 
   ungroup() %>% 
-  select(bin, area, age) 
+  select(bin, outcrop_area, age) 
 
 # use natural spline for interpolation
 
 dat_outcrop_int <- dat_outcrop_full %>% 
-  { spline(.$bin, .$area, 
+  { spline(.$bin, .$outcrop_area, 
            xout = 69:95) } %>% 
   as_tibble() %>% 
-  rename(bin = x, area = y) %>% 
+  rename(bin = x, outcrop_area = y) %>% 
   # get ages
   full_join(dat_stages %>% select(bin = stg, age = bottom))
   
@@ -434,7 +434,7 @@ dat_outcrop_int %>%
 
 # visualize
 plot_outcrop_full <- dat_outcrop_full %>%
-  ggplot(aes(age, area)) +
+  ggplot(aes(age, outcrop_area)) +
   geom_line(linewidth = 1.5, colour = "#a6d0c8") +
   scale_x_reverse() +
   coord_geo(xlim = c(160, 0), 
@@ -457,7 +457,7 @@ dat_cont_area_full <- read_csv(here("data",
                                     "shelf_area",
                                     "kocsis_scotese_2021.csv")) %>% 
   # clean up colnames
-  rename(area = "shelf-rgeos") %>% 
+  rename(cont_area = "shelf-rgeos") %>% 
   # bin to stages
   mutate(bin = 95 - cut(age, breaks = dat_stages$bottom,
                         include.lowest = TRUE,
@@ -465,7 +465,7 @@ dat_cont_area_full <- read_csv(here("data",
   drop_na(bin) %>% 
   group_by(bin) %>% 
   ungroup() %>% 
-  select(bin, area, age)
+  select(bin, cont_area, age)
 
 # save
 dat_cont_area_full %>% 
@@ -475,7 +475,7 @@ dat_cont_area_full %>%
 
 # visualize
 plot_cont_area_full <- dat_cont_area_full %>%
-  ggplot(aes(age, area)) +
+  ggplot(aes(age, cont_area)) +
   geom_line(linewidth = 1.5, colour = "#343c24") +
   scale_x_reverse() +
   coord_geo(xlim = c(160, 0), 
