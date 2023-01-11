@@ -5,3 +5,4 @@ This is the repo for the current project from the Pimiento lab under the lead of
 
 - [ ] Update data readme
 - [ ] Repeat analysis with 10 myr bins
+- [ ] Repeat analysis with genus instead of species
