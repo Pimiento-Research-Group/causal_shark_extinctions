@@ -145,4 +145,23 @@ dat_range_lat <- dat_occ_binned_coord %>%
 # calculate great circle distance via geodesic distance between two 
 # points specified by radian latitude/longitude using the
 # Spherical Law of Cosines (slc)
+dat_dist <- dat_occ_binned_coord %>% 
+  # select only species
+  filter(rank == "species") %>%
+  group_by(modified_identified_name) %>% 
+  # get maximum distance
+  summarise(min_lat = min(paleolat), 
+            max_lat = max(paleolat), 
+            min_long = min(paleolong), 
+            max_long = max(paleolong)) %>% 
+  # convert to radians
+  mutate(across(min_lat:max_long, ~ .x*pi/180)) %>% 
+  # use earth radius and slc
+  mutate(geo_dist = acos(sin(min_lat)*sin(max_lat) + cos(min_lat)*cos(max_lat) * cos(max_long-min_long)) * 6371) %>% 
+  drop_na(geo_dist) %>% 
+  select(modified_identified_name, 
+         geo_dist)
 
+dat_dist %>% 
+  ggplot(aes(geo_dist)) +
+  geom_density()

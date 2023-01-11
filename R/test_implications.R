@@ -16,6 +16,26 @@ dat_species <- read_rds(here("data",
 
 
 
+# occurrence database -----------------------------------------------------
+
+dat_occurrences <- read_rds(here("data",
+                                 "fossil_occurrences",
+                                 "database_occurrences_10_Jan_2023.rds"))
+
+dat_occurrences %>% slice_head(n = 5) %>% View
+
+
+# preservation potential --------------------------------------------------
+
+
+# abundance ---------------------------------------------------------------
+
+
+# sampling effort ---------------------------------------------------------
+
+
+
+
 # proxy data --------------------------------------------------------------
 
 
@@ -67,9 +87,10 @@ dat_proxy <- map2(
 # scale predictors --------------------------------------------------------
 
 dat_proxy %>% 
+  # scale all productivity parameters
   mutate(n_units_log = log(n_units),
          outcrop_area_std = scale(outcrop_area)[,1]) %>% 
-  ggplot(aes(outcrop_area_std)) +
+  ggplot(aes(outcrop_area)) +
   geom_density()
 
 
