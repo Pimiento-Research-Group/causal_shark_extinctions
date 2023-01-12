@@ -639,7 +639,8 @@ dat_paleotemp <- dat_temp_full %>%
   # add missing bin
   filter(bin >= 69) %>%
   complete(bin = 69:95) %>% 
-  fill(contains("temp"), .direction = "downup")
+  fill(contains("temp"), .direction = "downup") %>% 
+  select(-contains("binned"))
   
 
 
