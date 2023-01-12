@@ -400,10 +400,10 @@ plot_marine_units_full <- dat_marine_units_full %>%
 
 ### Phanerozoic outcrop area from Wall, Ivany, Wilkinson 2009 ###
 # load data
-dat_outcrop_full <- read_xlsx(here("data",
-                                   "raw",
-                                   "outcrop_area",
-                                   "wall_ivany_wilkinson_2009.xlsx")) %>% 
+dat_outcrop <- read_xlsx(here("data",
+                              "raw",
+                              "outcrop_area",
+                              "wall_ivany_wilkinson_2009.xlsx")) %>% 
   # clean up colnames
   rename(age = "age (ma)", 
          outcrop_area = "cumul_area (10^6 km^2)") %>% 
@@ -418,7 +418,7 @@ dat_outcrop_full <- read_xlsx(here("data",
 
 # use natural spline for interpolation
 
-dat_outcrop_int <- dat_outcrop_full %>% 
+dat_outcrop_full <- dat_outcrop %>% 
   { spline(.$bin, .$outcrop_area, 
            xout = 69:95) } %>% 
   as_tibble() %>% 
@@ -427,13 +427,13 @@ dat_outcrop_int <- dat_outcrop_full %>%
   full_join(dat_stages %>% select(bin = stg, age = bottom))
   
 # save
-dat_outcrop_int %>% 
+dat_outcrop_full %>% 
   write_rds(here("data", 
                  "proxy_data",
                  "outcrop_full.rds"))
 
 # visualize
-plot_outcrop_full <- dat_outcrop_full %>%
+plot_outcrop_full <- dat_outcrop %>%
   ggplot(aes(age, outcrop_area)) +
   geom_line(linewidth = 1.5, colour = "#a6d0c8") +
   scale_x_reverse() +
@@ -620,6 +620,28 @@ plot_temp_full <- dat_temp_full %>%
        subtitle = "Binned to stages\nGlobal average in red\nDeep-ocean in orange")
 
 
+# paleotemperature --------------------------------------------------------
+
+# calculate lagged temperatures trends
+dat_paleotemp <- dat_temp_full %>% 
+  mutate(temp_gat_st = temp_gat - lead(temp_gat), 
+         temp_gat_lt1 = lead(temp_gat_st), 
+         temp_gat_lt2 = lead(temp_gat_st, n = 2), 
+         temp_gat_lt3 = lead(temp_gat_st, n = 3), 
+         temp_gat_lt4 = lead(temp_gat_st, n = 4), 
+         # same for deep ocean temperature
+         temp_deep_st = temp_deep - lead(temp_deep), 
+         temp_deep_lt1 = lead(temp_deep_st), 
+         temp_deep_lt2 = lead(temp_deep_st, n = 2), 
+         temp_deep_lt3 = lead(temp_deep_st, n = 3), 
+         temp_deep_lt4 = lead(temp_deep_st, n = 4)) %>% 
+  # add missing bin
+  filter(bin >= 69) %>%
+  complete(bin = 69:95) %>% 
+  fill(contains("temp"), .direction = "downup") %>% 
+  select(-c(age, temp_gat, temp_deep))
+  
+
 
 # save plots --------------------------------------------------------------
 
@@ -639,3 +661,52 @@ walk2(.x = plt_list,
                                         .y), 
                     width = image_width, height = image_height, units = image_units, 
                     bg = "white", device = ragg::agg_png))
+
+
+
+# merge and combine full datasets -----------------------------------------
+
+# environmental data on stage level spanning the full time range
+# set up function
+format_proxy_data <- function(data_file, 
+                              column_name) {
+  data_file %>% 
+    as.name() %>% 
+    eval() %>% 
+    group_by(bin) %>% 
+    summarise({{ column_name }} := mean({{ column_name }})) %>%
+    arrange(bin) %>%
+    filter(bin >= 69) %>%
+    complete(bin = 69:95) %>%
+    fill({{ column_name }}, .direction = "downup")
+  
+}
+
+# get all full datasets
+dat_proxy <- c(ls()[str_detect(ls(), "^dat.*full$")],
+               "dat_temp_full") %>% 
+  # reformat all to the same format
+  map2(
+    .x = .,
+    .y = c(
+      as.symbol("d13C"),
+      as.symbol("cont_area"),
+      as.symbol("n_units"),
+      as.symbol("outcrop_area"),
+      as.symbol("sea_level"),
+      as.symbol("sr_value"),
+      as.symbol("temp_gat"),
+      as.symbol("temp_deep")
+    ),
+    .f = ~ format_proxy_data(data_file = .x ,
+                             column_name = {{ .y }})) %>%
+  reduce(full_join) %>% 
+  full_join(dat_paleotemp, by = "bin") 
+
+
+# save data file
+dat_proxy %>% 
+  write_rds(here("data", 
+                 "processed_proxy_data.rds"))
+
+
