@@ -172,6 +172,16 @@ dat_dist <- dat_occ_binned_coord %>%
 
 
 
+# latitude ----------------------------------------------------------------
+
+# calculate latitudinal preference of species
+dat_latitude <- dat_occ_binned_coord %>% 
+  # select only species
+  filter(rank == "species") %>% 
+  group_by(modified_identified_name) %>% 
+  summarise(latitude_pref = mean(paleolat))
+  
+
 # calculate abundance -----------------------------------------------------
 
 dat_abund <- dat_occ_binned %>% 
@@ -223,35 +233,47 @@ dat_pbdb_sampling <- dat_pbdb %>%
 # preservation potential --------------------------------------------------
 
 # get preservation rate from the PyRate output
-dat_preservation <- read_delim(here("data", 
-                                  "raw", 
-                                  "fossil_occurrences", 
-                                  "combined_10_mcmc.log"))
-
-dat_preservation2 <- dat_preservation %>% 
-  select(mean_q, contains("TS")) %>% 
-  pivot_longer(cols = contains("TS"), 
-               names_to = "species", 
-               values_to = "age")
-  
-dat_preservation2 <- dat_preservation2 %>% 
-  mutate(bin = 95 - cut(age, breaks = dat_stages$bottom,
-                        include.lowest = TRUE,
-                        labels = FALSE), 
-         .before = 1)
-
-dat_preservation2 <- dat_preservation2 %>% 
-  drop_na(bin) %>% 
-  group_by(bin, species) %>% 
-  summarise(mean_q = mean(mean_q)) %>% 
-  ungroup() 
-
-dat_preservation2%>% 
-  mutate(species = str_remove(species, "_TS"), 
-         modified_identified_name = str_replace(species, "_", " ")) %>% 
-  select(bin, modified_identified_name, mean_q) %>% 
-  write_rds(here("data", 
-                 "fossil_occurrences", 
-                 "preservation_rate_per_species.rds"))
+dat_preservation <- read_rds(here("data", 
+                              "fossil_occurrences", 
+                              "preservation_rate_per_species.rds")) %>% 
+  # use only occurrences from species that could get binned to stages
+  filter(modified_identified_name %in% dat_abund$modified_identified_name)
 
 
+
+# merge and combine -------------------------------------------------------
+
+# combine all datasets to one
+dat_range_lat %>% 
+  # geographic range
+  full_join(dat_dist) %>% 
+  full_join(dat_abund) %>% 
+  # latitudinal preference
+  full_join(dat_latitude) %>% 
+  # abundance
+  rename(abund = n) %>% 
+  # preservation rate
+  full_join(dat_preservation) %>% 
+  # sampling
+  full_join(dat_pbdb_sampling %>% 
+              mutate(bin = as.numeric(as.character(bin)))) %>% 
+  rename(pbdb_collections = n) %>% 
+  full_join(dat_sampling %>% 
+              mutate(bin = as.numeric(as.character(bin)))) %>% 
+  # species extinction signal
+  full_join(dat_species %>% 
+              mutate(modified_identified_name = str_replace(species, "_", " ")) %>% 
+              select(-species)) %>% 
+  # make missing values explicit
+  drop_na(ext_signal) %>% 
+  replace_na(list(geo_dist = 0, range_lat = 0, 
+                  mean_q = mean(dat_preservation$mean_q), 
+                  latitude_pref = mean(dat_latitude$latitude_pref))) %>% 
+  # get taxonomy
+  full_join(dat_occ_binned %>% 
+              distinct(modified_identified_name, genus, family, order)) %>% 
+  select(order, family, genus, species = modified_identified_name,
+         everything()) %>% 
+  # save dataset
+  write_rds(here("data",
+                 "processed_fossil_data.rds"))
