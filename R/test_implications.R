@@ -8,110 +8,56 @@ source(here("R", "config_file.R"))
 
 
 
-# species level extinction signal -----------------------------------------
+# load data  ------------------------------------------------------------
 
-# load data 
-dat_species <- read_rds(here("data",
-                             "species_extinction_signal.rds"))
+# fossil data on species level
+dat_fossil <- read_rds(here("data",
+                            "processed_fossil_data.rds"))
 
-
-
-# occurrence database -----------------------------------------------------
-
-dat_occurrences <- read_rds(here("data",
-                                 "fossil_occurrences",
-                                 "database_occurrences_10_Jan_2023.rds"))
-
-dat_occurrences %>% slice_head(n = 5) %>% View
-
-
-# preservation potential --------------------------------------------------
-
-
-# abundance ---------------------------------------------------------------
-
-
-# sampling effort ---------------------------------------------------------
-
-
-
-
-# proxy data --------------------------------------------------------------
-
-
-# environmental data on stage level spanning the full time range
-# set up function
-format_proxy_data <- function(data_file, 
-                              column_name) {
-  read_rds(here("data",
-                "proxy_data", 
-                data_file)) %>% 
-    group_by(bin) %>% 
-    summarise({{ column_name }} := mean({{ column_name }})) %>%
-    arrange(bin) %>%
-    filter(bin >= min(dat_species$bin)) %>%
-    complete(bin = 69:95) %>%
-    fill({{ column_name }}, .direction = "downup")
-  
-}
-
-# apply function
-dat_proxy <- map2(
-  .x = c(
-    "13C_full.rds",
-    "cont_area_full.rds",
-    "marine_units_full.rds",
-    "outcrop_full.rds",
-    "sealevel_full.rds",
-    "SR_full.rds",
-    "temp_full.rds",
-    "temp_full.rds"
-  ),
-  .y = c(
-    as.symbol("d13C"),
-    as.symbol("cont_area"),
-    as.symbol("n_units"),
-    as.symbol("outcrop_area"),
-    as.symbol("sea_level"),
-    as.symbol("sr_value"),
-    as.symbol("temp_gat"),
-    as.symbol("temp_deep")
-  ),
-  .f = ~ format_proxy_data(data_file = .x ,
-                           column_name = {{ .y }})) %>%
-  reduce(full_join) 
-
+# environmental proxy data
+dat_proxy <- read_rds(here("data",
+                           "processed_proxy_data.rds"))
 
 
 
 # scale predictors --------------------------------------------------------
 
-dat_proxy %>% 
-  # scale all productivity parameters
-  mutate(n_units_log = log(n_units),
-         outcrop_area_std = scale(outcrop_area)[,1]) %>% 
-  ggplot(aes(outcrop_area)) +
+# bring predictors on meaningful scales to enable comparisons
+dat_proxy <- dat_proxy %>% 
+  mutate(across(c(d13C, sr_value, # scale all productivity parameters
+                  n_units, outcrop_area), # same for outcrop parameters
+                ~ scale(.x)[,1], 
+                .names = "{col}_std"))
+
+# same for fossil data
+dat_fossil <- dat_fossil %>% 
+  mutate(across(c(range_lat, geo_dist, # scale geographic range parameters
+                  mean_q, # and preservation rate
+                  pbdb_collections, shark_collections), # and sampling effort
+                ~ scale(.x)[,1], 
+                .names = "{col}_std"), 
+         latitude_pref_abs = abs(latitude_pref)) # use absolute latitude 
+
+
+
+# combine data sources ----------------------------------------------------
+
+# merge
+left_join(dat_proxy, 
+          dat_fossil, 
+          by = "bin") %>%
+  drop_na(species) %>% 
+  replace_na(list(abund = 0)) %>% 
+  select(bin, order, family, genus, species,
+         ext_signal, 
+         sea_level, 
+         cont_area, 
+         contains("temp"), 
+         contains("std")) %>%
+  ggplot(aes(x = temp_deep_binned, y = ext_signal)) +
+  geom_point() +
+  stat_smooth(method = "glm",
+              method.args = list(family = binomial))
+  ggplot(aes(temp_gat_binned)) +
   geom_density()
 
-
-lm(area ~ temp_gat + sea_level, data = dat_proxy) %>% 
-  confint()
-
-  
-read_rds(here("data",
-              "proxy_data",
-              "outcrop_full.rds")) %>%
-  group_by(bin) %>% 
-  summarise(area = mean(area)) %>% 
-  arrange(bin) %>% 
-  filter(bin >= min(dat_species$bin)) %>% 
-  complete(bin = 69:95) %>% 
-  fill(area, .direction = "downup") 
-  
-  
-
-
-list.files(here("data", 
-                "proxy_data"), 
-           pattern = "*full*") 
-  
