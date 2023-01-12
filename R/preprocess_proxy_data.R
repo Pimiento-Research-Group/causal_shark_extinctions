@@ -318,7 +318,7 @@ dat_diatom_ceno %>%
                  "diatom_ceno.rds"))
 
 # visualize
-plot_diatom_full <- dat_diatom_full %>%
+plot_diatom_ceno <- dat_diatom_ceno %>%
   ggplot(aes(age, div_mean, 
              ymin = div_low, 
              ymax = div_high)) +
@@ -624,13 +624,14 @@ plot_temp_full <- dat_temp_full %>%
 
 # calculate lagged temperatures trends
 dat_paleotemp <- dat_temp_full %>% 
-  mutate(temp_gat_st = temp_gat - lead(temp_gat), 
+  distinct(bin, temp_gat_binned, temp_deep_binned) %>%
+  mutate(temp_gat_st = temp_gat_binned - lead(temp_gat_binned), 
          temp_gat_lt1 = lead(temp_gat_st), 
          temp_gat_lt2 = lead(temp_gat_st, n = 2), 
          temp_gat_lt3 = lead(temp_gat_st, n = 3), 
          temp_gat_lt4 = lead(temp_gat_st, n = 4), 
          # same for deep ocean temperature
-         temp_deep_st = temp_deep - lead(temp_deep), 
+         temp_deep_st = temp_deep_binned - lead(temp_deep_binned), 
          temp_deep_lt1 = lead(temp_deep_st), 
          temp_deep_lt2 = lead(temp_deep_st, n = 2), 
          temp_deep_lt3 = lead(temp_deep_st, n = 3), 
@@ -638,8 +639,7 @@ dat_paleotemp <- dat_temp_full %>%
   # add missing bin
   filter(bin >= 69) %>%
   complete(bin = 69:95) %>% 
-  fill(contains("temp"), .direction = "downup") %>% 
-  select(-c(age, temp_gat, temp_deep))
+  fill(contains("temp"), .direction = "downup")
   
 
 
@@ -695,8 +695,8 @@ dat_proxy <- c(ls()[str_detect(ls(), "^dat.*full$")],
       as.symbol("outcrop_area"),
       as.symbol("sea_level"),
       as.symbol("sr_value"),
-      as.symbol("temp_gat"),
-      as.symbol("temp_deep")
+      as.symbol("temp_gat_binned"),
+      as.symbol("temp_deep_binned")
     ),
     .f = ~ format_proxy_data(data_file = .x ,
                              column_name = {{ .y }})) %>%
