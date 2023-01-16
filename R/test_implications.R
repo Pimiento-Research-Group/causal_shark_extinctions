@@ -86,10 +86,7 @@ dag <- downloadGraph("dagitty.net/m_UM7hV")
 implied_conditions <- impliedConditionalIndependencies(dag)
 
 # set up dataframe to save results of tests
-dat_test <- tibble(cor_val = vector("double", # Student's t-test statistic
-                                    length = length(implied_conditions)), 
-                   pval = vector("double", # the p-value, assuming a two-sided alternative
-                                 length = length(implied_conditions)))
+cor_val <- vector("double", length = length(implied_conditions))
 
 for (i in 1:length(implied_conditions)) {
   
@@ -108,26 +105,7 @@ for (i in 1:length(implied_conditions)) {
     
   }
   
-  
-  test.output <- pcor.test(cor.output, 
-                           length(implied_conditions[[i]]$Z), 
-                           n = nrow(dat_dag))
-  
-  dat_test[i, "cor_val"] <- cor.output
-  
-  dat_test[i, "pval"] <- pluck(test.output, "pvalue")
+  cor_val[i] <- cor.output
   
 }
 
-dat_test %>% 
-  ggplot(aes(cor_val)) +
-  geom_density()
-
-dat_test <- dat_test %>% 
-  # apply bonferroni correction 
-  mutate(pval_cor = pval * length(implied_conditions), 
-         p_sign = if_else(pval_cor <= 0.05, "sign", "non-sign")) 
-
-implied_conditions[dat_test[, "p_sign"] == "sign"]
-
-implied_conditions[abs(dat_test[, "cor_val"]) >= 0.5]
