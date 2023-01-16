@@ -24,8 +24,8 @@ image_units <- "mm"
 # define pallets
 
 # define common color
-colour_lavender = "#551A8B"
-colour_brown = "#BD6416"
-colour_green = "#105157"
-colour_grey = "#D3CFC2"
-colour_coral = "coral2"
+colour_yellow = "#EEb462"
+colour_purple = "#534666"
+colour_mint = "#138086"
+colour_grey = "grey55"
+colour_coral = "#CD7672"
