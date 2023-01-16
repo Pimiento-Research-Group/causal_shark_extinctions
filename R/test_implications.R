@@ -58,6 +58,10 @@ dat_merged <- left_join(dat_proxy,
          contains("temp"), 
          contains("std")) 
 
+# save dataset
+dat_merged %>% 
+  write_rds(here("data", 
+                 "processed_merged_data.rds"))
 
 # change column names to fit with the directed acyclic graph
 dat_dag <- dat_merged %>% 
@@ -109,3 +113,4 @@ for (i in 1:length(implied_conditions)) {
   
 }
 
+implied_conditions[cor_val >= 0.3]
