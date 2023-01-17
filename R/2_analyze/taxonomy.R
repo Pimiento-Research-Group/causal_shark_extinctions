@@ -50,7 +50,6 @@ adjustmentSets(dag,
 # fit final model
 mod1 <- brm_logistic("ext_signal ~ order")
 
-conditional_effects(mod1)
 
 
 
@@ -72,13 +71,15 @@ dat_pred <- dat_merged %>%
   mutate(order = fct_reorder(order, median_epred))  
   
 # visualise
-plot_tax <- dat_pred %>% 
+plot_tax <- dat_pred %>%
   ggplot(aes(.epred, order)) +
   stat_histinterval(shape = 21, 
                     interval_alpha = 0,
-                    slab_colour = colour_purple, 
-                    slab_fill = colour_purple, 
-                    fill = "white") +
+                    slab_colour = "#9C8899", 
+                    slab_fill = "#9C8899", 
+                    fill = "white", 
+                    point_size = 1.5, 
+                    point_colour = "grey30") +
   geom_label(aes(label = n_lab, x = max_epred + 0.03), 
              data = dat_pred %>% 
                distinct(order, max_epred, n) %>% 
