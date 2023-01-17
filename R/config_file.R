@@ -44,8 +44,7 @@ brm_logistic <- function(model_formula) {
       cores = parallel::detectCores(), 
       chains = 4, 
       iter = 10000, 
-      silent = 2,
-      refresh = 0)
+      warmup = 2000)
   
 }
 
