@@ -37,33 +37,19 @@ adjustmentSets(dag,
 
 # fit models --------------------------------------------------------------
 
-# set up model function
-brm_temp <- function(model_formula) {
-  
-  brm(bf(model_formula), 
-      family = "bernoulli", 
-      data = dat_merged, 
-      seed = 1708, 
-      cores = parallel::detectCores(), 
-      chains = 4, 
-      iter = 10000, 
-      silent = 2,
-      refresh = 0)
-  
-}
 
 # start with deep ocean temperature
 # average over potential long-term trends
-mod1 <- brm_temp("ext_signal ~ temp_deep_binned + temp_deep_st:temp_deep_lt1")
-mod2 <- brm_temp("ext_signal ~ temp_deep_binned + temp_deep_st:temp_deep_lt2")
-mod3 <- brm_temp("ext_signal ~ temp_deep_binned + temp_deep_st:temp_deep_lt3")
-mod4 <- brm_temp("ext_signal ~ temp_deep_binned + temp_deep_st:temp_deep_lt4")
+mod1 <- brm_logistic("ext_signal ~ temp_deep_binned + temp_deep_st:temp_deep_lt1")
+mod2 <- brm_logistic("ext_signal ~ temp_deep_binned + temp_deep_st:temp_deep_lt2")
+mod3 <- brm_logistic("ext_signal ~ temp_deep_binned + temp_deep_st:temp_deep_lt3")
+mod4 <- brm_logistic("ext_signal ~ temp_deep_binned + temp_deep_st:temp_deep_lt4")
 
 # same for global average temperature
-mod5 <- brm_temp("ext_signal ~ temp_gat_binned + temp_gat_st:temp_gat_lt1")
-mod6 <- brm_temp("ext_signal ~ temp_gat_binned + temp_gat_st:temp_gat_lt2")
-mod7 <- brm_temp("ext_signal ~ temp_gat_binned + temp_gat_st:temp_gat_lt3")
-mod8 <- brm_temp("ext_signal ~ temp_gat_binned + temp_gat_st:temp_gat_lt4")
+mod5 <- brm_logistic("ext_signal ~ temp_gat_binned + temp_gat_st:temp_gat_lt1")
+mod6 <- brm_logistic("ext_signal ~ temp_gat_binned + temp_gat_st:temp_gat_lt2")
+mod7 <- brm_logistic("ext_signal ~ temp_gat_binned + temp_gat_st:temp_gat_lt3")
+mod8 <- brm_logistic("ext_signal ~ temp_gat_binned + temp_gat_st:temp_gat_lt4")
 
 
 

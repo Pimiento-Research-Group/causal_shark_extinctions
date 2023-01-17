@@ -29,3 +29,23 @@ colour_purple = "#534666"
 colour_mint = "#138086"
 colour_grey = "grey55"
 colour_coral = "#CD7672"
+  
+
+
+# functions ---------------------------------------------------------------
+
+# set up model function
+brm_logistic <- function(model_formula) {
+  
+  brm(bf(model_formula), 
+      family = "bernoulli", 
+      data = dat_merged, 
+      seed = 1708, 
+      cores = parallel::detectCores(), 
+      chains = 4, 
+      iter = 10000, 
+      silent = 2,
+      refresh = 0)
+  
+}
+
