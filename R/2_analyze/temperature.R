@@ -4,6 +4,7 @@ library(here)
 library(dagitty)
 library(brms)
 library(tidybayes)
+library(patchwork)
 
 # plotting configurations
 source(here("R", "config_file.R"))
@@ -123,9 +124,70 @@ plot_temp <- dat_pred %>%
   labs(y = "Extinction Risk [%]", 
        x = "Global Temperature [°C]")
 
+
+# estimate trend ----------------------------------------------------------
+
+# average posterior draws by model stacking
+dat_pred_post <- posterior_average(mod1, mod2,
+                                   mod3, mod4,
+                                   mod5, mod6,
+                                   mod7, mod8,
+                                   variable = c("b_temp_gat_binned", "b_temp_deep_binned"),
+                                   seed = 1708,
+                                   ndraws =  1e4, 
+                                   missing = NA) %>% 
+  pivot_longer(cols = everything(), 
+               names_to = "coef_name", 
+               values_to = "coef_val") %>% 
+  drop_na(coef_val)
+
+
+
+# visualise
+plot_temp_beta <- dat_pred_post %>%
+  ggplot(aes(coef_val)) +
+  geom_vline(xintercept = 0, 
+             linewidth = 0.5,
+             colour = "grey40") +
+  stat_slab(shape = 21, 
+            slab_colour = NA, 
+            slab_fill = colour_coral, 
+            slab_alpha = 0.7,
+            point_size = 3, 
+            point_fill = "white",
+            point_colour = colour_coral) +
+  annotate("text", 
+           label = "\u03B2", 
+           x = -0.25, 
+           y = 0.85, 
+           size = 10/.pt, 
+           colour = "grey40") +
+  scale_y_continuous(breaks = NULL) +
+  scale_x_continuous(breaks = 0) +
+  labs(y = NULL, 
+       x = NULL) +
+  theme(plot.background = elementalist::element_rect_round(radius = unit(0.85, "cm"), 
+                                                           color = "#FFE1E0"), 
+        axis.ticks = element_blank())
+
+
+
+
+# patch together and save -------------------------------------------------
+
+
+# patch together
+plot_final <- plot_temp +
+  inset_element(plot_temp_beta, 
+                left = 0.75, 
+                bottom = 0.6, 
+                right = 0.9,
+                top = 0.8) 
+
+
 # save plot
-ggsave(plot_temp, filename = here("figures",
-                                  "effect_temperature.png"), 
+ggsave(plot_final, filename = here("figures",
+                                   "effect_temperature.png"), 
        width = image_width, height = image_height,
        units = image_units, 
        bg = "white", device = ragg::agg_png)
