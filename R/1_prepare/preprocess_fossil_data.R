@@ -184,11 +184,17 @@ dat_latitude <- dat_occ_binned_coord %>%
 
 # calculate abundance -----------------------------------------------------
 
+# number of occurrences
 dat_abund <- dat_occ_binned %>% 
   # select only species
   filter(rank == "species") %>% 
   count(bin, modified_identified_name) 
   
+# number of species within genera
+dat_abund_genus <- dat_occ_binned %>% 
+  # select only species
+  filter(rank == "species") %>% 
+  count(bin, genus) 
 
 
 # sampling effort ---------------------------------------------------------
@@ -280,6 +286,8 @@ dat_full %>%
   # get taxonomy
   left_join(dat_occ_binned %>% 
               distinct(modified_identified_name, genus, family, order)) %>% 
+  # add genus counts
+  left_join(dat_abund_genus %>% rename(n_genus = n)) %>% 
   select(order, family, genus, species = modified_identified_name,
          everything()) %>% 
   # save dataset
