@@ -34,7 +34,7 @@ colour_coral = "#CD7672"
 
 # functions ---------------------------------------------------------------
 
-# set up model function
+# set up logistic model function
 brm_logistic <- function(model_formula) {
   
   brm(bf(model_formula), 
@@ -47,4 +47,5 @@ brm_logistic <- function(model_formula) {
       warmup = 2000)
   
 }
+
 
