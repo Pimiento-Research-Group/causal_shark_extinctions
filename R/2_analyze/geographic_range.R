@@ -51,11 +51,16 @@ adjustmentSets(dag,
 mod1 <- brm_logistic("ext_signal ~ geo_dist_std + abund + order")
 mod2 <- brm_logistic("ext_signal ~ range_lat_std + abund + order")
 
+# number of genera
+mod3 <- brm_logistic("ext_signal ~ geo_dist_std + n_genus + order")
+mod4 <- brm_logistic("ext_signal ~ range_lat_std + n_genus + order")
+
 
 # average models ----------------------------------------------------------
 
 # set up grid to average over
-dat_new <- tibble(geo_dist_std = -2:2) %>%
+dat_new <- tibble(geo_dist_std = -2:2, 
+                  n_genus = geo_dist_std) %>%
   # average over taxonomy
   expand_grid(order = unique(dat_merged$order)) %>% 
   mutate(range_lat_std = geo_dist_std) %>% 
@@ -67,6 +72,7 @@ nr_draws <- 100
 
 # average prediction by model stacking
 dat_pred <- pp_average(mod1, mod2,
+                       mod3, mod4,
                        newdata = dat_new,
                        seed = 1708,
                        summary = FALSE, 
@@ -94,7 +100,7 @@ plot_range <- dat_pred %>%
             slab_alpha = 0.3,
             scale = 0.2,
             data = dat_merged %>% 
-              pivot_longer(cols = geo_dist_std, 
+              pivot_longer(cols = c(geo_dist_std, range_lat_std), 
                            values_to = "geo_range", 
                            names_to = "geo_range_name") %>% 
               # spread out a bit
