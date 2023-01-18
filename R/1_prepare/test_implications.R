@@ -32,6 +32,8 @@ dat_proxy <- dat_proxy %>%
 
 # same for fossil data
 dat_fossil <- dat_fossil %>% 
+  # add zero genus counts
+  replace_na(list(n_genus = 0)) %>% 
   mutate(across(c(range_lat, geo_dist, # scale geographic range parameters
                   mean_q, # and preservation rate
                   pbdb_collections, shark_collections), # and sampling effort
