@@ -51,6 +51,7 @@ dat_merged <- left_join(dat_proxy,
   replace_na(list(abund = 0)) %>% 
   select(bin, order, family, genus, species,
          latitude_pref_abs,
+         n_genus,
          abund, 
          ext_signal, 
          sea_level, 
