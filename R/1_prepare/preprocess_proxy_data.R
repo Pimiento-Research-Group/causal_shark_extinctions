@@ -410,8 +410,6 @@ dat_outcrop <- read_xlsx(here("data",
                         include.lowest = TRUE,
                         labels = FALSE)) %>% 
   drop_na(bin) %>% 
-  group_by(bin) %>% 
-  ungroup() %>% 
   select(bin, outcrop_area, age) 
 
 # use natural spline for interpolation
@@ -461,8 +459,6 @@ dat_cont_area_full <- read_csv(here("data",
                         include.lowest = TRUE,
                         labels = FALSE)) %>% 
   drop_na(bin) %>% 
-  group_by(bin) %>% 
-  ungroup() %>% 
   select(bin, cont_area, age)
 
 # save
@@ -586,7 +582,7 @@ dat_temp_full <- read_xlsx(here("data",
                         include.lowest = TRUE,
                         labels = FALSE)) %>% 
   drop_na(bin) %>% 
-  group_by(bin) %>% 
+  %>% %>% 
   mutate(temp_gat_binned = mean(temp_gat), 
          temp_deep_binned = mean(temp_deep)) %>% 
   ungroup() %>% 
