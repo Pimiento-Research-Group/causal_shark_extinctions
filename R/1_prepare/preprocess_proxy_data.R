@@ -359,8 +359,6 @@ dat_marine_units_full <- read_csv(here("data",
                         include.lowest = TRUE,
                         labels = FALSE)) %>% 
   drop_na(bin) %>% 
-  group_by(bin) %>% 
-  ungroup() %>% 
   select(bin, unit_id, age, environ) %>% 
   count(bin) %>% 
   # add bins with zero counts
