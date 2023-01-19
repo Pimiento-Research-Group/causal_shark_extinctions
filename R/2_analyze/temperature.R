@@ -27,7 +27,7 @@ dat_merged <- read_rds(here("data",
 dag <- downloadGraph("dagitty.net/m_UM7hV")
 
 
-# get adjustments sets for temperature, for the total effect
+# get adjustments sets for the total effect
 adjustmentSets(dag, 
                exposure = "temperature",
                outcome = "extinction risk", 

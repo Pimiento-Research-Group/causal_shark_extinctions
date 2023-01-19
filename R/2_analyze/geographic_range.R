@@ -33,7 +33,7 @@ dat_merged <- dat_merged %>%
 dag <- downloadGraph("dagitty.net/m_UM7hV")
 
 
-# get adjustments sets for temperature, for the total effect
+# get adjustments for the total effect
 adjustmentSets(dag, 
                exposure = "geographic range",
                outcome = "extinction risk", 
