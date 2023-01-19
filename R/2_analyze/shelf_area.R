@@ -4,6 +4,7 @@ library(here)
 library(dagitty)
 library(brms)
 library(tidybayes)
+library(patchwork)
 
 # plotting configurations
 source(here("R", "config_file.R"))
@@ -86,9 +87,63 @@ plot_shelf <- dat_pred %>%
        x = "Continental Flooding [Proportion of Earth's Surface]")
 
 
+# estimate trend ----------------------------------------------------------
+
+# average posterior draws by model stacking
+dat_pred_post <- as_draws_df(mod1, 
+                             variable = "b_cont_area") %>% 
+  as_tibble() %>% 
+  select(coef_val = b_cont_area) %>% 
+  slice_sample(n = 1e4)
+
+
+
+# visualise
+plot_shelf_beta <- dat_pred_post %>%
+  ggplot(aes(coef_val)) +
+  geom_vline(xintercept = 0, 
+             linewidth = 0.5,
+             colour = "grey40") +
+  stat_slab(shape = 21, 
+            slab_colour = NA, 
+            slab_fill = "#BD8D9E", 
+            slab_alpha = 0.7,
+            point_size = 3, 
+            point_fill = "white",
+            point_colour = "#BD8D9E") +
+  annotate("text", 
+           label = "\u03B2", 
+           x = -17, 
+           y = 0.85, 
+           size = 10/.pt, 
+           colour = "grey40") +
+  scale_y_continuous(breaks = NULL) +
+  scale_x_continuous(breaks = 0) +
+  labs(y = NULL, 
+       x = NULL) +
+  theme(plot.background = elementalist::element_rect_round(radius = unit(0.85, "cm"), 
+                                                           color = "#FFEFE1"), 
+        axis.ticks = element_blank())
+
+
+
+
+# patch together and save -------------------------------------------------
+
+
+# patch together
+plot_final <- plot_shelf +
+  inset_element(plot_shelf_beta, 
+                left = 0.1, 
+                bottom = 0.6, 
+                right = 0.25,
+                top = 0.8) 
+
+
+
 # save plot
-ggsave(plot_shelf, filename = here("figures",
-                                 "effect_shelf_area.png"), 
+ggsave(plot_final, filename = here("figures",
+                                   "effect_shelf_area.png"), 
        width = image_width, height = image_height,
        units = image_units, 
        bg = "white", device = ragg::agg_png)
