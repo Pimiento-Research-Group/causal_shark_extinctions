@@ -88,7 +88,14 @@ dat_pred <- pp_average(mod1, mod2, mod3, mod4,
              temperature_lt = rep(dat_new$temp_deep_lt, nr_draws)) %>% 
   mutate(trend = if_else(temperature_lt <= 0, "Warming", "Cooling")) %>% 
   group_by(nr_draw, temperature_st, trend) %>%
-  mean_qi(value)
+  mean_qi(value) %>% 
+  select(temperature_st, trend, value, nr_draw)
+
+# save predictions
+dat_pred %>% 
+  write_rds(here("data", 
+                 "predictions", 
+                 "pred_paleotemperature.rds"))
 
 # average over posterior draws
 dat_pred_av <- dat_pred %>% 
@@ -114,41 +121,41 @@ plot_paleotemp <- dat_pred %>%
               filter(between(temperature_st, -3, 3))) +
   geom_line(aes(group = interaction(nr_draw, trend), 
                 colour = trend), 
-            alpha = 0.1) +
+            alpha = 0.05) +
   geom_line(aes(group = trend), 
             colour = "white",
-            linewidth = 1.3, 
+            linewidth = 1, 
             data = dat_pred_av) +
   geom_line(aes(colour = trend),
-            linewidth = 1, 
+            linewidth = 0.7, 
             data = dat_pred_av) +
   annotate("text", 
            y = 0.263, x = -1.8, 
            label = "Long-term Cooling", 
-           colour = "#186AA5", 
+           colour = "#9CBABF", 
            size = 10/.pt, 
            alpha = 0.8) +
   annotate(geom = "curve",
            x = -2.4, xend = -2.8,
            y = 0.26, yend = 0.13,
            curvature = 0.4,
-           colour = "#186AA5",
+           colour = "#9CBABF",
            arrow = arrow(length = unit(.2,"cm")), 
            alpha = 0.5) +
   annotate("text", 
            y = 0.293, x = 1.1, 
            label = "Long-term Warming", 
-           colour = "#C75E6B", 
+           colour = "#A76861", 
            size = 10/.pt, 
            alpha = 0.8) +
   annotate(geom = "curve",
            x = 1.8, xend = 2.3,
            y = 0.28, yend = 0.13,
            curvature = -0.3,
-           colour = "#C75E6B",
+           colour = "#A76861",
            arrow = arrow(length = unit(.2,"cm")), 
            alpha = 0.5) +
-  scale_color_manual(values = c("#186AA5", "#C75E6B")) +
+  scale_color_manual(values = c("#9CBABF", "#A76861")) +
   scale_y_continuous(breaks = c(0, 0.2, 0.4, 0.6, 0.8, 1), 
                      labels = c("0", "20", "40", "60", "80", "100")) +
   labs(y = "Extinction Risk [%]", 
@@ -174,6 +181,11 @@ dat_pred_post <- posterior_average(mod1, mod2,
   drop_na(coef_val)
 
 
+# save trend predictions
+dat_pred_post %>% 
+  write_rds(here("data", 
+                 "predictions", 
+                 "pred_trend_paleotemperature.rds"))
 
 # visualise
 plot_paleotemp_beta <- dat_pred_post %>%
@@ -193,13 +205,13 @@ plot_paleotemp_beta <- dat_pred_post %>%
            y = 0.85, 
            size = 10/.pt, 
            colour = "grey40") +
-  scale_fill_manual(values = c("#186AA5", "#C75E6B", "#186AA5")) +
+  scale_fill_manual(values = c("#9CBABF", "#A76861", "#9CBABF")) +
   scale_y_continuous(breaks = NULL) +
   scale_x_continuous(breaks = 0) +
   labs(y = NULL, 
        x = NULL) +
   theme(plot.background = elementalist::element_rect_round(radius = unit(0.85, "cm"), 
-                                                           color = "#FFE1E0"), 
+                                                           color = "grey80"), 
         axis.ticks = element_blank(), 
         legend.position = "none") 
 
