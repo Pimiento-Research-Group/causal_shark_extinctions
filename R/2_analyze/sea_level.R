@@ -4,6 +4,7 @@ library(here)
 library(dagitty)
 library(brms)
 library(tidybayes)
+library(patchwork)
 
 # plotting configurations
 source(here("R", "config_file.R"))
@@ -68,7 +69,14 @@ dat_pred <- pp_average(mod1, mod2,
   pivot_longer(cols = contains("V")) %>% 
   add_column(sea_level = rep(dat_new$sea_level, nr_draws)) %>% 
   group_by(nr_draw, sea_level) %>%
-  mean_qi(value) 
+  mean_qi(value) %>% 
+  select(sea_level, value, nr_draw)
+
+# save predictions
+dat_pred %>% 
+  write_rds(here("data", 
+                 "predictions", 
+                 "pred_sea_level.rds"))
 
 # average over posterior draws
 dat_pred_av <- dat_pred %>% 
@@ -104,9 +112,71 @@ plot_sea <- dat_pred %>%
   labs(y = "Extinction Risk [%]", 
        x = "Global Mean Sea Level [m]")
 
+
+# estimate trend ----------------------------------------------------------
+
+# average posterior draws by model stacking
+dat_pred_post <- posterior_average(mod1, mod2,
+                                   variable = "b_sea_level",
+                                   seed = 1708,
+                                   ndraws =  1e4, 
+                                   missing = NA) %>% 
+  pivot_longer(cols = everything(), 
+               names_to = "coef_name", 
+               values_to = "coef_val") %>% 
+  drop_na(coef_val)
+
+
+# save trend predictions
+dat_pred_post %>% 
+  write_rds(here("data", 
+                 "predictions", 
+                 "pred_trend_sea_level.rds"))
+
+# visualise
+plot_sea_beta <- dat_pred_post %>%
+  ggplot(aes(coef_val)) +
+  geom_vline(xintercept = 0, 
+             linewidth = 0.5,
+             colour = "grey40") +
+  stat_slab(shape = 21, 
+            slab_colour = NA, 
+            slab_fill = colour_mint, 
+            slab_alpha = 0.7,
+            point_size = 3, 
+            point_fill = "white",
+            point_colour = colour_mint) +
+  annotate("text", 
+           label = "\u03B2", 
+           x = -0.03, 
+           y = 0.85, 
+           size = 10/.pt, 
+           colour = "grey40") +
+  scale_y_continuous(breaks = NULL) +
+  scale_x_continuous(breaks = 0) +
+  labs(y = NULL, 
+       x = NULL) +
+  theme(plot.background = elementalist::element_rect_round(radius = unit(0.85, "cm"), 
+                                                           color = colour_mint), 
+        axis.ticks = element_blank())
+
+
+
+
+# patch together and save -------------------------------------------------
+
+
+# patch together
+plot_final <- plot_sea +
+  inset_element(plot_sea_beta, 
+                left = 0.1, 
+                bottom = 0.6, 
+                right = 0.25,
+                top = 0.8) 
+
 # save plot
-ggsave(plot_sea, filename = here("figures",
-                                 "effect_sea_level.png"), 
+ggsave(plot_final, filename = here("figures",
+                                   "effect_sea_level.png"), 
        width = image_width, height = image_height,
        units = image_units, 
        bg = "white", device = ragg::agg_png)
