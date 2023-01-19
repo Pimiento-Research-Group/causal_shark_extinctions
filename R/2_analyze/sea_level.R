@@ -169,9 +169,9 @@ plot_sea_beta <- dat_pred_post %>%
 # patch together
 plot_final <- plot_sea +
   inset_element(plot_sea_beta, 
-                left = 0.1, 
+                left = 0.75, 
                 bottom = 0.6, 
-                right = 0.25,
+                right = 0.9,
                 top = 0.8) 
 
 # save plot

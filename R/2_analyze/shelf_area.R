@@ -147,10 +147,10 @@ plot_shelf_beta <- dat_pred_post %>%
 # patch together
 plot_final <- plot_shelf +
   inset_element(plot_shelf_beta, 
-                left = 0.1, 
+                left = 0.75, 
                 bottom = 0.6, 
-                right = 0.25,
-                top = 0.8) 
+                right = 0.9,
+                top = 0.8)
 
 
 
