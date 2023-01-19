@@ -53,7 +53,15 @@ dat_pred <- tibble(cont_area = seq(0, 0.3, by = 0.02),
                    sea_level = mean(dat_merged$sea_level)) %>% 
   # add posterior draws
   add_epred_draws(mod1, 
-                  ndraws = 100) 
+                  ndraws = 100) %>% 
+  ungroup() %>% 
+  select(cont_area, .epred, .draw)
+
+# save predictions
+dat_pred %>% 
+  write_rds(here("data", 
+                 "predictions", 
+                 "pred_shelf_area.rds"))
 
 dat_pred_av <- dat_pred %>% 
   group_by(cont_area) %>% 
@@ -97,6 +105,11 @@ dat_pred_post <- as_draws_df(mod1,
   slice_sample(n = 1e4)
 
 
+# save trend predictions
+dat_pred_post %>% 
+  write_rds(here("data", 
+                 "predictions", 
+                 "pred_trend_shelf_area.rds"))
 
 # visualise
 plot_shelf_beta <- dat_pred_post %>%
@@ -122,7 +135,7 @@ plot_shelf_beta <- dat_pred_post %>%
   labs(y = NULL, 
        x = NULL) +
   theme(plot.background = elementalist::element_rect_round(radius = unit(0.85, "cm"), 
-                                                           color = "#FFEFE1"), 
+                                                           color = "#BD8D9E"), 
         axis.ticks = element_blank())
 
 
