@@ -147,7 +147,15 @@ dat_pred <- pp_average(mod1, mod2, mod3, mod4,
   pivot_longer(cols = contains("V")) %>% 
   add_column(productivity = rep(dat_new$d13C_std, nr_draws)) %>% 
   group_by(nr_draw, productivity) %>%
-  mean_qi(value) 
+  mean_qi(value) %>% 
+  select(productivity, value, nr_draw)
+
+
+# save predictions
+dat_pred %>% 
+  write_rds(here("data", 
+                 "predictions", 
+                 "pred_productivity.rds"))
 
 # average over posterior draws
 dat_pred_av <- dat_pred %>% 
@@ -203,6 +211,11 @@ dat_pred_post <- posterior_average(mod1, mod2,
   drop_na(coef_val)
 
 
+# save trend predictions
+dat_pred_post %>% 
+  write_rds(here("data", 
+                 "predictions", 
+                 "pred_trend_productivity.rds"))
 
 # visualise
 plot_prod_beta <- dat_pred_post %>%
@@ -228,7 +241,7 @@ plot_prod_beta <- dat_pred_post %>%
   labs(y = NULL, 
        x = NULL) +
   theme(plot.background = elementalist::element_rect_round(radius = unit(0.85, "cm"), 
-                                                           color = "#FFEFE1"), 
+                                                           color = colour_yellow), 
         axis.ticks = element_blank())
 
 
