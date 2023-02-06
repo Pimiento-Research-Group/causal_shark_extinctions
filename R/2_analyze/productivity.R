@@ -155,7 +155,8 @@ dat_pred <- pp_average(mod1, mod2, mod3, mod4,
 dat_pred %>% 
   write_rds(here("data", 
                  "predictions", 
-                 "pred_productivity.rds"))
+                 "pred_productivity.rds"), 
+            compress = "gz")
 
 # average over posterior draws
 dat_pred_av <- dat_pred %>% 
@@ -237,7 +238,7 @@ plot_prod_beta <- dat_pred_post %>%
            size = 10/.pt, 
            colour = "grey40") +
   scale_y_continuous(breaks = NULL) +
-  scale_x_continuous(breaks = 0, limits = c(-1, 3.2)) +
+  scale_x_continuous(breaks = 0, limits = c(-1, 2.6)) +
   labs(y = NULL, 
        x = NULL) +
   theme(plot.background = elementalist::element_rect_round(radius = unit(0.85, "cm"), 
