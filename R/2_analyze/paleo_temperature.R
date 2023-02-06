@@ -95,7 +95,8 @@ dat_pred <- pp_average(mod1, mod2, mod3, mod4,
 dat_pred %>% 
   write_rds(here("data", 
                  "predictions", 
-                 "pred_paleotemperature.rds"))
+                 "pred_paleotemperature.rds"), 
+            compress = "gz")
 
 # average over posterior draws
 dat_pred_av <- dat_pred %>% 
@@ -137,7 +138,7 @@ plot_paleotemp <- dat_pred %>%
            alpha = 0.8) +
   annotate(geom = "curve",
            x = -2.4, xend = -2.8,
-           y = 0.26, yend = 0.13,
+           y = 0.26, yend = 0.165,
            curvature = 0.4,
            colour = "#9CBABF",
            arrow = arrow(length = unit(.2,"cm")), 
@@ -150,7 +151,7 @@ plot_paleotemp <- dat_pred %>%
            alpha = 0.8) +
   annotate(geom = "curve",
            x = 1.8, xend = 2.3,
-           y = 0.28, yend = 0.13,
+           y = 0.28, yend = 0.16,
            curvature = -0.3,
            colour = "#A76861",
            arrow = arrow(length = unit(.2,"cm")), 
@@ -185,7 +186,8 @@ dat_pred_post <- posterior_average(mod1, mod2,
 dat_pred_post %>% 
   write_rds(here("data", 
                  "predictions", 
-                 "pred_trend_paleotemperature.rds"))
+                 "pred_trend_paleotemperature.rds"), 
+            compress = "gz")
 
 # visualise
 plot_paleotemp_beta <- dat_pred_post %>%
@@ -201,13 +203,14 @@ plot_paleotemp_beta <- dat_pred_post %>%
             point_colour = colour_coral) +
   annotate("text", 
            label = "\u03B2", 
-           x = -0.075, 
+           x = -0.16, 
            y = 0.85, 
            size = 10/.pt, 
            colour = "grey40") +
-  scale_fill_manual(values = c("#9CBABF", "#A76861", "#9CBABF")) +
+  scale_fill_manual(values = c("#A76861", "#9CBABF")) +
   scale_y_continuous(breaks = NULL) +
   scale_x_continuous(breaks = 0) +
+  coord_cartesian(xlim = c(-0.23, 0.15)) +
   labs(y = NULL, 
        x = NULL) +
   theme(plot.background = elementalist::element_rect_round(radius = unit(0.85, "cm"), 
