@@ -133,7 +133,8 @@ dat_occ_binned_coord <- dat_occ_binned %>%
 dat_occ_binned_coord %>% 
   write_rds(here("data",
                  "fossil_occurrences",
-                 "binned_rotated_occurrences.rds"))
+                 "binned_rotated_occurrences.rds"), 
+            compress = "gz")
   
 
 
@@ -144,11 +145,13 @@ dat_occ_binned_coord %>%
 dat_range_lat <- dat_occ_binned_coord %>% 
   # select only species
   filter(rank == "species") %>% 
-  group_by(modified_identified_name) %>% 
+  group_by(modified_identified_name, bin) %>% 
   summarise(min_lat = min(paleolat), 
             max_lat = max(paleolat)) %>% 
+  ungroup() %>% 
   mutate(range_lat = abs(min_lat - max_lat)) %>% 
-  select(modified_identified_name, range_lat)
+  select(modified_identified_name, bin, range_lat)
+
 
 # calculate great circle distance via geodesic distance between two 
 # points specified by radian latitude/longitude using the
@@ -156,18 +159,20 @@ dat_range_lat <- dat_occ_binned_coord %>%
 dat_dist <- dat_occ_binned_coord %>% 
   # select only species
   filter(rank == "species") %>%
-  group_by(modified_identified_name) %>% 
+  group_by(modified_identified_name, bin) %>% 
   # get maximum distance
   summarise(min_lat = min(paleolat), 
             max_lat = max(paleolat), 
             min_long = min(paleolong), 
-            max_long = max(paleolong)) %>% 
+            max_long = max(paleolong)) %>%
+  ungroup() %>% 
   # convert to radians
   mutate(across(min_lat:max_long, ~ .x*pi/180)) %>% 
   # use earth radius and slc
   mutate(geo_dist = acos(sin(min_lat)*sin(max_lat) + cos(min_lat)*cos(max_lat) * cos(max_long-min_long)) * 6371) %>% 
   drop_na(geo_dist) %>% 
   select(modified_identified_name, 
+         bin,
          geo_dist)
 
 
@@ -178,7 +183,7 @@ dat_dist <- dat_occ_binned_coord %>%
 dat_latitude <- dat_occ_binned_coord %>% 
   # select only species
   filter(rank == "species") %>% 
-  group_by(modified_identified_name) %>% 
+  group_by(modified_identified_name, bin) %>% 
   summarise(latitude_pref = mean(paleolat))
   
 
@@ -260,12 +265,16 @@ dat_full <- dat_range_lat %>%
   # abundance
   rename(abund = n) %>% 
   # preservation rate
-  full_join(dat_preservation) %>% 
+  left_join(dat_preservation) %>% 
+  left_join(dat_preservation %>%
+              group_by(bin) %>%
+              summarise(mean_q_av = mean(mean_q))) %>% 
+  mutate(mean_q = if_else(is.na(mean_q), mean_q_av, mean_q)) %>%
   # sampling
-  full_join(dat_pbdb_sampling %>% 
+  left_join(dat_pbdb_sampling %>% 
               mutate(bin = as.numeric(as.character(bin)))) %>% 
   rename(pbdb_collections = n) %>% 
-  full_join(dat_sampling %>% 
+  left_join(dat_sampling %>% 
               mutate(bin = as.numeric(as.character(bin))) %>% 
               rename(shark_collections = n)) 
   
@@ -279,10 +288,6 @@ dat_full %>%
   drop_na(ext_signal) %>% 
   replace_na(list(geo_dist = 0, range_lat = 0,  
                   latitude_pref = mean(dat_latitude$latitude_pref))) %>%
-  left_join(dat_preservation %>%
-              group_by(bin) %>%
-              summarise(mean_q_av = mean(mean_q))) %>% 
-  mutate(mean_q = if_else(is.na(mean_q), mean_q_av, mean_q)) %>% 
   # get taxonomy
   left_join(dat_occ_binned %>% 
               distinct(modified_identified_name, genus, family, order)) %>% 
