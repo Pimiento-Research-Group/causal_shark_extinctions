@@ -61,7 +61,8 @@ dat_pred <- tibble(cont_area = seq(0, 0.3, by = 0.02),
 dat_pred %>% 
   write_rds(here("data", 
                  "predictions", 
-                 "pred_shelf_area.rds"))
+                 "pred_shelf_area.rds"), 
+            compress = "gz")
 
 dat_pred_av <- dat_pred %>% 
   group_by(cont_area) %>% 
@@ -109,7 +110,8 @@ dat_pred_post <- as_draws_df(mod1,
 dat_pred_post %>% 
   write_rds(here("data", 
                  "predictions", 
-                 "pred_trend_shelf_area.rds"))
+                 "pred_trend_shelf_area.rds"), 
+            compress = "gz")
 
 # visualise
 plot_shelf_beta <- dat_pred_post %>%
@@ -126,7 +128,7 @@ plot_shelf_beta <- dat_pred_post %>%
             point_colour = "#BD8D9E") +
   annotate("text", 
            label = "\u03B2", 
-           x = -17, 
+           x = -10, 
            y = 0.85, 
            size = 10/.pt, 
            colour = "grey40") +
@@ -147,9 +149,9 @@ plot_shelf_beta <- dat_pred_post %>%
 # patch together
 plot_final <- plot_shelf +
   inset_element(plot_shelf_beta, 
-                left = 0.75, 
+                left = 0.15, 
                 bottom = 0.6, 
-                right = 0.9,
+                right = 0.3,
                 top = 0.8)
 
 
