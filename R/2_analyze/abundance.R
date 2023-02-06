@@ -146,7 +146,8 @@ dat_pred <- pp_average(mod1, mod2,
 dat_pred %>% 
   write_rds(here("data", 
                  "predictions", 
-                 "pred_abundance.rds"))
+                 "pred_abundance.rds"), 
+            compress = "gz")
 
 # average over posterior draws
 dat_pred_av <- dat_pred %>% 
@@ -202,7 +203,8 @@ dat_pred_post <- posterior_average(mod1, mod2,
 dat_pred_post %>% 
   write_rds(here("data", 
                  "predictions", 
-                 "pred_trend_abund.rds"))
+                 "pred_trend_abund.rds"), 
+            compress = "gz")
 
 # visualise
 plot_abund_beta <- dat_pred_post %>%
@@ -219,12 +221,12 @@ plot_abund_beta <- dat_pred_post %>%
             point_colour = "#BD6E4E") +
   annotate("text", 
            label = "\u03B2", 
-           x = -0.1, 
+           x = -0.4, 
            y = 0.85, 
            size = 10/.pt, 
            colour = "grey40") +
   scale_y_continuous(breaks = NULL) +
-  scale_x_continuous(breaks = 0, limits = c(-0.17, 0.04)) +
+  scale_x_continuous(breaks = 0, limits = c(-0.45, 0.04)) +
   labs(y = NULL, 
        x = NULL) +
   theme(plot.background = elementalist::element_rect_round(radius = unit(0.85, "cm"), 
