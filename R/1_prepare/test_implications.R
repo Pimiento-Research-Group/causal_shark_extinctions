@@ -116,4 +116,4 @@ for (i in 1:length(implied_conditions)) {
   
 }
 
-implied_conditions[cor_val >= 0.3]
+implied_conditions[cor_val >= 0.5]
