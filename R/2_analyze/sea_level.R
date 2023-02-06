@@ -76,7 +76,8 @@ dat_pred <- pp_average(mod1, mod2,
 dat_pred %>% 
   write_rds(here("data", 
                  "predictions", 
-                 "pred_sea_level.rds"))
+                 "pred_sea_level.rds"), 
+            compress = "gz")
 
 # average over posterior draws
 dat_pred_av <- dat_pred %>% 
@@ -131,7 +132,8 @@ dat_pred_post <- posterior_average(mod1, mod2,
 dat_pred_post %>% 
   write_rds(here("data", 
                  "predictions", 
-                 "pred_trend_sea_level.rds"))
+                 "pred_trend_sea_level.rds"), 
+            compress = "gz")
 
 # visualise
 plot_sea_beta <- dat_pred_post %>%
