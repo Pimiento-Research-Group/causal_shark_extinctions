@@ -103,7 +103,7 @@ mod8 <- brm_logistic("ext_signal ~ geo_dist_std + outcrop_area_std  + temp_deep_
 # average models ----------------------------------------------------------
 
 # set up grid to average over
-dat_new <- tibble(geo_dist_std = -2:2, 
+dat_new <- tibble(geo_dist_std = seq(-1.5, 2.5, by = 0.2), 
                   n_genus = geo_dist_std) %>%
   # average over taxonomy
   expand_grid(order = unique(dat_merged$order)) %>% 
@@ -149,7 +149,8 @@ dat_pred <- pp_average(mod1, mod2,
 dat_pred %>% 
   write_rds(here("data", 
                  "predictions", 
-                 "pred_geo_range.rds"))
+                 "pred_geo_range.rds"), 
+            compress = "gz")
 
 
 # average over posterior draws
@@ -182,7 +183,7 @@ plot_range <- dat_pred %>%
             data = dat_pred_av) +
   scale_y_continuous(breaks = c(0, 0.2, 0.4, 0.6, 0.8, 1), 
                      labels = c("0", "20", "40", "60", "80", "100")) +
-  coord_cartesian(xlim = c(-2, 2)) +
+  coord_cartesian(xlim = c(-1.5, 2.5)) +
   labs(y = "Extinction Risk [%]", 
        x = "Geographic Range [srd]")
 
@@ -207,7 +208,8 @@ dat_pred_post <- posterior_average(mod1, mod2,
 dat_pred_post %>% 
   write_rds(here("data", 
                  "predictions", 
-                 "pred_trend_geo_range.rds"))
+                 "pred_trend_geo_range.rds"), 
+            compress = "gz")
 
 # visualise
 plot_range_beta <- dat_pred_post %>%
@@ -224,7 +226,7 @@ plot_range_beta <- dat_pred_post %>%
                point_colour = colour_purple) +
   annotate("text", 
            label = "\u03B2", 
-           x = -0.8, 
+           x = -1.5, 
            y = 0.85, 
            size = 10/.pt, 
            colour = "grey40") +
