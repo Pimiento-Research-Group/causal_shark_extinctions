@@ -1,4 +1,5 @@
 # load packages
+library(chronosphere)
 library(tidyverse)
 library(here)
 library(readxl)
@@ -181,11 +182,6 @@ dat_proxy <- dat_13C_full %>%
   
 
 
-# save data file
-dat_proxy %>% 
-  write_rds(here("data", 
-                 "processed_proxy_data_10myr.rds"))
-
 
 # fossil data -------------------------------------------------------------
 
@@ -226,43 +222,34 @@ dat_species <- read_delim(here("data",
   select(-bin_ext, 
          bin = bin_occ)
 
-# save data
-dat_species %>% 
-  write_rds(here("data", 
-                 "species_extinction_signal_10myr.rds"))
 
-
-
-# occurrence data ---------------------------------------------------------
 
 # load occurrence database
 dat_occurrences <- read_rds(here("data",
                                  "fossil_occurrences",
                                  "database_occurrences_10_Jan_2023.rds"))
 
-# bin the occurrences to stages
+# bin the occurrences to 10 myr
 dat_occ_binned <- dat_occurrences %>% 
-  mutate(bin_min = 95 - cut(Min_Ma, breaks = dat_stages$bottom,
-                            include.lowest = TRUE,
-                            labels = FALSE), 
-         bin_max = 95 - cut(Max_Ma, breaks = dat_stages$bottom,
-                            include.lowest = TRUE,
-                            labels = FALSE)) %>% 
+  mutate(bin_min = cut(Min_Ma, breaks = seq(250, 0, by = -10),
+                       include.lowest = TRUE,
+                       labels = FALSE), 
+         bin_max = cut(Max_Ma, breaks = seq(250, 0, by = -10),
+                       include.lowest = TRUE,
+                       labels = FALSE)) %>% 
   # select entries, where the early and late interval fields indicate 
-  # the same stg or the late_intervar field is empty
+  # the same stg or the late_interval field is empty
   filter(bin_min == bin_max | is.na(bin_max)) %>% 
   # in these entries, use the stg indicated by the early_interval
   select(bin = bin_min, everything(), -bin_max) %>% 
   # clean up
   drop_na(bin) %>% 
   # get the age estimate for the corresponding bin
-  left_join(dat_stages %>% 
-              select(bin = stg, age = mid))
+  left_join(tibble(bin = 25:1, age = seq(245, 5, by = -10)))
 
 
 
-# reconstruct paleo-coordinates -------------------------------------------
-
+# reconstruct paleo-coordinates
 # reformat data
 dat_coords <- dat_occ_binned %>% 
   distinct(Longitude, Latitude, age) %>% 
@@ -301,11 +288,8 @@ dat_occ_binned_coord <- dat_occ_binned %>%
 dat_occ_binned_coord %>% 
   write_rds(here("data",
                  "fossil_occurrences",
-                 "binned_rotated_occurrences.rds"))
+                 "binned_rotated_occurrences_10myr.rds"))
 
-
-
-# geographic range --------------------------------------------------------
 
 
 # calculate latitude range in absolute degrees
@@ -324,33 +308,30 @@ dat_range_lat <- dat_occ_binned_coord %>%
 dat_dist <- dat_occ_binned_coord %>% 
   # select only species
   filter(rank == "species") %>%
-  group_by(modified_identified_name) %>% 
+  group_by(modified_identified_name, bin) %>% 
   # get maximum distance
   summarise(min_lat = min(paleolat), 
             max_lat = max(paleolat), 
             min_long = min(paleolong), 
             max_long = max(paleolong)) %>% 
+  ungroup() %>% 
   # convert to radians
   mutate(across(min_lat:max_long, ~ .x*pi/180)) %>% 
   # use earth radius and slc
   mutate(geo_dist = acos(sin(min_lat)*sin(max_lat) + cos(min_lat)*cos(max_lat) * cos(max_long-min_long)) * 6371) %>% 
   drop_na(geo_dist) %>% 
-  select(modified_identified_name, 
+  select(modified_identified_name, bin, 
          geo_dist)
 
-
-
-# latitude ----------------------------------------------------------------
 
 # calculate latitudinal preference of species
 dat_latitude <- dat_occ_binned_coord %>% 
   # select only species
   filter(rank == "species") %>% 
-  group_by(modified_identified_name) %>% 
-  summarise(latitude_pref = mean(paleolat))
+  group_by(modified_identified_name, bin) %>% 
+  summarise(latitude_pref = mean(paleolat)) %>% 
+  ungroup()
 
-
-# calculate abundance -----------------------------------------------------
 
 # number of occurrences
 dat_abund <- dat_occ_binned %>% 
@@ -365,14 +346,12 @@ dat_abund_genus <- dat_occ_binned %>%
   count(bin, genus) 
 
 
-# sampling effort ---------------------------------------------------------
-
 # estimate sampling effort by the number of collections per bin
 dat_sampling <- dat_occ_binned %>% 
   distinct(bin, collection_no) %>% 
   count(bin) %>% 
   # add bins with zero counts
-  mutate(bin = factor(bin, levels = 95:69)) %>% 
+  mutate(bin = factor(bin, levels = 1:14)) %>% 
   complete(bin, fill = list(n = 0))
 
 # alternatively the number of collections per bin from the pbdb
@@ -383,12 +362,12 @@ dat_pbdb <- read_csv("https://paleobiodb.org/data1.2/colls/list.csv?interval=Hau
 
 # bin the data
 dat_pbdb_sampling <- dat_pbdb %>% 
-  mutate(bin_min = 95 - cut(min_ma, breaks = dat_stages$bottom,
-                            include.lowest = TRUE,
-                            labels = FALSE), 
-         bin_max = 95 - cut(max_ma, breaks = dat_stages$bottom,
-                            include.lowest = TRUE,
-                            labels = FALSE)) %>% 
+  mutate(bin_min = cut(min_ma, breaks = seq(250, 0, by = -10),
+                       include.lowest = TRUE,
+                       labels = FALSE), 
+         bin_max = cut(max_ma, breaks = seq(250, 0, by = -10),
+                       include.lowest = TRUE,
+                       labels = FALSE)) %>% 
   # select entries, where the early and late interval fields indicate 
   # the same stg or the late_intervar field is empty
   filter(bin_min == bin_max | is.na(bin_max)) %>% 
@@ -400,22 +379,40 @@ dat_pbdb_sampling <- dat_pbdb %>%
   distinct(bin, collection_no) %>% 
   count(bin) %>% 
   # add bins with zero counts
-  mutate(bin = factor(bin, levels = 95:69)) %>% 
+  mutate(bin = factor(bin, levels = 1:14)) %>% 
   complete(bin, fill = list(n = 0))
 
 
 
-# preservation potential --------------------------------------------------
-
 # get preservation rate from the PyRate output
-dat_preservation <- read_rds(here("data", 
-                                  "fossil_occurrences", 
-                                  "preservation_rate_per_species.rds")) %>% 
-  # use only occurrences from species that could get binned to stages
-  filter(modified_identified_name %in% dat_abund$modified_identified_name)
+dat_preservation_raw <- read_delim(here("data",
+                                        "raw",
+                                        "fossil_occurrences",
+                                        "combined_10_mcmc.log"))
+# bring in right format
+dat_preservation <- dat_preservation_raw %>% 
+  select(mean_q, contains("TS")) %>% 
+  pivot_longer(cols = contains("TS"), 
+               names_to = "species", 
+               values_to = "age") %>% 
+  # bin to 10 myr
+  mutate(bin = cut(age, breaks = seq(250, 0, by = -10),
+                   include.lowest = TRUE,
+                   labels = FALSE)-1, 
+         .before = 1) %>% 
+  # summarise
+  drop_na(bin) %>% 
+  group_by(bin, species) %>% 
+  summarise(mean_q = mean(mean_q)) %>% 
+  ungroup() %>% 
+  # clean up species names for joining
+  mutate(species = str_remove(species, "_TS"), 
+         modified_identified_name = str_replace(species, "_", " ")) %>% 
+  select(bin, modified_identified_name, mean_q) %>% 
+  arrange(modified_identified_name)
 
 
-
+  
 # merge and combine -------------------------------------------------------
 
 # combine all datasets to one
@@ -428,7 +425,7 @@ dat_full <- dat_range_lat %>%
   # abundance
   rename(abund = n) %>% 
   # preservation rate
-  full_join(dat_preservation) %>% 
+  left_join(dat_preservation) %>% 
   # sampling
   full_join(dat_pbdb_sampling %>% 
               mutate(bin = as.numeric(as.character(bin)))) %>% 
@@ -460,7 +457,8 @@ dat_full %>%
          everything()) %>% 
   # save dataset
   write_rds(here("data",
-                 "processed_fossil_data.rds"))
+                 "processed_fossil_data_10myr.rds"))
+
 
 
 
