@@ -95,7 +95,8 @@ dat_pred <- pp_average(mod1, mod2, mod3, mod4,
 dat_pred %>% 
   write_rds(here("data", 
                  "predictions", 
-                 "pred_temperature.rds"))
+                 "pred_temperature.rds"), 
+            compress = "gz")
 
 
 # average over posterior draws
@@ -154,7 +155,8 @@ dat_pred_post <- posterior_average(mod1, mod2,
 dat_pred_post %>% 
   write_rds(here("data", 
                  "predictions", 
-                 "pred_trend_temperature.rds"))
+                 "pred_trend_temperature.rds"), 
+            compress = "gz")
 
 # visualise
 plot_temp_beta <- dat_pred_post %>%
@@ -171,7 +173,7 @@ plot_temp_beta <- dat_pred_post %>%
             point_colour = colour_coral) +
   annotate("text", 
            label = "\u03B2", 
-           x = -0.25, 
+           x = -0.175, 
            y = 0.85, 
            size = 10/.pt, 
            colour = "grey40") +
