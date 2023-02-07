@@ -4,6 +4,7 @@ This is the repo for the current project from the Pimiento lab under the lead of
 ## To do  
 
 - [ ] Update data readme
+- [X] Calculate geographic range per bin
 - [ ] Repeat analysis with 10 myr bins
 - [ ] Repeat analysis with genus instead of species
 - [ ] Repeat analysis with Cenozoic subset at higher resolution
