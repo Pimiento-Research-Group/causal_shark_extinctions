@@ -3,6 +3,11 @@ library(chronosphere)
 library(tidyverse)
 library(here)
 library(readxl)
+library(brms)
+
+
+# plotting configurations
+source(here("R", "config_file.R"))
 
 
 # bin proxy data ----------------------------------------------------------
@@ -284,11 +289,6 @@ dat_occ_binned_coord <- dat_occ_binned %>%
   full_join(dat_occ_binned) %>% 
   drop_na(paleolong, paleolat)  
 
-# save data
-dat_occ_binned_coord %>% 
-  write_rds(here("data",
-                 "fossil_occurrences",
-                 "binned_rotated_occurrences_10myr.rds"))
 
 
 
@@ -412,10 +412,7 @@ dat_preservation <- dat_preservation_raw %>%
   arrange(modified_identified_name)
 
 
-  
-# merge and combine -------------------------------------------------------
-
-# combine all datasets to one
+# combine all fossil datasets to one
 dat_full <- dat_range_lat %>% 
   # geographic range
   full_join(dat_dist) %>% 
@@ -460,8 +457,370 @@ dat_full %>%
                  "processed_fossil_data_10myr.rds"))
 
 
+# scale predictors --------------------------------------------------------
+
+
+# bring predictors on meaningful scales to enable comparisons
+dat_proxy <- dat_proxy %>% 
+  mutate(across(c(d13C, sr_value, # scale all productivity parameters
+                  n_units, outcrop_area), # same for outcrop parameters
+                ~ scale(.x)[,1], 
+                .names = "{col}_std"))
+
+# same for fossil data
+dat_fossil <- dat_full %>% 
+  # add zero genus counts
+  replace_na(list(n_genus = 0)) %>% 
+  mutate(across(c(range_lat, geo_dist, # scale geographic range parameters
+                  mean_q, # and preservation rate
+                  pbdb_collections, shark_collections), # and sampling effort
+                ~ scale(.x)[,1], 
+                .names = "{col}_std"), 
+         latitude_pref_abs = abs(latitude_pref)) # use absolute latitude 
+
+
+# combine data sources
+
+# merge
+dat_merged <- left_join(dat_proxy,
+                        dat_fossil,
+                        by = "bin") %>% 
+  drop_na(species) %>% 
+  replace_na(list(abund = 0)) %>% 
+  select(bin, order, family, genus, species,
+         latitude_pref_abs,
+         n_genus,
+         abund, 
+         ext_signal, 
+         sea_level, 
+         cont_area, 
+         contains("temp"), 
+         contains("std")) 
+
+
+
+# abundance ---------------------------------------------------------------
+
+
+# use same adjustment set as in main analysis
+# first adjustment set
+mod1 <- brm_logistic("ext_signal ~ abund + geo_dist_std + order")
+mod2 <- brm_logistic("ext_signal ~ abund + range_lat_std + order")
+
+# number of genera
+mod3 <- brm_logistic("ext_signal ~ n_genus + geo_dist_std + order")
+mod4 <- brm_logistic("ext_signal ~ n_genus + range_lat_std + order")
+
+
+# second adjustment subset
+mod5 <- brm_logistic("ext_signal ~ n_genus + mean_q_std + cont_area + order +
+                     n_units_std + temp_deep_st:temp_deep_lt3 + sr_value_std +
+                     shark_collections_std + temp_gat_binned")
+
+mod6 <- brm_logistic("ext_signal ~ n_genus + mean_q_std + cont_area + order +
+                     outcrop_area_std + temp_deep_st:temp_deep_lt3 + d13C_std +
+                     shark_collections_std + temp_gat_binned")
+
+mod7 <- brm_logistic("ext_signal ~ abund + mean_q_std + cont_area + order +
+                     n_units_std + temp_deep_st:temp_deep_st:temp_deep_lt2 + sr_value_std +
+                     shark_collections_std + temp_deep_binned")
+
+mod8 <- brm_logistic("ext_signal ~ abund + mean_q_std + cont_area + order +
+                     outcrop_area_std + temp_deep_st:temp_deep_lt3 + sr_value_std +
+                     shark_collections_std + temp_gat_binned")
+
+# average posterior draws by model stacking
+dat_pred_post <- posterior_average(mod1, mod2,
+                                   mod3, mod4,
+                                   mod5, mod6,
+                                   mod7, mod8,
+                                   variable = c("b_abund", "b_n_genus"),
+                                   seed = 1708,
+                                   ndraws =  1e4, 
+                                   missing = NA) %>% 
+  pivot_longer(cols = everything(), 
+               names_to = "coef_name", 
+               values_to = "coef_val") %>% 
+  drop_na(coef_val)
+
+# save trend predictions
+dat_pred_post %>% 
+  write_rds(here("data", 
+                 "predictions", 
+                 "pred_trend_abund_10myr.rds"), 
+            compress = "gz")
+
+
+
+# geographic range --------------------------------------------------------
+
+# first adjustment set
+mod1 <- brm_logistic("ext_signal ~ geo_dist_std + abund + order")
+mod2 <- brm_logistic("ext_signal ~ range_lat_std + abund + order")
+
+# number of genera
+mod3 <- brm_logistic("ext_signal ~ geo_dist_std + n_genus + order")
+mod4 <- brm_logistic("ext_signal ~ range_lat_std + n_genus + order")
+
+
+# second adjustment subset
+mod5 <- brm_logistic("ext_signal ~ range_lat_std + n_units_std  + temp_deep_st:temp_deep_lt3 +
+                     mean_q_std + sr_value_std + shark_collections_std  + cont_area +
+                     order + temp_gat_binned")
+
+mod6 <- brm_logistic("ext_signal ~ range_lat_std + outcrop_area_std  + temp_deep_st:temp_deep_lt3 +
+                     mean_q_std + d13C_std + shark_collections_std  + cont_area +
+                     order + temp_gat_binned")
+
+mod7 <- brm_logistic("ext_signal ~ geo_dist_std  + n_units_std  + temp_deep_st:temp_deep_lt2 +
+                     mean_q_std + sr_value_std + shark_collections_std  + cont_area +
+                     order + temp_deep_binned")
+
+mod8 <- brm_logistic("ext_signal ~ geo_dist_std + outcrop_area_std  + temp_deep_st:temp_deep_lt3 +
+                     mean_q_std + sr_value_std + shark_collections_std  + cont_area +
+                     order + temp_gat_binned")
+
+# average posterior draws by model stacking
+dat_pred_post <- posterior_average(mod1, mod2,
+                                   mod3, mod4,
+                                   mod5, mod6,
+                                   mod7, mod8,
+                                   variable = c("b_geo_dist_std", "b_range_lat_std"),
+                                   seed = 1708,
+                                   ndraws =  1e4, 
+                                   missing = NA) %>% 
+  pivot_longer(cols = everything(), 
+               names_to = "coef_name", 
+               values_to = "coef_val") %>% 
+  drop_na(coef_val)
+
+# save trend predictions
+dat_pred_post %>% 
+  write_rds(here("data", 
+                 "predictions", 
+                 "pred_trend_geo_range_10myr.rds"), 
+            compress = "gz")
+
+
+
+# paleotemperature --------------------------------------------------------
+
+# start with deep ocean temperature
+# average over potential long-term trends
+mod1 <- brm_logistic("ext_signal ~ temp_deep_st:temp_deep_lt1")
+mod2 <- brm_logistic("ext_signal ~ temp_deep_st:temp_deep_lt2")
+mod3 <- brm_logistic("ext_signal ~ temp_deep_st:temp_deep_lt3")
+mod4 <- brm_logistic("ext_signal ~ temp_deep_st:temp_deep_lt4")
+
+# same for global average temperature
+mod5 <- brm_logistic("ext_signal ~ temp_gat_st:temp_gat_lt1")
+mod6 <- brm_logistic("ext_signal ~ temp_gat_st:temp_gat_lt2")
+mod7 <- brm_logistic("ext_signal ~ temp_gat_st:temp_gat_lt3")
+mod8 <- brm_logistic("ext_signal ~ temp_gat_st:temp_gat_lt4")
+
+# average posterior draws by model stacking
+dat_pred_post <- posterior_average(mod1, mod2,
+                                   mod3, mod4,
+                                   mod5, mod6,
+                                   mod7, mod8,
+                                   seed = 1708,
+                                   ndraws =  1e4, 
+                                   missing = NA) %>% 
+  select(contains("temp")) %>% 
+  pivot_longer(cols = everything(), 
+               names_to = "coef_name", 
+               values_to = "coef_val") %>% 
+  drop_na(coef_val)
+
+
+# save trend predictions
+dat_pred_post %>% 
+  write_rds(here("data", 
+                 "predictions", 
+                 "pred_trend_paleotemperature_10myr.rds"), 
+            compress = "gz")
+
+
+# productivity ------------------------------------------------------------
+
+## first adjustment set 
+# for d13C
+mod1 <- brm_logistic("ext_signal ~ d13C_std + 
+                     latitude_pref_abs + cont_area +
+                     shark_collections_std + temp_gat_binned")
+
+mod2 <- brm_logistic("ext_signal ~ d13C_std + 
+                     latitude_pref_abs + cont_area + 
+                     pbdb_collections_std + temp_gat_binned")
+
+mod3 <- brm_logistic("ext_signal ~ d13C_std + 
+                     latitude_pref_abs + cont_area + 
+                     pbdb_collections_std + temp_deep_binned")
+
+mod4 <- brm_logistic("ext_signal ~ d13C_std + 
+                     latitude_pref_abs + cont_area + 
+                     shark_collections_std + temp_deep_binned")
+
+# for Sr ratio 
+mod5 <- brm_logistic("ext_signal ~ sr_value_std + 
+                     latitude_pref_abs + cont_area + 
+                     shark_collections_std + temp_gat_binned")
+
+mod6 <- brm_logistic("ext_signal ~ sr_value_std + 
+                     latitude_pref_abs + cont_area + 
+                     pbdb_collections_std + temp_gat_binned")
+
+mod7 <- brm_logistic("ext_signal ~ sr_value_std + 
+                     latitude_pref_abs + cont_area + 
+                     pbdb_collections_std + temp_deep_binned")
+
+mod8 <- brm_logistic("ext_signal ~ sr_value_std + 
+                     latitude_pref_abs + cont_area + 
+                     shark_collections_std + temp_deep_binned")
+
+
+## second adjustment set 
+# for d13C
+mod9 <- brm_logistic("ext_signal ~ d13C_std + latitude_pref_abs + 
+                     sea_level + cont_area + 
+                     shark_collections_std + temp_gat_binned")
+
+mod10 <- brm_logistic("ext_signal ~ d13C_std + latitude_pref_abs +
+                      sea_level + cont_area +
+                      pbdb_collections_std + temp_gat_binned")
+
+mod11 <- brm_logistic("ext_signal ~ d13C_std + latitude_pref_abs + 
+                      sea_level + cont_area +
+                      pbdb_collections_std + temp_deep_binned")
+
+mod12 <- brm_logistic("ext_signal ~ d13C_std + latitude_pref_abs + 
+                      sea_level + cont_area +
+                      shark_collections_std + temp_deep_binned")
+
+# for Sr ratio 
+mod13 <- brm_logistic("ext_signal ~ sr_value_std + latitude_pref_abs + 
+                     sea_level + cont_area + 
+                     shark_collections_std + temp_gat_binned")
+
+mod14 <- brm_logistic("ext_signal ~ sr_value_std + latitude_pref_abs +
+                      sea_level + cont_area +
+                      pbdb_collections_std + temp_gat_binned")
+
+mod15 <- brm_logistic("ext_signal ~ sr_value_std + latitude_pref_abs + 
+                      sea_level + cont_area +
+                      pbdb_collections_std + temp_deep_binned")
+
+mod16 <- brm_logistic("ext_signal ~ sr_value_std + latitude_pref_abs + 
+                      sea_level + cont_area +
+                      shark_collections_std + temp_deep_binned")
+
+# average posterior draws by model stacking
+dat_pred_post <- posterior_average(mod1, mod2, mod3, mod4, 
+                                   mod5, mod6, mod7, mod8,
+                                   mod9, mod10, mod11, mod12,
+                                   mod13, mod14, mod15, mod16,
+                                   variable = c("b_d13C_std", "b_sr_value_std"),
+                                   seed = 1708,
+                                   ndraws =  1e4, 
+                                   missing = NA) %>% 
+  pivot_longer(cols = everything(), 
+               names_to = "coef_name", 
+               values_to = "coef_val") %>% 
+  drop_na(coef_val)
+
+
+# save trend predictions
+dat_pred_post %>% 
+  write_rds(here("data", 
+                 "predictions", 
+                 "pred_trend_productivity_10myr.rds"))
+
+
+# sea level ---------------------------------------------------------------
+
+# average over temperature estimates 
+mod1 <- brm_logistic("ext_signal ~ sea_level + temp_gat_binned")
+mod2 <- brm_logistic("ext_signal ~ sea_level + temp_deep_binned")
+
+# average posterior draws by model stacking
+dat_pred_post <- posterior_average(mod1, mod2,
+                                   variable = "b_sea_level",
+                                   seed = 1708,
+                                   ndraws =  1e4, 
+                                   missing = NA) %>% 
+  pivot_longer(cols = everything(), 
+               names_to = "coef_name", 
+               values_to = "coef_val") %>% 
+  drop_na(coef_val)
+
+
+# save trend predictions
+dat_pred_post %>% 
+  write_rds(here("data", 
+                 "predictions", 
+                 "pred_trend_sea_level_10myr.rds"), 
+            compress = "gz")
+
+
+
+# shelf area --------------------------------------------------------------
+
+# one model with sea level 
+mod1 <- brm_logistic("ext_signal ~ cont_area + sea_level")
+
+
+# average posterior draws by model stacking
+dat_pred_post <- as_draws_df(mod1, 
+                             variable = "b_cont_area") %>% 
+  as_tibble() %>% 
+  select(coef_val = b_cont_area) %>% 
+  slice_sample(n = 1e4)
+
+
+# save trend predictions
+dat_pred_post %>% 
+  write_rds(here("data", 
+                 "predictions", 
+                 "pred_trend_shelf_area_10myr.rds"), 
+            compress = "gz")
 
 
 
 
+# temperature -------------------------------------------------------------
+
+# start with deep ocean temperature
+# average over potential long-term trends
+mod1 <- brm_logistic("ext_signal ~ temp_deep_binned + temp_deep_st:temp_deep_lt1")
+mod2 <- brm_logistic("ext_signal ~ temp_deep_binned + temp_deep_st:temp_deep_lt2")
+mod3 <- brm_logistic("ext_signal ~ temp_deep_binned + temp_deep_st:temp_deep_lt3")
+mod4 <- brm_logistic("ext_signal ~ temp_deep_binned + temp_deep_st:temp_deep_lt4")
+
+# same for global average temperature
+mod5 <- brm_logistic("ext_signal ~ temp_gat_binned + temp_gat_st:temp_gat_lt1")
+mod6 <- brm_logistic("ext_signal ~ temp_gat_binned + temp_gat_st:temp_gat_lt2")
+mod7 <- brm_logistic("ext_signal ~ temp_gat_binned + temp_gat_st:temp_gat_lt3")
+mod8 <- brm_logistic("ext_signal ~ temp_gat_binned + temp_gat_st:temp_gat_lt4")
+
+
+# average posterior draws by model stacking
+dat_pred_post <- posterior_average(mod1, mod2,
+                                   mod3, mod4,
+                                   mod5, mod6,
+                                   mod7, mod8,
+                                   variable = c("b_temp_gat_binned", "b_temp_deep_binned"),
+                                   seed = 1708,
+                                   ndraws =  1e4, 
+                                   missing = NA) %>% 
+  pivot_longer(cols = everything(), 
+               names_to = "coef_name", 
+               values_to = "coef_val") %>% 
+  drop_na(coef_val)
+
+# save predictions
+dat_pred_post %>% 
+  write_rds(here("data", 
+                 "predictions", 
+                 "pred_trend_temperature_10myr.rds"), 
+            compress = "gz")
 

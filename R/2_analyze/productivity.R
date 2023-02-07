@@ -198,10 +198,10 @@ plot_prod <- dat_pred %>%
 # estimate trend ----------------------------------------------------------
 
 # average posterior draws by model stacking
-dat_pred_post <- posterior_average(mod1, mod2,
-                                   mod3, mod4,
-                                   mod5, mod6,
-                                   mod7, mod8,
+dat_pred_post <- posterior_average(mod1, mod2, mod3, mod4, 
+                                   mod5, mod6, mod7, mod8,
+                                   mod9, mod10, mod11, mod12,
+                                   mod13, mod14, mod15, mod16,
                                    variable = c("b_d13C_std", "b_sr_value_std"),
                                    seed = 1708,
                                    ndraws =  1e4, 
