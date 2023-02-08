@@ -75,8 +75,10 @@ dat_new <- tibble(temp_deep_binned = 0:25) %>%
 nr_draws <- 100
 
 # average prediction by model stacking
-dat_pred <- pp_average(mod1, mod2, mod3, mod4, 
-                       mod5, mod6, mod7, mod8,
+dat_pred <- pp_average(mod1, mod2,
+                       mod3, mod4, 
+                       mod5, mod6,
+                       mod7, mod8,
                        newdata = dat_new,
                        seed = 1708,
                        summary = FALSE, 
@@ -173,7 +175,7 @@ plot_temp_beta <- dat_pred_post %>%
             point_colour = colour_coral) +
   annotate("text", 
            label = "\u03B2", 
-           x = -0.175, 
+           x = -0.2, 
            y = 0.85, 
            size = 10/.pt, 
            colour = "grey40") +
