@@ -289,18 +289,22 @@ dat_occ_binned_coord <- dat_occ_binned %>%
   full_join(dat_occ_binned) %>% 
   drop_na(paleolong, paleolat)  
 
-
+dat_occ_binned_coord %>% 
+  write_rds(here("data",
+                 "fossil_occurrences",
+                 "binned_rotated_occurrences_10myr.rds"), 
+            compress = "gz")
 
 
 # calculate latitude range in absolute degrees
 dat_range_lat <- dat_occ_binned_coord %>% 
   # select only species
   filter(rank == "species") %>% 
-  group_by(modified_identified_name) %>% 
+  group_by(accepted_name) %>% 
   summarise(min_lat = min(paleolat), 
             max_lat = max(paleolat)) %>% 
   mutate(range_lat = abs(min_lat - max_lat)) %>% 
-  select(modified_identified_name, range_lat)
+  select(accepted_name, range_lat)
 
 # calculate great circle distance via geodesic distance between two 
 # points specified by radian latitude/longitude using the
@@ -308,7 +312,7 @@ dat_range_lat <- dat_occ_binned_coord %>%
 dat_dist <- dat_occ_binned_coord %>% 
   # select only species
   filter(rank == "species") %>%
-  group_by(modified_identified_name, bin) %>% 
+  group_by(accepted_name, bin) %>% 
   # get maximum distance
   summarise(min_lat = min(paleolat), 
             max_lat = max(paleolat), 
@@ -320,7 +324,7 @@ dat_dist <- dat_occ_binned_coord %>%
   # use earth radius and slc
   mutate(geo_dist = acos(sin(min_lat)*sin(max_lat) + cos(min_lat)*cos(max_lat) * cos(max_long-min_long)) * 6371) %>% 
   drop_na(geo_dist) %>% 
-  select(modified_identified_name, bin, 
+  select(accepted_name, bin, 
          geo_dist)
 
 
@@ -328,7 +332,7 @@ dat_dist <- dat_occ_binned_coord %>%
 dat_latitude <- dat_occ_binned_coord %>% 
   # select only species
   filter(rank == "species") %>% 
-  group_by(modified_identified_name, bin) %>% 
+  group_by(accepted_name, bin) %>% 
   summarise(latitude_pref = mean(paleolat)) %>% 
   ungroup()
 
@@ -337,7 +341,7 @@ dat_latitude <- dat_occ_binned_coord %>%
 dat_abund <- dat_occ_binned %>% 
   # select only species
   filter(rank == "species") %>% 
-  count(bin, modified_identified_name) 
+  count(bin, accepted_name) 
 
 # number of species within genera
 dat_abund_genus <- dat_occ_binned %>% 
@@ -407,9 +411,9 @@ dat_preservation <- dat_preservation_raw %>%
   ungroup() %>% 
   # clean up species names for joining
   mutate(species = str_remove(species, "_TS"), 
-         modified_identified_name = str_replace(species, "_", " ")) %>% 
-  select(bin, modified_identified_name, mean_q) %>% 
-  arrange(modified_identified_name)
+         accepted_name = str_replace(species, "_", " ")) %>% 
+  select(bin, accepted_name, mean_q) %>% 
+  arrange(accepted_name)
 
 
 # combine all fossil datasets to one
@@ -432,11 +436,11 @@ dat_full <- dat_range_lat %>%
               rename(shark_collections = n)) 
 
 # add species extinction signal
-dat_full %>% 
+dat_full <- dat_full %>% 
   left_join(dat_species %>%
-              mutate(modified_identified_name = str_replace(species, "_", " ")) %>%
+              mutate(accepted_name = str_replace(species, "_", " ")) %>%
               select(-species) %>% 
-              filter(modified_identified_name %in% dat_full$modified_identified_name)) %>%
+              filter(accepted_name %in% dat_full$accepted_name)) %>%
   # make missing values explicit
   drop_na(ext_signal) %>% 
   replace_na(list(geo_dist = 0, range_lat = 0,  
@@ -447,12 +451,14 @@ dat_full %>%
   mutate(mean_q = if_else(is.na(mean_q), mean_q_av, mean_q)) %>% 
   # get taxonomy
   left_join(dat_occ_binned %>% 
-              distinct(modified_identified_name, genus, family, order)) %>% 
+              distinct(accepted_name, genus, family, order)) %>% 
   # add genus counts
   left_join(dat_abund_genus %>% rename(n_genus = n)) %>% 
-  select(order, family, genus, species = modified_identified_name,
-         everything()) %>% 
-  # save dataset
+  select(order, family, genus, species = accepted_name,
+         everything())
+
+# save dataset
+dat_full %>% 
   write_rds(here("data",
                  "processed_fossil_data_10myr.rds"))
 
