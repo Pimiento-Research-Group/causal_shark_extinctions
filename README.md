@@ -5,9 +5,10 @@ This is the repo for the current project from the Pimiento lab under the lead of
 
 - [ ] Update data readme
 - [X] Calculate geographic range per bin
-- [ ] Repeat analysis with 10 myr bins
-- [ ] Add all models to productivity beta estimation
+- [X] Repeat analysis with 10 myr bins
+- [X] Use unambiguous taxonomic names
+- [X] Add all models to productivity beta estimation
 - [ ] Repeat analysis with genus instead of species
 - [ ] Repeat analysis with Cenozoic subset at higher resolution
 - [ ] Repeat analysis with Superorders
-- [ ] Habitat fragmentation
+- [X] Omit the last temporal stage 

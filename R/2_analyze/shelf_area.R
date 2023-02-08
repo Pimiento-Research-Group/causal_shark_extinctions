@@ -128,7 +128,7 @@ plot_shelf_beta <- dat_pred_post %>%
             point_colour = "#BD8D9E") +
   annotate("text", 
            label = "\u03B2", 
-           x = -10, 
+           x = -7, 
            y = 0.85, 
            size = 10/.pt, 
            colour = "grey40") +

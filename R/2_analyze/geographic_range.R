@@ -226,7 +226,7 @@ plot_range_beta <- dat_pred_post %>%
                point_colour = colour_purple) +
   annotate("text", 
            label = "\u03B2", 
-           x = -1.5, 
+           x = -1.15, 
            y = 0.85, 
            size = 10/.pt, 
            colour = "grey40") +
