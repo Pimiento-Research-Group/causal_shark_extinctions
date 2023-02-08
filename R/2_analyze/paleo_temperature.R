@@ -156,7 +156,7 @@ plot_paleotemp <- dat_pred %>%
            colour = "#A76861",
            arrow = arrow(length = unit(.2,"cm")), 
            alpha = 0.5) +
-  scale_color_manual(values = c("#9CBABF", "#A76861")) +
+  scale_color_manual(values = c("#A76861", "#9CBABF")) + 
   scale_y_continuous(breaks = c(0, 0.2, 0.4, 0.6, 0.8, 1), 
                      labels = c("0", "20", "40", "60", "80", "100")) +
   labs(y = "Extinction Risk [%]", 
