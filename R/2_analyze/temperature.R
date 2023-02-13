@@ -24,7 +24,7 @@ dat_merged <- read_rds(here("data",
 
 
 # load the graph 
-dag <- downloadGraph("dagitty.net/m_UM7hV")
+dag <- downloadGraph("dagitty.net/mjiV5Qf")
 
 
 # get adjustments sets for the total effect
