@@ -12,6 +12,7 @@ dat_main <- list.files(here("data",
                             "predictions"), 
            full.names = TRUE) %>%
   str_subset("10myr", negate = TRUE) %>% 
+  str_subset("genus", negate = TRUE) %>% 
   str_subset("trend") %>% 
   map_df(read_rds) %>% 
   # for some reason shelf area was entered as NA
@@ -56,8 +57,34 @@ dat_10myr <- list.files(here("data",
          )) %>% 
   add_column(data_source = "10_myr")
 
+
+# get data from genus resolution
+dat_genus <- list.files(here("data",
+                             "predictions"), 
+                        full.names = TRUE) %>%
+  str_subset("genus") %>% 
+  str_subset("trend") %>% 
+  map_df(read_rds) %>% 
+  # for some reason shelf area was entered as NA
+  replace_na(list(coef_name = "b_shelf_area"))  %>% 
+  # join parameters together
+  mutate(coef_name = as.factor(coef_name), 
+         coef_name = fct_collapse(coef_name, 
+                                  Abundance = c("b_n_genus", "b_abund"), 
+                                  "Geographic range" = c("b_geo_dist_std"), 
+                                  Paleotemperature = c("b_temp_deep_st:temp_deep_lt2", 
+                                                       "b_temp_deep_st:temp_deep_lt4",
+                                                       "b_temp_gat_st:temp_gat_lt1"), 
+                                  Productivity = c("b_d13C_std", "b_sr_value_std"), 
+                                  Temperature = c("b_temp_gat_binned"), 
+                                  "Sea level" = c("b_sea_level"), 
+                                  "Shelf area" = c("b_shelf_area")
+         )) %>% 
+  add_column(data_source = "Genus")
+
 # merge
 full_join(dat_main, dat_10myr) %>% 
+  full_join(dat_genus) %>% 
   ggplot(aes(y = data_source, coef_val, 
              colour = data_source)) +
   geom_vline(xintercept = 0) +
@@ -67,8 +94,9 @@ full_join(dat_main, dat_10myr) %>%
   scale_y_discrete(breaks = NULL) +
   scale_x_continuous(breaks = c(0)) +
   scale_color_manual(name = NULL,
-                     values = c("coral", "steelblue"), 
+                     values = c("coral", "steelblue", "darkgreen"), 
                      labels = c("10 myr", 
+                                "Genus", 
                                 "Stages")) +
   labs(y = NULL, 
        x = NULL) +
