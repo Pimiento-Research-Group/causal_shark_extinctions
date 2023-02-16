@@ -107,18 +107,18 @@ dat_pred_av <- dat_pred %>%
 # visualise
 plot_paleotemp <- dat_pred %>%
   ggplot(aes(temperature_st, value)) +
-  stat_dots(aes(y = as.numeric(ext_signal == 1), 
+  stat_dots(aes(y = as.numeric(ext_signal == 1),
                 side = ifelse(ext_signal == 1, "bottom", "top")),
             slab_colour = colour_grey,
             slab_size = 0.5,
             slab_alpha = 0.3,
             scale = 0.2,
-            data = dat_merged %>% 
-              pivot_longer(cols = c(temp_deep_st, temp_gat_st), 
-                           values_to = "temperature_st", 
-                           names_to = "temp_name") %>% 
+            data = dat_merged %>%
+              pivot_longer(cols = c(temp_deep_st, temp_gat_st),
+                           values_to = "temperature_st",
+                           names_to = "temp_name") %>%
               # spread out a bit
-              mutate(temperature_st = temperature_st + rnorm(nrow(.), 0, 0.1)) %>% 
+              mutate(temperature_st = temperature_st + rnorm(nrow(.), 0, 0.1)) %>%
               filter(between(temperature_st, -3, 3))) +
   geom_line(aes(group = interaction(nr_draw, trend), 
                 colour = trend), 
@@ -131,28 +131,28 @@ plot_paleotemp <- dat_pred %>%
             linewidth = 0.7, 
             data = dat_pred_av) +
   annotate("text", 
-           y = 0.263, x = -1.8, 
+           y = 0.363, x = -1.8, 
            label = "Long-term Cooling", 
            colour = "#9CBABF", 
            size = 10/.pt, 
            alpha = 0.8) +
   annotate(geom = "curve",
-           x = -2.4, xend = -2.8,
-           y = 0.26, yend = 0.165,
+           x = -2.45, xend = -2.8,
+           y = 0.36, yend = 0.275,
            curvature = 0.4,
            colour = "#9CBABF",
            arrow = arrow(length = unit(.2,"cm")), 
            alpha = 0.5) +
   annotate("text", 
-           y = 0.293, x = 1.1, 
+           y = 0.323, x = 1.1, 
            label = "Long-term Warming", 
            colour = "#A76861", 
            size = 10/.pt, 
            alpha = 0.8) +
   annotate(geom = "curve",
-           x = 1.8, xend = 2.3,
-           y = 0.28, yend = 0.16,
-           curvature = -0.3,
+           x = 1.75, xend = 2.3,
+           y = 0.32, yend = 0.28,
+           curvature = -0.2,
            colour = "#A76861",
            arrow = arrow(length = unit(.2,"cm")), 
            alpha = 0.5) +
@@ -191,7 +191,7 @@ dat_pred_post %>%
 
 # visualise
 plot_paleotemp_beta <- dat_pred_post %>%
-  ggplot(aes(coef_val, fill = coef_name)) +
+  ggplot(aes(coef_val, group = coef_name)) +
   geom_vline(xintercept = 0, 
              linewidth = 0.5,
              colour = "grey40") +
@@ -200,17 +200,17 @@ plot_paleotemp_beta <- dat_pred_post %>%
             slab_alpha = 0.7,
             point_size = 3, 
             point_fill = "white",
-            point_colour = colour_coral) +
+            point_colour = colour_coral, 
+            fill = colour_grey) +
   annotate("text", 
            label = "\u03B2", 
-           x = -0.16, 
+           x = -0.08, 
            y = 0.85, 
            size = 10/.pt, 
            colour = "grey40") +
-  scale_fill_manual(values = c("#A76861", "#9CBABF")) +
   scale_y_continuous(breaks = NULL) +
   scale_x_continuous(breaks = 0) +
-  coord_cartesian(xlim = c(-0.23, 0.15)) +
+  coord_cartesian(xlim = c(-0.12, 0.08)) +
   labs(y = NULL, 
        x = NULL) +
   theme(plot.background = elementalist::element_rect_round(radius = unit(0.85, "cm"), 
