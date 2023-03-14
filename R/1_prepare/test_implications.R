@@ -30,6 +30,12 @@ dat_dag <- dat_merged %>%
             "preservation potential" = mean_q_std) %>% 
   drop_na(everything())
 
+# create subsets for bootstrapping
+dat_dag_list <- replicate(5, slice_sample(dat_dag,
+                                          n = nrow(dat_dag),
+                                          replace = TRUE),
+                          simplify = FALSE)
+
 
 
 # directed acyclic graph ---------------------------------------------
@@ -40,29 +46,44 @@ dag <- downloadGraph("dagitty.net/mjiV5Qf")
 # get testable implications of that model
 implied_conditions <- impliedConditionalIndependencies(dag)
 
-# set up dataframe to save results of tests
-cor_val <- vector("double", length = length(implied_conditions))
-
-for (i in 1:length(implied_conditions)) {
+# set up function to get partial correlation estimates
+part_cor <- function(data_set) {
   
-  if (length(implied_conditions[[i]]$Z) == 0) {
+  # vector to save results into 
+  cor_val <- vector("double", length = length(implied_conditions))
+  
+  for (i in 1:length(implied_conditions)) {
     
-    cor.output <- pcor(c(implied_conditions[[i]]$X,
-                         implied_conditions[[i]]$Y), 
-                       var(dat_dag))
+    # simple correlation case
+    if (length(implied_conditions[[i]]$Z) == 0) {
+      
+      cor.output <- pcor(c(implied_conditions[[i]]$X,
+                           implied_conditions[[i]]$Y), 
+                         var(data_set))
+      
+    # partical correlation case  
+    } else {
+      
+      cor.output <- pcor(c(implied_conditions[[i]]$X,
+                           implied_conditions[[i]]$Y,
+                           implied_conditions[[i]]$Z), 
+                         var(data_set)) 
+      
+    }
     
-  } else {
-    
-    cor.output <- pcor(c(implied_conditions[[i]]$X,
-                         implied_conditions[[i]]$Y,
-                         implied_conditions[[i]]$Z), 
-                       var(dat_dag)) 
+    cor_val[i] <- cor.output
     
   }
   
-  cor_val[i] <- cor.output
+  enframe(cor_val)
   
 }
 
-implied_conditions[cor_val >= 0.3]
+dat_dag_list %>% 
+  map(part_cor) %>% 
+  reduce(full_join) %>% 
+  group_by(name) %>% 
+  summarise(mean_cl_normal(value)) 
+
+implied_conditions[abs(cor_val) >= 0.3]
 
