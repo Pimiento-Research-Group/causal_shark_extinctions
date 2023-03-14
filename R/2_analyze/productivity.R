@@ -15,8 +15,8 @@ source(here("R", "config_file.R"))
 
 # fossil data and environmental proxy data on species level
 dat_merged <- read_rds(here("data",
-                            "processed_merged_data.rds")) 
-
+                            "processed_merged_data.rds")) %>% 
+  drop_na()
 
 
 
@@ -25,7 +25,7 @@ dat_merged <- read_rds(here("data",
 
 
 # load the graph 
-dag <- downloadGraph("dagitty.net/m_UM7hV")
+dag <- downloadGraph("dagitty.net/mjiV5Qf")
 
 
 # get adjustments sets for the total effect
@@ -35,8 +35,9 @@ adjustmentSets(dag,
                effect = "total")
 
 # two sets of adjustments
-# latitude, outcrop area, sampling effort, shelf area, temperature
-# latitude, sampling effort, sea level, shelf area, temperature
+# sampling effort, sea level, shelf area, temperature
+# outcrop area, preservation potential, sampling effort, shelf area, 
+# taxonomic identity, temperature
 
 
 # fit models --------------------------------------------------------------
@@ -45,89 +46,102 @@ adjustmentSets(dag,
 ## first adjustment set 
 # for d13C
 mod1 <- brm_logistic("ext_signal ~ d13C_std + 
-                     latitude_pref_abs + cont_area +
-                     shark_collections_std + temp_gat_binned")
+                     pbdb_collections_std + sea_level + 
+                     cont_area + temp_gat_binned")
 
-mod2 <- brm_logistic("ext_signal ~ d13C_std + 
-                     latitude_pref_abs + cont_area + 
-                     pbdb_collections_std + temp_gat_binned")
+mod2 <- brm_logistic("ext_signal ~ d13C_std +
+                     outcrop_area_std + sea_level + 
+                     cont_area + temp_gat_binned")
 
 mod3 <- brm_logistic("ext_signal ~ d13C_std + 
-                     latitude_pref_abs + cont_area + 
-                     pbdb_collections_std + temp_deep_binned")
+                     pbdb_collections_std + sea_level +
+                     cont_area + temp_deep_binned")
 
 mod4 <- brm_logistic("ext_signal ~ d13C_std + 
-                     latitude_pref_abs + cont_area + 
-                     shark_collections_std + temp_deep_binned")
+                     outcrop_area_std + sea_level + 
+                     cont_area + temp_deep_binned")
 
 # for Sr ratio 
-mod5 <- brm_logistic("ext_signal ~ sr_value_std + 
-                     latitude_pref_abs + cont_area + 
-                     shark_collections_std + temp_gat_binned")
+mod5 <- brm_logistic("ext_signal ~ sr_mean_std + 
+                     pbdb_collections_std + sea_level + 
+                     cont_area + temp_gat_binned")
 
-mod6 <- brm_logistic("ext_signal ~ sr_value_std + 
-                     latitude_pref_abs + cont_area + 
-                     pbdb_collections_std + temp_gat_binned")
+mod6 <- brm_logistic("ext_signal ~ sr_mean_std + 
+                     outcrop_area_std + sea_level + 
+                     cont_area + temp_gat_binned")
 
-mod7 <- brm_logistic("ext_signal ~ sr_value_std + 
-                     latitude_pref_abs + cont_area + 
-                     pbdb_collections_std + temp_deep_binned")
+mod7 <- brm_logistic("ext_signal ~ sr_mean_std + 
+                     pbdb_collections_std + sea_level +
+                     cont_area + temp_deep_binned")
 
-mod8 <- brm_logistic("ext_signal ~ sr_value_std + 
-                     latitude_pref_abs + cont_area + 
-                     shark_collections_std + temp_deep_binned")
+mod8 <- brm_logistic("ext_signal ~ sr_mean_std + 
+                     outcrop_area_std + sea_level + 
+                     cont_area + temp_deep_binned")
 
 
 ## second adjustment set 
+# outcrop area, preservation potential, sampling effort, shelf area, 
+# taxonomic identity, temperature
 # for d13C
-mod9 <- brm_logistic("ext_signal ~ d13C_std + latitude_pref_abs + 
-                     sea_level + cont_area + 
-                     shark_collections_std + temp_gat_binned")
+mod9 <- brm_logistic("ext_signal ~ d13C_std + 
+                     outcrop_area_std + mean_q_std + 
+                     pbdb_collections_std + cont_area + 
+                     order + temp_gat_binned")
 
-mod10 <- brm_logistic("ext_signal ~ d13C_std + latitude_pref_abs +
-                      sea_level + cont_area +
-                      pbdb_collections_std + temp_gat_binned")
+mod10 <- brm_logistic("ext_signal ~ d13C_std + 
+                      outcrop_area_std + mean_q_std +
+                      shark_collections_std + cont_area +
+                      order + temp_gat_binned")
 
-mod11 <- brm_logistic("ext_signal ~ d13C_std + latitude_pref_abs + 
-                      sea_level + cont_area +
-                      pbdb_collections_std + temp_deep_binned")
+mod11 <- brm_logistic("ext_signal ~ d13C_std + 
+                      outcrop_area_std + mean_q_std +
+                      pbdb_collections_std + cont_area +
+                      order + temp_deep_binned")
 
-mod12 <- brm_logistic("ext_signal ~ d13C_std + latitude_pref_abs + 
-                      sea_level + cont_area +
-                      shark_collections_std + temp_deep_binned")
+mod12 <- brm_logistic("ext_signal ~ d13C_std + 
+                      outcrop_area_std + mean_q_std +
+                      shark_collections_std + cont_area +
+                      order + temp_deep_binned")
 
 # for Sr ratio 
-mod13 <- brm_logistic("ext_signal ~ sr_value_std + latitude_pref_abs + 
-                     sea_level + cont_area + 
-                     shark_collections_std + temp_gat_binned")
+mod13 <- brm_logistic("ext_signal ~ sr_mean_std + 
+                      outcrop_area_std + mean_q_std + 
+                      pbdb_collections_std + cont_area + 
+                      order + temp_gat_binned")
 
-mod14 <- brm_logistic("ext_signal ~ sr_value_std + latitude_pref_abs +
-                      sea_level + cont_area +
-                      pbdb_collections_std + temp_gat_binned")
+mod14 <- brm_logistic("ext_signal ~ sr_mean_std + 
+                      outcrop_area_std + mean_q_std +
+                      shark_collections_std + cont_area +
+                      order + temp_gat_binned")
 
-mod15 <- brm_logistic("ext_signal ~ sr_value_std + latitude_pref_abs + 
-                      sea_level + cont_area +
-                      pbdb_collections_std + temp_deep_binned")
+mod15 <- brm_logistic("ext_signal ~ sr_mean_std + 
+                      outcrop_area_std + mean_q_std +
+                      pbdb_collections_std + cont_area +
+                      order + temp_deep_binned")
 
-mod16 <- brm_logistic("ext_signal ~ sr_value_std + latitude_pref_abs + 
-                      sea_level + cont_area +
-                      shark_collections_std + temp_deep_binned")
+mod16 <- brm_logistic("ext_signal ~ sr_mean_std + 
+                      outcrop_area_std + mean_q_std +
+                      shark_collections_std + cont_area +
+                      order + temp_deep_binned")
 
 
 
 # average models ----------------------------------------------------------
 
+
 # set up grid to average over
 dat_new <- tibble(d13C_std = seq(-2, 2, by = 0.2), 
-                  sr_value_std = seq(-2, 2, by = 0.2), 
+                  sr_mean_std = seq(-2, 2, by = 0.2), 
                   # keep adjustments fixed at average
-                  latitude_pref_abs = mean(dat_merged$latitude_pref_abs), 
                   sea_level = mean(dat_merged$sea_level), 
                   cont_area = mean(dat_merged$cont_area), 
                   shark_collections_std = mean(dat_merged$shark_collections_std), 
                   pbdb_collections_std = mean(dat_merged$pbdb_collections_std), 
                   temp_deep_binned = mean(dat_merged$temp_deep_binned), 
-                  temp_gat_binned = mean(dat_merged$temp_gat_binned))  
+                  temp_gat_binned = mean(dat_merged$temp_gat_binned), 
+                  outcrop_area_std = mean(dat_merged$outcrop_area_std), 
+                  mean_q_std = mean(dat_merged$mean_q_std)) %>% 
+  expand_grid(order = unique(dat_merged$order))
 
 # set up number of draws 
 nr_draws <- 100
@@ -173,7 +187,7 @@ plot_prod <- dat_pred %>%
             slab_alpha = 0.3,
             scale = 0.2,
             data = dat_merged %>% 
-              pivot_longer(cols = c(d13C_std, sr_value_std), 
+              pivot_longer(cols = c(d13C_std, sr_mean_std), 
                            values_to = "productivity", 
                            names_to = "prod_name") %>% 
               # spread out a bit
@@ -202,7 +216,7 @@ dat_pred_post <- posterior_average(mod1, mod2, mod3, mod4,
                                    mod5, mod6, mod7, mod8,
                                    mod9, mod10, mod11, mod12,
                                    mod13, mod14, mod15, mod16,
-                                   variable = c("b_d13C_std", "b_sr_value_std"),
+                                   variable = c("b_d13C_std", "b_sr_mean_std"),
                                    seed = 1708,
                                    ndraws =  1e4, 
                                    missing = NA) %>% 
@@ -234,12 +248,12 @@ plot_prod_beta <- dat_pred_post %>%
             point_colour = colour_yellow) +
   annotate("text", 
            label = "\u03B2", 
-           x = -0.6, 
+           x = -0.3, 
            y = 0.85, 
            size = 10/.pt, 
            colour = "grey40") +
   scale_y_continuous(breaks = NULL) +
-  scale_x_continuous(breaks = 0, limits = c(-1, 3.6)) +
+  scale_x_continuous(breaks = 0, limits = c(-0.5, 0.7)) +
   labs(y = NULL, 
        x = NULL) +
   theme(plot.background = elementalist::element_rect_round(radius = unit(0.85, "cm"), 

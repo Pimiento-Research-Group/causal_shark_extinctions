@@ -25,7 +25,7 @@ dat_merged <- read_rds(here("data",
 
 
 # load the graph 
-dag <- downloadGraph("dagitty.net/m_UM7hV")
+dag <- downloadGraph("dagitty.net/mjiV5Qf")
 
 
 # get adjustments sets for the total effect
@@ -150,12 +150,12 @@ plot_sea_beta <- dat_pred_post %>%
             point_colour = colour_mint) +
   annotate("text", 
            label = "\u03B2", 
-           x = -0.03, 
+           x = -0.003, 
            y = 0.85, 
            size = 10/.pt, 
            colour = "grey40") +
   scale_y_continuous(breaks = NULL) +
-  scale_x_continuous(breaks = 0) +
+  scale_x_continuous(breaks = 0, limits = c(-0.005, 0.013)) +
   labs(y = NULL, 
        x = NULL) +
   theme(plot.background = elementalist::element_rect_round(radius = unit(0.85, "cm"), 

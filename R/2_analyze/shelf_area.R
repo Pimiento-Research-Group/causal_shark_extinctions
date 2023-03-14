@@ -25,7 +25,7 @@ dat_merged <- read_rds(here("data",
 
 
 # load the graph 
-dag <- downloadGraph("dagitty.net/m_UM7hV")
+dag <- downloadGraph("dagitty.net/mjiV5Qf")
 
 
 # get adjustments sets for the total effect
@@ -128,7 +128,7 @@ plot_shelf_beta <- dat_pred_post %>%
             point_colour = "#BD8D9E") +
   annotate("text", 
            label = "\u03B2", 
-           x = -7, 
+           x = -6, 
            y = 0.85, 
            size = 10/.pt, 
            colour = "grey40") +

@@ -16,23 +16,13 @@ source(here("R", "config_file.R"))
 dat_merged <- read_rds(here("data",
                             "processed_merged_data.rds")) 
 
-# select taxa where we have an extinction event
-dat_merged <- dat_merged %>% 
-  filter(order %in% (dat_merged %>%
-                       count(order,
-                             ext_signal) %>%
-                       filter(ext_signal == 1) %>%
-                       pull(order)))
-  
-
-
 
 
 # total effect adjustment sets --------------------------------------------
 
 
 # load the graph 
-dag <- downloadGraph("dagitty.net/m_UM7hV")
+dag <- downloadGraph("dagitty.net/mjiV5Qf")
 
 
 # get adjustments sets for the total effect
@@ -68,6 +58,7 @@ dat_pred <- dat_merged %>%
   mutate(median_epred = median(.epred), 
          max_epred = max(.epred)) %>% 
   ungroup() %>% 
+  drop_na(order) %>% 
   mutate(order = fct_reorder(order, median_epred))  
   
 # visualise
@@ -80,7 +71,7 @@ plot_tax <- dat_pred %>%
                     fill = "white", 
                     point_size = 1.5, 
                     point_colour = "grey30") +
-  geom_label(aes(label = n_lab, x = max_epred + 0.03), 
+  geom_label(aes(label = n_lab, x = max_epred + 0.05), 
              data = dat_pred %>% 
                distinct(order, max_epred, n) %>% 
                mutate(n_lab = paste0("n = ", n)), 
