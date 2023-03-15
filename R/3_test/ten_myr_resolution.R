@@ -376,42 +376,6 @@ dat_merged %>%
 
 
 
-# paleotemperature --------------------------------------------------------
-
-# start with deep ocean temperature
-# average over potential long-term trends
-mod1 <- brm_logistic("ext_signal ~ temp_deep_st:temp_deep_lt1")
-mod2 <- brm_logistic("ext_signal ~ temp_deep_st:temp_deep_lt2")
-mod3 <- brm_logistic("ext_signal ~ temp_deep_st:temp_deep_lt3")
-mod4 <- brm_logistic("ext_signal ~ temp_deep_st:temp_deep_lt4")
-
-# same for global average temperature
-mod5 <- brm_logistic("ext_signal ~ temp_gat_st:temp_gat_lt1")
-mod6 <- brm_logistic("ext_signal ~ temp_gat_st:temp_gat_lt2")
-mod7 <- brm_logistic("ext_signal ~ temp_gat_st:temp_gat_lt3")
-mod8 <- brm_logistic("ext_signal ~ temp_gat_st:temp_gat_lt4")
-
-# average posterior draws by model stacking
-dat_pred_post <- posterior_average(mod1, mod2,
-                                   mod3, mod4,
-                                   mod5, mod6,
-                                   mod7, mod8,
-                                   seed = 1708,
-                                   ndraws =  1e4, 
-                                   missing = NA) %>% 
-  select(contains("temp")) %>% 
-  pivot_longer(cols = everything(), 
-               names_to = "coef_name", 
-               values_to = "coef_val") %>% 
-  drop_na(coef_val)
-
-
-# save trend predictions
-dat_pred_post %>% 
-  write_rds(here("data", 
-                 "predictions", 
-                 "pred_trend_paleotemperature_10myr.rds"), 
-            compress = "gz")
 
 
 # productivity ------------------------------------------------------------
