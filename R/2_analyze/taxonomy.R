@@ -14,8 +14,23 @@ source(here("R", "config_file.R"))
 
 # fossil data and environmental proxy data on species level
 dat_merged <- read_rds(here("data",
-                            "processed_merged_data.rds")) 
-
+                            "processed_merged_data.rds")) %>% 
+  drop_na(order) %>% 
+  mutate(superorder = fct_collapse(order,
+                              sharks = c("Carcharhiniformes",
+                                         "Orectolobiformes",
+                                         "Lamniformes",
+                                         "Squaliformes",
+                                         "Hexanchiformes",
+                                         "Echinorhiniformes",
+                                         "Heterodontiformes",
+                                         "Pristiophoriformes",
+                                         "Squatiniformes",
+                                         "Synechodontiformes"),
+                              rays = c("Myliobatiformes",
+                                       "Rajiformes",
+                                       "Rhinopristiformes",
+                                       "Torpediniformes"))) 
 
 
 # total effect adjustment sets --------------------------------------------
@@ -40,13 +55,14 @@ adjustmentSets(dag,
 # fit final model
 mod1 <- brm_logistic("ext_signal ~ order")
 
-
+# same for superorders
+mod2 <- brm_logistic("ext_signal ~ superorder")
 
 
 # extract predictions ----------------------------------------------------------
 
 # set up grid to average over
-dat_pred <- dat_merged %>% 
+dat_pred_order <- dat_merged %>% 
   distinct(order) %>% 
   # add posterior draws
   add_epred_draws(mod1, 
@@ -62,7 +78,7 @@ dat_pred <- dat_merged %>%
   mutate(order = fct_reorder(order, median_epred))  
   
 # visualise
-plot_tax <- dat_pred %>%
+plot_order <- dat_pred_order %>%
   ggplot(aes(.epred, order)) +
   stat_histinterval(shape = 21, 
                     interval_alpha = 0,
@@ -72,7 +88,7 @@ plot_tax <- dat_pred %>%
                     point_size = 1.5, 
                     point_colour = "grey30") +
   geom_label(aes(label = n_lab, x = max_epred + 0.05), 
-             data = dat_pred %>% 
+             data = dat_pred_order %>% 
                distinct(order, max_epred, n) %>% 
                mutate(n_lab = paste0("n = ", n)), 
              label.size = 0, 
@@ -84,6 +100,37 @@ plot_tax <- dat_pred %>%
   labs(y = NULL, 
        x = "Extinction Risk [%]")
 
+# same for superorders
+# set up grid to average over
+dat_pred_superorder <- dat_merged %>% 
+  distinct(superorder) %>% 
+  # add posterior draws
+  add_epred_draws(mod2, 
+                  ndraws = 10000) %>% 
+  # arrange
+  group_by(superorder) %>% 
+  mutate(median_epred = median(.epred), 
+         max_epred = max(.epred)) %>% 
+  ungroup() %>% 
+  drop_na(superorder) %>% 
+  mutate(superorder = fct_reorder(superorder, median_epred))  
+
+# visualise
+plot_super <- dat_pred_superorder %>%
+  filter(superorder != "incertae sedis") %>% 
+  ggplot(aes(.epred, superorder)) +
+  stat_histinterval(shape = 21, 
+                    interval_alpha = 0,
+                    slab_colour = "#9C8899", 
+                    slab_fill = "#9C8899", 
+                    fill = "white", 
+                    point_size = 1.5, 
+                    point_colour = "grey30") +
+  scale_x_continuous(breaks = c(0, 0.2, 0.4, 0.6, 0.8, 1), 
+                     labels = c("0", "20", "40", "60", "80", "100")) +
+  coord_cartesian(xlim = c(0, 0.6)) +
+  labs(y = NULL, 
+       x = "Extinction Risk [%]")
 
 # save plot
 ggsave(plot_tax, filename = here("figures",

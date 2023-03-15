@@ -10,5 +10,5 @@ This is the repo for the current project from the Pimiento lab under the lead of
 - [X] Add all models to productivity beta estimation
 - [X] Repeat analysis with genus instead of species
 - [ ] Repeat analysis with Cenozoic subset at higher resolution
-- [ ] Repeat analysis with Superorders
+- [X] Repeat analysis with Superorders
 - [X] Omit the last temporal stage 
