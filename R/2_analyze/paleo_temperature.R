@@ -129,31 +129,31 @@ plot_paleotemp <- dat_pred %>%
   geom_line(aes(colour = trend),
             linewidth = 0.7, 
             data = dat_pred_av) +
-  annotate("text", 
-           y = 0.363, x = -1.8, 
-           label = "Long-term Cooling", 
-           colour = "#9CBABF", 
-           size = 10/.pt, 
+  annotate("text",
+           y = 0.363, x = -1.8,
+           label = "Long-term Cooling",
+           colour = "#9CBABF",
+           size = 10/.pt,
            alpha = 0.8) +
   annotate(geom = "curve",
            x = -2.45, xend = -2.8,
            y = 0.36, yend = 0.275,
            curvature = 0.4,
            colour = "#9CBABF",
-           arrow = arrow(length = unit(.2,"cm")), 
+           arrow = arrow(length = unit(.2,"cm")),
            alpha = 0.5) +
-  annotate("text", 
-           y = 0.323, x = 1.1, 
-           label = "Long-term Warming", 
-           colour = "#A76861", 
-           size = 10/.pt, 
+  annotate("text",
+           y = 0.323, x = 1.1,
+           label = "Long-term Warming",
+           colour = "#A76861",
+           size = 10/.pt,
            alpha = 0.8) +
   annotate(geom = "curve",
            x = 1.75, xend = 2.3,
            y = 0.32, yend = 0.28,
            curvature = -0.2,
            colour = "#A76861",
-           arrow = arrow(length = unit(.2,"cm")), 
+           arrow = arrow(length = unit(.2,"cm")),
            alpha = 0.5) +
   scale_color_manual(values = c("#A76861", "#9CBABF")) + 
   scale_y_continuous(breaks = c(0, 0.2, 0.4, 0.6, 0.8, 1), 
@@ -161,8 +161,6 @@ plot_paleotemp <- dat_pred %>%
   labs(y = "Extinction Risk [%]", 
        x = "Temperature Change [°C]") +
   theme(legend.position = "none")
-
-
 
 
 
