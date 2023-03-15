@@ -108,7 +108,7 @@ dat_pred_av <- dat_pred %>%
   summarise(value = mean(value))
 
 # visualise
-plot_temp <- dat_pred %>% 
+plot_temp <- dat_pred %>%
   ggplot(aes(temperature, value)) +
   stat_dots(aes(y = as.numeric(ext_signal == 1), 
                 side = ifelse(ext_signal == 1, "bottom", "top")),
