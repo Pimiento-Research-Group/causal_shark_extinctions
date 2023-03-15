@@ -178,7 +178,7 @@ dat_pred_av <- dat_pred %>%
   summarise(value = mean(value))
 
 # visualise
-plot_prod <- dat_pred %>% 
+plot_prod <- dat_pred %>%
   ggplot(aes(productivity, value)) +
   stat_dots(aes(y = as.numeric(ext_signal == 1), 
                 side = ifelse(ext_signal == 1, "bottom", "top")),
