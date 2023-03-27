@@ -1,0 +1,1162 @@
+species	2015	2009	2000	1996	2019	1994	1990	2018	2007	2006	2013	2016	2005	2003	2002	2004	2017	2011	2012	2010
+Bathyraja abyssicola	DD	DD	DD	DD																
+Carcharhinus limbatus		NT	VU	VU																
+Carcharhinus obscurus		VU	LR/nt	EN	EN															
+Carcharhinus plumbeus		VU	LR/nt	VU																
+Carcharias taurus		VU	VU	EN					CR					NT						
+Carcharodon carcharias		VU	VU	VU	VU	K	K													
+Cetorhinus maximus		VU	VU	VU	EN	K	K													
+Dalatias licha		NT	DD	LR/nt				VU												
+Glyphis gangeticus				CR					CR											
+Hexanchus griseus		NT	LR/nt	VU																
+Lamna nasus			LR/nt	VU	VU					VU										
+Pristis pectinata			EN	EN						CR	CR									
+Rhincodon typus			VU	DD		I	I					EN	VU							
+Notorynchus cepedianus		DD	LR/nt																	
+Pristiophorus cirratus			LR/nt									LC		LC						
+Squatina californica			LR/nt									NT	NT							
+Squatina argentina			DD		CR					EN										
+Squatina occulta			EN		CR				EN											
+Squatina squatina	CR		VU		CR					CR										
+Heterodontus francisci	DD		LR/lc							DD										
+Heterodontus portusjacksoni	LC		LR/lc										LC							
+Brachaelurus colcloughi	VU	VU	VU																	
+Odontaspis noronhai		DD	DD		LC															
+Pseudocarcharias kamoharai		NT	LR/nt		LC															
+Megachasma pelagios	LC		DD		LC								DD							
+Alopias vulpinus		VU	DD		VU										DD					
+Isurus oxyrinchus		NT	LR/nt		EN															
+Lamna ditropis		LC	DD		LC															
+Haploblepharus edwardsii		NT	LR/nt																	
+Haploblepharus fuscus		VU	LR/nt																	
+Schroederichthys bivius		DD	DD																	
+Poroderma africanum		NT	LR/nt																	
+Scyliorhinus capensis			LR/nt													NT				
+Leptocharias smithii		NT	LR/nt																	
+Furgaleus macki			LR/cd									LC		LC						
+Galeorhinus galeus			VU							VU										
+Hemitriakis leucoperiptera			EN							EN										
+Hypogaleus hyugaensis			LR/nt									LC	NT							
+Mustelus antarcticus			LR/cd									LC		LC						
+Mustelus lenticulatus			LR/cd					LC						LC						
+Mustelus asterias		LC	LR/lc																	
+Mustelus mustelus		VU	LR/lc																	
+Mustelus canis		NT	LR/nt																	
+Scylliogaleus quecketti		VU	VU		VU															
+Triakis acutipinna		EN	VU																	
+Triakis megalopterus		NT	LR/nt																	
+Triakis semifasciata	LC	LC	LR/cd																	
+Carcharhinus amblyrhynchos		NT	LR/nt																	
+Carcharhinus amboinensis		NT	LR/nt																	
+Carcharhinus borneensis		EN	EN																	
+Carcharhinus brevipinna		NT	VU																	
+Carcharhinus hemiodon			VU											CR						
+Carcharhinus falciformis		NT	LR/lc									NT					VU			
+Carcharhinus leiodon		VU	VU														EN			
+Carcharhinus leucas		NT	LR/nt																	
+Carcharhinus limbatus		NT	VU	VU																
+Carcharhinus longimanus	VU		LR/nt		CR					VU										
+Carcharhinus melanopterus		NT	LR/nt																	
+Galeocerdo cuvier		NT	LR/nt		NT															
+Glyphis glyphis		EN	EN																	
+Negaprion brevirostris	NT	NT	LR/nt																	
+Prionace glauca		NT	LR/nt		NT															
+Rhizoprionodon terraenovae		LC	LR/lc																	
+Scoliodon laticaudus		NT	LR/nt																	
+Triaenodon obesus		NT	LR/nt																	
+Sphyrna lewini		EN	LR/nt		CR															
+Sphyrna mokarran			DD		CR				EN											
+Sphyrna tiburo			LR/lc									LC	LC							
+Sphyrna zygaena		VU	LR/nt		VU															
+Anoxypristis cuspidata			EN							CR	EN									
+Pristis clavata			EN							CR	EN									
+Pristis zijsron			EN							CR	CR									
+Rhynchobatus djiddensis					CR					VU										
+Tetronarce californica	LC		LR/lc										LC							
+Dipturus batis			EN							CR										
+Raja clavata			LR/nt									NT	NT							
+Raja microocellata		NT	LR/nt																	
+Potamotrygon henlei			DD													LC				
+Potamotrygon leopoldi		DD	DD																	
+Potamotrygon motoro		DD	DD																	
+Fontitrygon garouaensis			VU									VU	VU							
+Hemitrygon laosensis			EN									EN	EN					EN		
+Urogymnus polylepis			CR									EN						EN		
+Fluvitrygon signifer			EN									EN	EN							
+Taeniura lymma		NT	LR/nt																	
+Urogymnus asperrimus			VU									VU	VU							
+Fontitrygon ukpam		EN	EN									EN								
+Aetobatus narinari			DD							NT										
+Myliobatis californicus	LC		LR/lc							LC										
+Squatina guggenheim			EN		EN															
+Notorynchus cepedianus		DD	LR/nt																	
+Carcharhinus amboinensis		NT	LR/nt																	
+Carcharhinus brevipinna		NT	VU																	
+Dipturus laevis			VU											EN						
+Carcharhinus amblyrhynchoides		NT	LR/nt																	
+Pseudobatos horkelii			CR						CR			CR								
+Apristurus albisoma	LC													NT						
+Apristurus exsanguis								LC						LC						
+Asymbolus analis	LC													DD						
+Asymbolus funebris												DD		DD						
+Asymbolus occiduus												LC		LC						
+Asymbolus pallidus												LC		LC						
+Asymbolus parvus												LC		LC						
+Asymbolus rubiginosus	LC													LC						
+Asymbolus submaculatus												LC		LC						
+Asymbolus vincenti												LC		LC						
+Atelomycterus fasciatus	LC													LC						
+Atelomycterus macleayi	LC													LC						
+Atelomycterus marmoratus														NT						
+Aulohalaelurus labiosus	LC													LC						
+Brachaelurus waddi	LC													LC						
+Carcharhinus cautus														DD						
+Carcharhinus fitzroyensis					LC									LC						
+Carcharhinus galapagensis					LC									NT						
+Carcharhinus macloti														NT						
+Carcharhinus sealei														NT						
+Carcharhinus tilstoni					LC									LC						
+Centrophorus harrissoni											EN			CR						
+Carcharhinus brachyurus														VU						
+Carcharhinus brachyurus														VU						
+Callorhinchus milii	LC													LC						
+Centrophorus uyato														DD						
+Centroscyllium kamoharai								LC						DD						
+Centroscymnus coelolepis														NT						
+Centroscymnus owstonii								VU						LC						
+Cephaloscyllium isabellum								LC						LC						
+Cephaloscyllium laticeps												LC		LC						
+Chiloscyllium indicum														NT						
+Chiloscyllium griseum														NT						
+Chimaera panthera								DD						DD						
+Chlamydoselachus anguineus												LC		NT						
+Cirrhigaleus barbifer		DD												NT						
+Bathytoshia brevicaudata												LC		LC						
+Hemitrygon fluviorum												VU		VU						
+Deania calcea														LC						
+Dipturus innominatus								LC						NT						
+Zearaja nasutus								LC						LC						
+Echinorhinus brucus														DD						
+Echinorhinus cookei								DD						NT						
+Etmopterus caudistigmus								LC						LC						
+Etmopterus dianthus	LC													LC						
+Etmopterus dislineatus	LC													LC						
+Etmopterus evansi	LC													LC						
+Etmopterus fusus	LC													LC						
+Etmopterus pseudosqualiolus								LC						LC						
+Eusphyra blochii												EN		NT						
+Figaro boardmani												LC		LC						
+Galeus gracilis												DD		DD						
+Gogolia filewoodi														DD						
+Gollum attenuatus								LC						LC						
+Hemigaleus microstoma		VU												LC						
+Hemiscyllium ocellatum	LC													NT						
+Hemiscyllium strahani														VU						
+Hemiscyllium trispeculare	LC													LC						
+Hemitriakis abdita												DD		DD						
+Hemitriakis falcata												LC		LC						
+Heptranchias perlo														NT						
+Heterodontus galeatus												LC		LC						
+Heterodontus zebra														LC						
+Hydrolagus bemisi								LC						LC						
+Hydrolagus novaezealandiae								LC						LC						
+Hypnos monopterygius	LC													LC						
+Iago garricki												LC		LC						
+Isistius brasiliensis								LC						LC						
+Loxodon macrorhinus														LC						
+Mobula eregoodoo														NT						
+Nebrius ferrugineus														VU						
+Negaprion acutidens														EN						
+Orectolobus maculatus	LC	NT												NT						
+Orectolobus ornatus	LC	NT												NT						
+Orectolobus wardi	LC													LC						
+Oxynotus bruniensis								NT						DD						
+Parascyllium collare												LC		LC						
+Parascyllium ferrugineum												LC		LC						
+Parascyllium sparsimaculatum	DD													DD						
+Parascyllium variolatum												LC		LC						
+Parmaturus macmillani								DD						DD						
+Pristiophorus nudipinnis												LC		LC						
+Rhina ancylostoma					CR							VU		VU						
+Rhizoprionodon acutus														LC						
+Rhizoprionodon oligolinx														LC						
+Rhizoprionodon taylori					LC									LC						
+Rhynchobatus australiae					CR									VU						
+Rhynchobatus laevis					CR							VU		VU						
+Scymnodalatias albicauda								DD						DD						
+Scymnodalatias sherwoodi								DD						DD						
+Somniosus antarcticus								LC						DD						
+Squaliolus aliae	LC													LC						
+Squalus megalops														DD						
+Squalus melanurus								DD						LC						
+Squalus rancureli								NT						NT						
+Squatina australis												LC		LC						
+Squatina tergocellata												LC		LC						
+Sutorectus tentaculatus	LC													LC						
+Trygonorrhina fasciata	LC																			
+Aulohalaelurus kanakorum								DD						VU						
+Centrophorus squamosus														VU						
+Chiloscyllium punctatum												NT		NT						
+Eucrossorhinus dasypogon	LC													NT						
+Hemipristis elongata												VU		VU						
+Hemiscyllium hallstromi												VU		VU						
+Odontaspis ferox		VU										VU		DD						
+Squalus mitsukurii		DD												DD						
+Stegostoma tigrinum					EN							EN		VU						
+Apristurus melanoasper		DD										LC		DD						
+Apristurus ampliceps	LC													DD						
+Apristurus bucephalus	DD													DD						
+Apristurus australis												LC		DD			LC			
+Cephaloscyllium albipinnum					CR									NT				NT		
+Cephaloscyllium variegatum					NT									DD				NT		
+Cephaloscyllium zebrum												DD		DD				DD		
+Cephaloscyllium speccum												DD		DD				DD		
+Figaro striatus												DD		DD						
+Glyphis garricki														CR						
+Halaelurus sellus		LC										LC		LC						
+Mustelus stevensi					LC									LC				LC		
+Orectolobus hutchinsi	LC	DD												LC						
+Parmaturus bigus		DD										DD		DD						
+Pristiophorus delicatus	LC													LC						
+Rhinobatos sainsburyi	LC													LC						
+Squalus notocaudatus					LC									DD						
+Squalus albifrons					LC									DD						
+Squalus crassispinus					LC									DD						
+Squalus nasutus					NT									DD						
+Squalus grahami					NT									NT						
+Squatina pseudocellata												LC		DD						
+Squatina albipunctata												VU		VU						
+Urolophus kapalensis					NT									NT						
+Hemiscyllium ocellatum	LC													NT						
+Negaprion acutidens														EN						
+Centrophorus moluccensis											LC			DD						
+Carcharias taurus		VU	VU	EN					CR					NT						
+Carcharias taurus		VU	VU	EN					CR					NT						
+Squalus acanthias										LC		VU		VU						
+Squalus acanthias										LC		VU		VU						
+Bythaelurus dawsoni								LC						DD						
+Bythaelurus incanus	DD													DD						
+Beringraja binoculata			LR/nt									LC	NT							
+Fluvitrygon oxyrhyncha			EN									EN	EN							
+Aptychotrema vincentiana	LC															LC				
+Trigonognathus kabeyai																DD				
+Oxynotus japonicus																DD				
+Apristurus aphyodes	LC															DD				
+Apristurus brunneus	DD															DD				
+Apristurus fedorovi																DD				
+Apristurus gibbosus																DD				
+Apristurus herklotsi																DD				
+Apristurus internatus																DD				
+Apristurus investigatoris																DD				
+Apristurus kampae	DD															DD				
+Apristurus laurussonii									DD							DD				
+Apristurus longicephalus	LC															DD				
+Apristurus macrorhynchus																DD				
+Apristurus macrostomus																DD				
+Apristurus micropterygeus																DD				
+Apristurus parvipinnis																DD				
+Apristurus pinguis	LC															DD				
+Apristurus platyrhynchus	LC															DD				
+Apristurus profundorum																DD				
+Apristurus sinensis	DD															DD				
+Apristurus spongiceps	DD															DD				
+Bythaelurus alcockii																DD	DD			
+Bythaelurus hispidus					NT											DD				
+Bythaelurus immaculatus																DD				
+Pliotrema warreni																NT				
+Centroscyllium nigrum																DD				
+Mollisquama parini																DD				
+Centrophorus isodon																DD				
+Miroscyllium sheikoi																DD				
+Mitsukurina owstoni								LC								LC				
+Pseudotriakis microdon	LC															DD				
+Centroscyllium granulatum																DD				
+Oxynotus caribbaeus																DD				
+Proscymnodon macracanthus																DD				
+Scymnodalatias oligodon																DD				
+Squatina armata																DD				
+Apristurus canutus									DD							DD				
+Apristurus nasutus																DD				
+Apristurus stenseni																DD				
+Atlantoraja castelnaui																EN				
+Bathyraja longicauda																DD				
+Benthobatis kreffti																VU				
+Galeus mincaronei																VU				
+Heterodontus quoyi																DD				
+Mustelus dorsalis																DD				
+Mustelus fasciatus																CR				
+Psammobatis bergi																LC				
+Psammobatis extenta																LC				
+Pseudobatos planiceps												DD				DD				
+Schroederichthys chilensis																DD				
+Schroederichthys saurisqualus																VU				
+Schroederichthys tenuis																DD				
+Scyliorhinus besnardi																DD				
+Scyliorhinus haeckelii																DD				
+Scyliorhinus hesperius																DD				
+Sphyrna corona																NT				
+Hypanus guttatus												DD				DD				
+Potamotrygon schuemacheri																DD				
+Potamotrygon scobina																DD				
+Rhinoptera brasiliensis																EN				
+Sympterygia brevicaudata																DD				
+Sympterygia bonapartii																DD				
+Urotrygon microphthalmum																LC				
+Apristurus manis					LC											LC				
+Anacanthobatis marmorata																DD				
+Indobatis ori					LC											DD				
+Apristurus saldanha					LC											LC				
+Euprotomicroides zantedeschia		DD			LC					DD						DD				
+Bythaelurus clevai					DD											DD				
+Cephaloscyllium sufflans																LC				
+Dipturus campbelli																NT				
+Dipturus lanceorostratus					DD											DD				
+Dipturus pullopunctatus																LC				
+Dipturus stenorhynchus					DD											DD				
+Eridacnis sinuans					LC											LC				
+Halaelurus lineatus					LC											DD				
+Halaelurus natalensis																DD				
+Heterodontus ramalheira					DD											DD				
+Neoraja stehmanni					LC											DD				
+Pseudoginglymostoma brevicaudatum					CR											VU				
+Rajella caudaspinosa					LC											NT				
+Rajella leoparda								LC								LC				
+Rajella ravidula					LC											LC				
+Torpedo fuscomaculata					DD											DD				
+Apristurus riveri									DD							DD				
+Psammobatis normani																DD				
+Psammobatis rudis																DD				
+Sympterygia acuta																VU				
+Sympterygia lima																DD				
+Dipturus leptocaudus																DD				
+Rajella sadowskii																DD				
+Urobatis marmoratus																DD				
+Urotrygon chilensis																DD				
+Galeus polli																LC				
+Rajella barnardi																LC				
+Rajella dissimilis																LC				
+Amblyraja frerichsi																DD				
+Aculeola nigra																DD				
+Gurgesiella furvescens																LC				
+Rajella nigerrima																LC				
+Gurgesiella dorsalifera																VU				
+Apristurus microps					LC											LC				
+Rhizoprionodon lalandii																DD				
+Discopyge tschudii																DD				
+Discopyge tschudii																DD				
+Discopyge tschudii																DD				
+Squatina africana					NT											DD				
+Hypanus marianae												DD				DD				
+Centroselachus crepidater														LC						
+Scymnodon plunketi								VU						NT						
+Trygonoptera galba		DD			LC															
+Trygonoptera imitata					LC					NT										
+Trygonoptera mucosa					LC					LC										
+Trygonoptera ovalis					LC					LC										
+Trygonoptera personata					LC					LC										
+Trygonoptera testacea					NT					LC										
+Urolophus armatus										DD										
+Urolophus aurantiacus										NT										
+Urolophus bucculentus					VU					VU										
+Urolophus circularis					LC					LC										
+Urolophus cruciatus					LC					LC										
+Urolophus deforgesi								LC		LC										
+Urolophus expansus					LC					LC										
+Urolophus flavomosaicus					LC					LC										
+Urolophus gigas					LC					LC										
+Urolophus javanicus										CR										
+Urolophus kaianus										DD										
+Urolophus lobatus					LC					LC										
+Urolophus mitosis					LC					LC										
+Urolophus neocaledoniensis								LC		LC										
+Urolophus orarius					EN					EN										
+Urolophus papilio								LC		LC										
+Urolophus paucimaculatus					LC					LC										
+Urolophus piperatus					LC					LC										
+Urolophus sufflavus					VU					VU										
+Urolophus viridis					VU					VU										
+Urolophus westraliensis					LC					LC										
+Urobatis concentricus										DD										
+Urobatis halleri	LC									LC										
+Urobatis jamaicensis										LC										
+Urobatis maculatus										DD										
+Plesiobatis daviesi	LC									LC										
+Platyrhinoidis triseriata										LC		LC								
+Gymnura zonura										VU										
+Gymnura micrura										DD										
+Gymnura natalensis					LC					DD										
+Gymnura poecilura										NT										
+Dipturus crosnieri					VU					VU										
+Aetobatus flagellum										EN										
+Aetomylaeus maculatus										EN										
+Aetomylaeus vespertilio										EN		EN								
+Myliobatis chilensis										DD										
+Myliobatis hamlyni										EN		NT								
+Myliobatis longirostris										NT										
+Myliobatis peruvianus										DD										
+Aetomylaeus bovinus										DD		DD								
+Rhinoptera bonasus										NT										
+Rhinoptera javanica										VU										
+Rhinoptera steindachneri										NT										
+Torpedo adenensis										NT							EN			
+Torpedo andersoni										DD										
+Torpedo microdiscus										DD										
+Torpedo panthera										DD										
+Tetronarce puelcha										DD										
+Torpedo sinuspersici					DD					DD										
+Tetronarce tremens										DD										
+Callorhinchus capensis										LC										
+Harriotta haeckeli	LC									DD										
+Harriotta raleighana										LC		LC								
+Neoharriotta carri										DD										
+Neoharriotta pinnata										DD										
+Neoharriotta pumila										DD							LC			
+Rhinochimaera africana										DD		DD								
+Rhinochimaera atlantica										LC										
+Rhinochimaera pacifica	LC									LC										
+Telatrygon acutirostra										NT		NT								
+Hemitrygon akajei										NT		NT								
+Hypanus americanus										DD		DD								
+Neotrygon annotata	NT									NT										
+Fontitrygon colarensis										VU		VU								
+Hypanus dipterurus										DD		DD								
+Fontitrygon geijskesi										NT		NT								
+Dasyatis hypostigma										DD										
+Hemitrygon izuensis										NT		NT								
+Neotrygon leylandi	LC									NT								LC		
+Hypanus longus										DD		DD								
+Hypanus sabinus										LC		LC								
+Hypanus say										LC		LC								
+Telatrygon zugei										NT		NT								
+Styracura schmardae										DD										
+Taeniurops meyeni	VU									VU										
+Acroteriobatus annulatus										LC		LC								
+Acroteriobatus blochii					LC					LC		LC								
+Glaucostegus granulatus					CR					VU		VU								
+Rhinobatos hynnicephalus										NT										
+Pseudobatos leucorhynchus										NT		NT								
+Rhinobatos nudidorsalis					DD					NT										
+Glaucostegus obtusus					CR					VU		VU								
+Pseudobatos productus										NT		NT								
+Acroteriobatus salalah										DD		DD					NT			
+Glaucostegus thouin					CR					VU		VU								
+Acroteriobatus zanzibarensis										NT		NT								
+Zapteryx exasperata	DD									DD										
+Zapteryx xyster		DD								DD										
+Aptychotrema timorensis	VU									VU				LC						
+Rhynchobatus luebberti					CR					EN										
+Rhynchobatus cooki					CR					VU										
+Rhynchobatus springeri					CR					VU										
+Chimaera cubana										DD										
+Chimaera jordani										DD										
+Chimaera lignaria	LC									DD										
+Chimaera owstoni										DD										
+Chimaera phantasma										DD										
+Hydrolagus africanus										DD										
+Hydrolagus alberti										DD										
+Hydrolagus barbouri										DD										
+Hydrolagus colliei	LC									LC										
+Hydrolagus lemures										LC		LC								
+Hydrolagus macrophthalmus										DD										
+Hydrolagus mitsukurii										DD										
+Hydrolagus ogilbyi										NT		VU								
+Hydrolagus purpurescens	DD									DD										
+Hydrolagus trolli	LC									DD										
+Mobula munkiana					VU					NT										
+Mobula tarapacana					EN					DD		VU								
+Mobula thurstoni					EN					NT		NT								
+Sphyrna media										DD										
+Sphyrna tudes										VU										
+Mustelus schmitti										EN										
+Mustelus higmani										LC										
+Mustelus minicanis										DD										
+Mustelus sinusmexicanus										DD										
+Centrophorus tessellatus										DD										
+Cirrhigaleus asper										DD										
+Euprotomicrus bispinatus	LC									LC										
+Heteroscymnoides marleyi					LC					LC										
+Isistius plutodus	LC									LC										
+Somniosus microcephalus										NT										
+Squaliolus laticaudus										LC										
+Zameus squamulosus										DD										
+Centrophorus granulosus										DD										
+Carcharhinus perezi										NT										
+Isogomphodon oxyrhynchus										CR										
+Carcharhinus signatus										DD										
+Carcharhinus porosus										DD										
+Carcharhinus signatus										DD										
+Chiloscyllium plagiosum										NT										
+Ginglymostoma cirratum										NT										
+Ginglymostoma cirratum										NT										
+Isurus paucus					EN					VU										
+Pristiophorus schroederi										DD										
+Cephaloscyllium ventriosum	LC									LC										
+Galeus piperatus										LC										
+Holohalaelurus melanostigma					LC					DD										
+Parmaturus campechiensis										DD										
+Parmaturus xaniurus	LC									DD										
+Scyliorhinus meadi										DD										
+Scyliorhinus retifer										LC										
+Scyliorhinus cervigoni										DD										
+Heterodontus mexicanus										DD										
+Etmopterus bigelowi										LC										
+Etmopterus bullisi										DD										
+Etmopterus carteri										DD										
+Etmopterus hillianus										LC										
+Etmopterus perryi										DD										
+Etmopterus polli										DD										
+Etmopterus princeps										DD										
+Etmopterus robinsi										LC										
+Etmopterus sentosus					LC					LC										
+Etmopterus virens										LC										
+Etmopterus schultzi										LC										
+Mustelus palumbes										DD										
+Atlantoraja cyclophora										VU										
+Bathyraja aguja										DD										
+Bythaelurus canescens										DD										
+Diplobatis colombiensis										VU										
+Diplobatis guamachensis										VU										
+Diplobatis ommata										VU										
+Diplobatis picta										VU										
+Leucoraja melitensis	CR									CR										
+Narcine brevilabiata										VU										
+Rhizoprionodon porosus										LC										
+Rostroraja alba										EN										
+Squalus acanthias										LC		VU		VU						
+Squalus acanthias										LC		VU		VU						
+Squalus acanthias										LC		VU		VU						
+Squalus acanthias										LC		VU		VU						
+Squalus acanthias										LC		VU		VU						
+Squalus cubensis										DD										
+Squatina aculeata					CR				CR	EN										
+Squatina oculata					CR				CR	EN										
+Zapteryx brevirostris										VU										
+Dipturus oxyrinchus	NT								NT											
+Psammobatis rutrum									DD											
+Bathyraja albomaculata								VU	VU											
+Hydrolagus pallidus									LC											
+Hydrolagus mirabilis									NT											
+Bathyraja cousseauae									NT											
+Callorhinchus callorynchus									LC											
+Etmopterus gracilispinis									LC											
+Rioraja agassizii									VU											
+Atlantoraja platana									VU											
+Bathyraja brachyurops									LC											
+Bathyraja papilonifera									DD											
+Bathyraja griseocauda									EN											
+Chimaera monstrosa									NT											
+Bathyraja pallida									LC											
+Dipturus trachyderma									VU											
+Bathyraja macloviana								NT	NT											
+Amblyraja hyperborea									LC			LC								
+Raja asterias	NT								LC											
+Psammobatis lentiginosa									DD											
+Amblyraja doellojuradoi									LC											
+Hydrolagus affinis									LC											
+Dipturus mennii									VU											
+Malacoraja kreffti	LC								LC											
+Malacoraja spinacidermis									LC											
+Bathyraja richardsoni	LC								LC											
+Mustelus mento									NT											
+Mustelus whitneyi									VU											
+Triakis maculata									VU											
+Rhinobatos rhinobatos									EN											
+Malacoraja obscura									DD											
+Psammobatis parvacauda									DD											
+Urobatis tumbesensis									DD											
+Dipturus ecuadoriensis									DD											
+Bathyraja schroederi									DD											
+Psammobatis scobina									DD											
+Oxynotus centrina									VU											
+Narcine bancroftii					LC				CR											
+Bathyraja magellanica								DD	DD											
+Bathyraja multispinis									NT											
+Bathyraja scaphiops									NT											
+Raja montagui									LC											
+Zearaja chilensis									VU											
+Bathyraja peruana									DD											
+Galeus atlanticus									NT											
+Hydrolagus matallanasi									DD											
+Bathytoshia centroura									LC			LC								
+Gymnura altavela									VU											
+Narcine leoparda									NT											
+Rostroraja cervigoni									NT											
+Urotrygon venezuelae									NT											
+Narcine brasiliensis									DD											
+Pseudobatos prahli									DD			DD								
+Etmopterus litvinovi									DD											
+Etmopterus pycnolepis									DD											
+Gurgesiella atlantica									DD											
+Rajella eisenhardti									DD											
+Carcharias taurus		VU	VU	EN					CR					NT						
+Hydrolagus mccoskeri									DD											
+Mustelus ravidus					LC									LC				LC		
+Rhinobatos penggali										VU										
+Rhinobatos jimbaranensis										VU										
+Zearaja maugeana			EN									EN	EN							
+Squalus altipinnis		DD			DD															
+Squalus edmundsi		NT			NT															
+Benthobatis marcida		LC																		
+Leucoraja lentiginosa		DD																		
+Bathyraja mariposa		DD										LC								
+Rhinobatos albomaculatus		VU																		
+Cirrhigaleus australis		DD										DD								
+Amblyraja robertsi		LC																		
+Hydrolagus alphus		DD																		
+Squatina nebulosa		VU																		
+Crassinarke dormitor		DD																		
+Etmopterus burgessi		DD																		
+Torpedo marmorata		DD																		
+Dipturus cerva		NT																		
+Eridacnis barbouri		DD																		
+Dactylobatus clarkii		DD																		
+Galeus schultzi		DD																		
+Mustelus californicus	LC	LC																		
+Urotrygon rogersi		DD																		
+Scyliorhinus boa		LC																		
+Pavoraja alleni	LC	LC																		
+Beringraja cortezensis		DD																		
+Raja radula	EN	DD										EN								
+Amblyraja reversa		DD															DD			
+Cruriraja durbanensis		DD			DD															
+Gymnura australis	LC	LC																		
+Raja herwigi		DD																		
+Rostroraja velezi		DD																		
+Rajella bathyphila		LC																		
+Narcine westraliensis	LC	LC																		
+Neoraja africana		DD																		
+Fenestraja sibogae		DD																		
+Benthobatis moresbyi		DD															LC			
+Bathyraja maculata	LC	LC																		
+Cirrhoscyllium expolitum		DD																		
+Hexanchus nakamurai		DD																		
+Potamotrygon falkneri		DD																		
+Dipturus tengu		DD																		
+Nasolamia velox		DD																		
+Anacanthobatis donghaiensis		DD																		
+Myliobatis tobijei		DD																		
+Sinobatis melanosoma		LC																		
+Fenestraja ishiyamai		DD																		
+Squalus chloroculus		NT			EN															
+Oxynotus paradoxus		DD																		
+Potamotrygon marinae		DD																		
+Zameus ichiharai		DD																		
+Galeus eastmani		LC																		
+Potamotrygon schroederi		DD																		
+Bathyraja spinicauda		NT																		
+Apristurus japonicus		DD																		
+Hemitriakis complicofasciata		DD																		
+Pavoraja nitida	LC	NT																		
+Rajella bigelowi		LC																		
+Bathyraja andriashevi		LC																		
+Pseudobatos percellens		NT										NT								
+Cruriraja cadenati		DD																		
+Bathyraja trachura	LC	LC																		
+Carcharhinus sorrah		NT																		
+Rajella lintea		LC																		
+Carcharhinus acronotus		NT																		
+Sinobatis borneensis		LC																		
+Cephaloscyllium sarawakensis		DD																		
+Bathyraja minispinosa	LC	LC																		
+Bathyraja shuntovi		DD						DD												
+Neoraja iberica	LC	DD																		
+Centrophorus atromarginatus		DD																		
+Potamotrygon magdalenae		NT										LC								
+Bathytoshia lata		LC										LC								
+Bathyraja ishiharai	DD	DD																		
+Etmopterus spinax		LC																		
+Insentiraja laxipella	DD	DD																		
+Bathyraja murrayi		NT																		
+Amblyraja taaf		DD																		
+Dipturus gigas		DD																		
+Urotrygon simulatrix		VU																		
+Triakis scyllium		LC																		
+Aetomylaeus asperrimus		DD										DD								
+Torpedo torpedo		DD																		
+Galeus melastomus		LC																		
+Scyliorhinus canicula		LC																		
+Dipturus kwangtungensis		DD																		
+Bathyraja interrupta		LC										LC								
+Somniosus pacificus		DD																		
+Squalus montalbani		VU			VU															
+Rhinobatos holcorhynchus		DD			DD															
+Galeus sauteri		DD																		
+Etmopterus molleri	DD	LC																		
+Glaucostegus halavi		DD			CR							DD					VU			
+Rhinobatos irvinei		VU																		
+Squalus hemipinnis		NT																		
+Torpedo mackayana		DD																		
+Scyliorhinus tokubee		DD																		
+Isistius labialis		DD																		
+Brochiraja leviveneta		DD						DD												
+Breviraja mouldi		DD																		
+Breviraja claramaculata		DD																		
+Centrophorus seychellorum		DD			LC															
+Leucoraja erinacea		NT																		
+Leucoraja garmani		LC																		
+Brochiraja spinifera		DD						DD												
+Okamejei heemstrai		DD			LC															
+Breviraja nigriventralis		DD																		
+Narcine vermiculatus		NT																		
+Bathyraja matsubarai		DD																		
+Raja undulata		EN																		
+Chiloscyllium arabicum		NT															NT			
+Dipturus bullisi		DD																		
+Electrolux addisoni		CR			LC															
+Scyliorhinus comoroensis		DD			DD															
+Bathyraja lindbergi	LC	LC																		
+Urogymnus granulatus		NT										VU								
+Somniosus rostratus		DD																		
+Squalus japonicus		DD																		
+Atelomycterus marnkalha	DD	DD																		
+Scyliorhinus torazame		LC																		
+Myliobatis goodei		DD																		
+Pentanchus profundicolus		DD																		
+Squalus brevirostris		DD																		
+Mobula kuhlii		DD																		
+Pseudoraja fischeri		DD																		
+Etmopterus villosus		LC																		
+Centrophorus lusitanicus		VU																		
+Etmopterus pusillus		LC																		
+Bathyraja tzinovskii		LC																		
+Narcine timlei		DD																		
+Rostroraja ackleyi		DD																		
+Rhinobatos punctifer		DD															NT			
+Etmopterus splendidus		DD																		
+Scyliorhinus torrei		LC																		
+Parmaturus lanatus		DD																		
+Mustelus albipinnis		DD																		
+Amblyraja badia		LC										LC								
+Dasyatis pastinaca		DD																		
+Bathyraja isotrachys		LC																		
+Cephalurus cephalus		DD																		
+Squatina formosa		EN																		
+Pseudobatos glaucostigmus		DD										DD								
+Scyliorhinus garmani		DD																		
+Raja maderensis	VU	DD																		
+Galeus cadenati		DD																		
+Leucoraja fullonica	VU	NT																		
+Bathyraja diplotaenia		LC																		
+Rhinoptera marginata		NT																		
+Leucoraja circularis	EN	VU																		
+Pastinachus solocirostris		EN																		
+Raja inornata		DD										LC								
+Potamotrygon signata		DD																		
+Eridacnis radcliffei		LC			LC															
+Squalus raoulensis		DD						LC										LC		
+Apristurus indicus		DD															LC			
+Bathyraja parmifera	LC	LC																		
+Galeus longirostris		DD																		
+Hydrolagus lusitanicus	LC	DD																		
+Acroteriobatus variegatus		DD										DD					CR			
+Malacoraja senta		EN																		
+Rhinobatos annandalei		DD																		
+Galeus arae		LC																		
+Mustelus mosis		DD			NT															
+Schroederobatis americana		DD																		
+Hongeo koreana		DD																		
+Scyliorhinus stellaris		NT																		
+Mustelus punctulatus		DD																		
+Bathyraja spinosissima	LC	LC																		
+Okamejei meerdervoortii		DD																		
+Halaelurus boesemani		DD															VU			
+Dentiraja lemprieri	LC	LC																		
+Amblyraja georgiana		DD																		
+Amblyraja jenseni		LC																		
+Leucoraja wallacei		LC																		
+Okamejei philipi		DD																		
+Springeria longirostris		DD																		
+Fontitrygon margarita		EN										EN								
+Spiniraja whitleyi		VU																		
+Parmaturus melanobranchus		DD																		
+Galeus springeri		DD																		
+Ctenacis fehlmanni		DD															LC			
+Brochiraja microspinifera		DD						DD												
+Iago omanensis		LC																		
+Fenestraja maceachrani		DD			DD															
+Bathyraja tunae		DD			LC															
+Maculabatis toshi	LC	LC										LC							LC	
+Paragaleus randalli		NT																		
+Hemitriakis japanica		LC																		
+Centroscyllium ritteri		DD																		
+Parmaturus albimarginatus		DD						LC												
+Rajella fuliginea		LC																		
+Taeniurops grabata		DD																		
+Dipturus oregoni		DD																		
+Poroderma pantherinum		DD																		
+Gymnura tentaculata		DD																		
+Etmopterus lucifer		LC						LC												
+Mustelus norrisi		DD																		
+Zanobatus schoenleinii		DD																		
+Fontitrygon margaritella		DD										DD								
+Centroscyllium fabricii		LC																		
+Neoraja carolinensis		DD																		
+Narcine lingula		DD																		
+Carcharhinus isodon		LC																		
+Squatina tergocellatoides		VU																		
+Carcharhinus albimarginatus		NT										VU								
+Breviraja colesi		DD																		
+Rostroraja bahamensis		DD																		
+Bathyraja maccaini		NT																		
+Rhinoptera neglecta	DD	DD																		
+Holohalaelurus grennian		DD			DD															
+Okamejei hollandi		DD																		
+Hemitrygon bennetti		DD										DD								
+Rhinoraja kujiensis		LC																		
+Dipturus gudgeri		NT										NT								
+Squalus blainville		DD																		
+Okamejei mengae		DD																		
+Hemigaleus australiensis		LC										LC								
+Maculabatis pastinacoides		VU										VU								
+Urotrygon reticulata		VU																		
+Amblyraja radiata		VU																		
+Paragaleus tengi		DD																		
+Schroederichthys maculatus		LC																		
+Narcine prodorsalis		DD																		
+Urogymnus lobistomus		VU										VU								
+Pateobatis uarnacoides		VU										VU								
+Orbiraja powelli		DD															DD			
+Deania hystricosa		DD																		
+Brochiraja albilabiata		DD						DD												
+Deania profundorum		LC																		
+Somniosus longus		DD						DD												
+Insentiraja subtilispinosa	LC	LC																		
+Narcine insolita		DD			DD															
+Acroteriobatus leucospilus		DD			EN							DD								
+Dactylobatus armatus		DD																		
+Chiloscyllium hasselti		NT																		
+Squatina japonica		VU																		
+Notoraja ochroderma	DD	DD																		
+Narcine maculata		DD																		
+Bathyraja smithii		DD			LC															
+Torpedo bauchotae		DD																		
+Orectolobus japonicus		DD																		
+Carcharhinus altimus		DD																		
+Dipturus garricki		DD																		
+Maculabatis gerrardi		VU										VU								
+Galeus nipponensis		DD																		
+Myliobatis freminvillii		DD																		
+Myliobatis aquila		DD																		
+Lamiopsis temminckii		EN																		
+Mustelus widodoi		DD																		
+Potamotrygon castexi		DD																		
+Potamotrygon yepezi		DD																		
+Holohalaelurus regani		LC																		
+Rhinoraja longicauda		LC																		
+Hemitrygon sinensis		DD										DD								
+Arhynchobatis asperrimus		DD						DD												
+Centroscyllium ornatum		DD																		
+Tetronarce nobiliana		DD																		
+Parmaturus pilosus		DD																		
+Megatrygon microps	DD	DD										DD								
+Scymnodalatias garricki	DD	DD																		
+Fenestraja atripinna		DD																		
+Etmopterus decacuspidatus		DD																		
+Raja straeleni		DD																		
+Rajella fyllae		LC																		
+Paratrygon aiereba		DD						DD												
+Platyrhina sinensis		VU																		
+Cephaloscyllium silasi		DD																		
+Fenestraja mamillidens		DD																		
+Heteronarce prabhui		DD																		
+Bathyraja violacea		DD																		
+Beringraja rhina		LC																		
+Aptychotrema rostrata	LC	LC																		
+Alopias pelagicus		VU			EN															
+Pateobatis hortlei		VU										VU								
+Bathyraja taranetzi	LC	LC																		
+Dipturus doutrei		DD																		
+Brochiraja asperula		DD						DD												
+Anacanthobatis nanhaiensis		DD																		
+Leucoraja yucatanensis		DD																		
+Notoraja tobitukai		DD																		
+Cirrhoscyllium japonicum		DD																		
+Narke dipterygia		DD																		
+Tetronarce formosa		DD																		
+Potamotrygon orbignyi		LC																		
+Dipturus teevani		DD																		
+Glyphis siamensis		CR																		
+Bathyraja smirnovi		LC																		
+Torpedo suessii		DD															CR			
+Narke capensis		DD			LC															
+Pateobatis fai		LC										VU								
+Chiloscyllium burmensis		DD																		
+Dipturus johannisdavisi		DD			DD															
+Hemitrygon laevigata		NT										NT								
+Bathyraja meridionalis		DD																		
+Hypanus rudis		DD										DD								
+Himantura undulata		VU																	VU	
+Rajella kukujevi	LC	DD																		
+Bathyraja fedorovi		LC																		
+Benthobatis yangi		VU																		
+Halaelurus quagga		DD															DD			
+Leucoraja naevus	LC	LC																		
+Narcine tasmaniensis	LC	LC																		
+Raja stellulata		LC										LC								
+Gymnura japonica		DD																		
+Leucoraja ocellata		EN																		
+Heteronarce bentuviai		DD															DD			
+Mustelus manazo		DD																		
+Pristiophorus japonicus		DD																		
+Deania quadrispinosa		NT																		
+Okamejei acutispina		DD																		
+Dipturus australis		VU																		
+Squatina legnota		DD																		
+Paragaleus leucolomatus		DD																		
+Mustelus lunulatus		LC										LC								
+Bathyraja hesperafricana		DD																		
+Fenestraja plutonia		DD																		
+Dasyatis chrysonota		LC																		
+Halaelurus maculosus		LC																		
+Okamejei kenojei		DD																		
+Narcine rierai		DD			DD															
+Notoraja hirticauda	DD	DD																		
+Mustelus henlei		LC										LC								
+Etmopterus brachyurus	DD	DD																		
+Haploblepharus pictus		LC			LC															
+Orectolobus parvimaculatus	LC	DD																		
+Holohalaelurus favus		EN																		
+Dipturus springeri		DD			LC															
+Irolita waitii	LC	LC																		
+Fenestraja sinusmexicanus		DD																		
+Potamotrygon histrix		DD																		
+Rostroraja eglanteria		LC																		
+Bathyraja irrasa		NT																		
+Narcine atzi		DD																		
+Bathyraja aleutica	LC	LC																		
+Rhizoprionodon longurio		DD																		
+Heteronarce mollis		DD															DD			
+Orectolobus floridus	LC	DD																		
+Narke japonica		VU																		
+Neoraja caerulea	LC	DD																		
+Haploblepharus kistnasamyi		CR			VU															
+Squalus lalannei		DD			LC															
+Beringraja pulchra		VU																		
+Anacanthobatis stenosoma		DD																		
+Apristurus sibogae		DD																		
+Raja polystigma	LC	NT																		
+Hexatrygon bickelli	LC	LC																		
+Holohalaelurus punctatus		EN																		
+Tetronarce tokionis		DD										DD								
+Rhinobatos lionotus		DD																		
+Cruriraja parcomaculata		DD			LC			DD												
+Cirrhoscyllium formosanum		DD																		
+Halaelurus buergeri		DD																		
+Springeria folirostris		DD																		
+Cruriraja rugosa		DD																		
+Bathyraja microtrachys	LC	LC																		
+Leucoraja leucosticta		DD																		
+Rostroraja texana		DD																		
+Potamotrygon brachyura		DD																		
+Brochiraja aenigma		DD						DD												
+Urotrygon aspidura		DD																		
+Narcine oculifera		DD															DD		DD	
+Raja brachyura		NT																		
+Himantura uarnak		VU										VU								
+Fenestraja cubensis		DD																		
+Rostroraja equatorialis		DD																		
+Chaenogaleus macrostoma		VU																		
+Alopias superciliosus		VU			VU															
+Acroteriobatus ocellatus		DD			DD							DD								
+Makararaja chindwinensis		DD																		DD
+Plesiotrygon iwamae		DD																		
+Narcine lasti	LC	LC																		
+Bathyraja trachouros		LC																		
+Rajella purpuriventralis		LC																		
+Squalus bucephalus		DD						DD												
+Leucoraja compagnoi		DD			DD															
+Galeus murinus	LC	LC																		
+Bathyraja kincaidii		DD																		
+Paragaleus pectoralis		DD																		
+Breviraja spinosa		DD																		
+Orectolobus halei	LC	NT																		
+Cruriraja andamanica		DD			DD															
+Cruriraja poeyi		DD																		
+Cruriraja atlantis		DD																		
+Rhinobatos schlegelii		DD																		
+Heterodontus japonicus		LC																		
+Mustelus griseus		DD																		
+Narcine entemedor		DD																		
+Scymnodon ringens		DD																		
+Dipturus olseni		DD																		
+Fluvitrygon kittipongi		EN										EN								
+Heterodontus omanensis		DD															DD			
+Rajella annandalei		DD																		
+Bathyraja bergi		LC																		
+Raja pita		CR										DD					DD			
+Cephaloscyllium umbratile		DD																		
+Okamejei schmidti		DD																		
+Parmaturus albipenis		DD						LC												
+Brevitrygon imbricata		DD										DD								
+Dipturus nidarosiensis	NT	NT																		
+Urotrygon munda		DD																		
+Pteroplatytrygon violacea		LC			LC															
+Galeus antillensis		DD																		
+Proscyllium habereri		DD																		
+Okamejei boesemani		DD																		
+Atelomycterus baliensis		VU																		
+Dipturus macrocauda		DD																		
+Bathyraja eatonii		DD																		
+Centroscyllium excelsum		DD																		
+Hemitrygon navarrae		DD										DD								
+Rhinoraja odai		LC																		
+Pseudobatos lentiginosus		NT										NT								
+Pateobatis jenkinsii		LC										VU								
+Temera hardwickii		VU																		
+Heteronarce garmani		VU																		
+Urotrygon nana		DD																		
+Dasyatis marmorata		DD																		
+Isurus oxyrinchus		NT	LR/nt		EN															
+Isurus oxyrinchus		NT	LR/nt		EN															
+Isurus oxyrinchus		NT	LR/nt		EN															
+Potamotrygon constellata		DD																		
+Potamotrygon ocellata		DD																		
+Cephaloscyllium cooki	DD																	DD		
+Cephaloscyllium signourum												DD						DD		
+Urogymnus dalyensis	LC											LC						DD		
+Urogymnus polylepis			CR									EN						EN		
+Asymbolus galacticus								LC										LC		
+Cephaloscyllium hiscosellum	LC																	LC		
+Cephaloscyllium maculatum																		DD		
+Cephaloscyllium pardelotum																		DD		
+Galeus priapus								LC										LC		
+Mustelus walkeri												DD						DD		
+Chimaera argiloba	LC																	LC		
+Chimaera bahamaensis																		DD		
+Chimaera fulva	LC																	LC		
+Chimaera macrospina	LC																	LC		
+Chimaera notafricana																		LC		
+Chimaera obscura	DD																	LC		
+Hydrolagus homonycteris	LC																	DD		
+Hydrolagus marmoratus	LC																	DD		
+Hydrolagus melanophasma																		LC		
+Hemiscyllium galei																			DD	
+Hemiscyllium henryi																			DD	
+Hemiscyllium michaeli																			NT	
+Orectolobus reticulatus	DD																	DD		
+Parascyllium elongatum	DD																	DD		
+Hemitrygon parvonigra	DD											DD						DD		
+Dentiraja flindersi	DD																	DD		
+Dipturus acrobelus	LC																	LC		
+Dipturus apricus	LC																	LC		
+Dipturus endeavouri																		NT		
+Dipturus falloargus	DD																	DD		
+Dipturus grahami	LC																		LC	
+Dipturus healdi	LC																	DD		
+Dipturus melanospilus	DD																	DD		
+Dipturus oculus	LC																	LC		
+Dipturus queenslandicus	DD																	DD		
+Dipturus wengi	LC																	LC		
+Dipturus wuhanlingi																		DD		
+Maculabatis astra	LC											LC						LC		
+Himantura leoparda												VU							VU	
+Irolita westraliensis	DD																	LC		
+Leucoraja pristispina	LC																	LC		
+Mobula alfredi					VU													VU		
+Narcine nelsoni	LC																	LC		
+Narcine ornata	LC																	LC		
+Neotrygon ningalooensis	DD																	DD		
+Neotrygon picta	LC																	LC		
+Notoraja azurea	LC																	LC		
+Notoraja lira								DD										LC		
+Notoraja sapphira								DD										DD		
+Notoraja sticta	LC																	LC		
+Okamejei arafurensis	LC																	LC		
+Okamejei leptoura	LC																		LC	
+Pavoraja arenaria	DD																	DD		
+Pavoraja mosaica	LC																	LC		
+Pavoraja pseudonitida	LC																	LC		
+Rhynchobatus palpebratus					NT															
+Sinobatis bulbicauda	LC																		DD	
+Sinobatis caerulea	DD																		DD	
+Sinobatis filicauda	DD																	DD		
+Centrophorus westraliensis	DD																	LC		
+Squalus acutirostris																			DD	
+Squalus griffini								LC										LC		
+Squalus suckleyi												LC								
+Chlamydoselachus africana					LC											DD				
+Squatina dumeril					LC															
+Mobula birostris								VU										VU		
+Hemiscyllium freycineti																		NT		
+Cephaloscyllium fasciatum																		DD		
+Dipturus polyommata	LC																	LC		
+Dipturus canutus												EN								
+Gymnura marmorata																			LC	
+Gymnura crebripunctata																			DD	
+Centrophorus moluccensis											LC			DD						
+Centrophorus moluccensis											LC			DD						
+Pristis pristis											CR									
+Aetobatus ocellatus												VU								
+Cruriraja hulleyi		LC			LC															
+Trygonorrhina dumerilii	LC													LC						
+Pristis pectinata			EN	EN						CR	CR									
+Pristis pectinata			EN	EN						CR	CR									
+Pristis pristis											CR									
+Pristis pristis											CR									
+Pristis pristis											CR									
+Pristis pristis											CR									
+Maculabatis randalli																	LC			
+Potamotrygon tigrina												EN								
+Carcharhinus coatesi					LC															
+Carcharhinus dussumieri					EN															
+Carcharhinus tjutjot					VU															
+Pavoraja umbrosa	LC																			
+Pastinachus ater												LC								
+Pastinachus sephen																	NT			
+Myliobatis tenuicaudatus												LC								
+Dipturus confusus												CR								
+Rajella challengeri	LC																			
+Stegostoma tigrinum					EN							EN		VU						
+Stegostoma tigrinum					EN							EN		VU						
+Bathyraja panthera	LC																			
+Tetronarce cowleyi					LC															
+Aetomylaeus nichofii												VU								
+Aetomylaeus caeruleofasciatus												LC								
+Squalus acanthias										LC		VU		VU						
+Pristiophorus nancyae					LC															
+Planonasus parini																	LC			
+Apristurus breviventralis																	LC			
+Rhynchobatus immaculatus					CR															
+Aetomylaeus milvus																	EN			
+Glaucostegus cemiculus					CR															
+Glaucostegus typus					CR															
+Brevitrygon walga																	NT			
+Acroteriobatus omanensis																	DD			
+Okamejei ornata																	LC			
+Maculabatis arabica																	CR			
+Maculabatis ambigua					NT															
+Carcharhinus humani					DD															
+Mobula mobular					EN															
+Bythaelurus tenuicephalus					LC															
+Neotrygon kuhlii								DD												
+Taeniura lessoni								DD												
+Etmopterus granulosus								LC												
+Apristurus garricki								LC												
+Centroscymnus macracanthus								DD												
+Typhlonarke aysoni								LC												
+Bathyraja leucomelanos								LC												
+Bathyraja pacifica								LC												
+Brochiraja heuresa								DD												
+Brochiraja vittacauda								DD												
+Notoraja alisae								LC												
+Notoraja fijiensis								LC												
+Notoraja inusitata								LC												
+Notoraja longiventralis								LC												
+Chimaera carophila								LC												
+Etmopterus viator								LC												
+Squatina caillieti					DD															
+Squatina david					NT															
+Etmopterus alphus					LC															
+Etmopterus compagnoi					LC															
+Etmopterus sculptus					LC															
+Bythaelurus bachi					DD															
+Bythaelurus naylori					DD															
+Rhinobatos austini					DD															
+Rajella paucispinosa					LC															
+Raja miraletus					LC															
+Etmopterus unicolor								DD												
+Mobula hypostoma					EN															
+Squatina varii					LC															
+Rhynchorhina mauritaniensis					CR															
+Squatina guggenheim			EN		EN															
+Bythaelurus lutarius					DD															
