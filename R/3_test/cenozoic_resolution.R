@@ -433,7 +433,8 @@ dat_pred_post <- as_draws_df(mod1,
                              variable = "b_cont_area") %>% 
   as_tibble() %>% 
   select(coef_val = b_cont_area) %>% 
-  slice_sample(n = 1e4)
+  slice_sample(n = 1e4) %>% 
+  add_column(coef_name = "b_cont_area")
 
 
 # save predictions
@@ -455,7 +456,8 @@ dat_pred_post <- as_draws_df(mod1,
                              variable = "b_sea_level") %>% 
   as_tibble() %>% 
   select(coef_val = b_sea_level) %>% 
-  slice_sample(n = 1e4)
+  slice_sample(n = 1e4) %>% 
+  add_column(coef_name = "b_sea_level")
 
 
 # save predictions
@@ -519,12 +521,13 @@ mod8 <- brm_logistic("ext_signal ~ diatom_rich_std +
 # average posterior draws by model stacking
 dat_pred_post <- posterior_average(mod1, mod2, 
                                    mod3, mod4, 
-                                   mod5, mod6, 
+                                   mod5, mod6,
                                    mod7, mod8,
                                    variable = c("b_d13C_std", 
                                                 "b_diatom_rich_std"),
+                                   weights = "pseudobma",
                                    seed = 1708,
-                                   ndraws =  1e4, 
+                                   ndraws =  1e3, 
                                    missing = NA) %>% 
   pivot_longer(cols = everything(), 
                names_to = "coef_name", 
