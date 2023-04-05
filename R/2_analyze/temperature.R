@@ -54,6 +54,14 @@ mod7 <- brm_logistic("ext_signal ~ temp_gat_binned + temp_gat_st:temp_gat_lt3")
 mod8 <- brm_logistic("ext_signal ~ temp_gat_binned + temp_gat_st:temp_gat_lt4")
 
 
+# save global average temperature models for reuse later
+list(mod5, mod6, 
+     mod7, mod8) %>% 
+  write_rds(here("data", 
+                 "fossil_temp_models.rds"), 
+            compress = "gz")
+
+
 
 # average models ----------------------------------------------------------
 
