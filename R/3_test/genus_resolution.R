@@ -143,6 +143,12 @@ dat_merged <- full_join(dat_genus,
          mean_q_std = scale(mean_q)[,1]) %>% 
   drop_na()
 
+# save dataset
+dat_merged %>% 
+  write_rds(here("data",
+                 "processed_fossil_data_genus.rds"))
+
+
 
 # paleotemperature --------------------------------------------------------
 
