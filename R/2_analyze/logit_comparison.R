@@ -2,7 +2,8 @@ library(tidyverse)
 library(here)
 library(brms)
 library(tidybayes)
-library(patchwork)
+library(deeptime)
+
 
 # plotting configurations
 source(here("R", "config_file.R"))
@@ -384,25 +385,72 @@ dat_pred_full %>%
                  "logits", 
                  "logit_full.rds"))
 
-
-dat_pred_full %>% 
+# create plot
+plot_full <- dat_pred_full %>% 
   ggplot(aes(myr, value, group = data_set)) +
   geom_hline(yintercept = 0, 
-             colour = "grey50") +
+             colour = "grey20") +
   geom_linerange(aes(xmin = xmin,
                      xmax = xmax),
-                 colour = "grey40") +
+                 colour = "grey75") +
   geom_linerange(aes(ymin = .lower,
                      ymax = .upper),
-                 colour = "grey40") +
+                 colour = "grey75") +
   geom_point(aes(fill = data_set), 
-             size = 3, 
-             alpha = 0.7, 
+             size = 2, 
+             alpha = 0.8, 
              shape = 21, 
              colour = "grey20") +
-  scale_x_continuous(breaks = seq(0, 150, 10), 
-                     trans = "reverse") +
-  theme(legend.position = "bottom")
+  annotate("text", 
+           x = c(150, 
+                 rep(148, 5)), 
+           y = c(12.7, 
+                 11.5, 10.5, 
+                 9.5, 8.5,
+                 7.5),
+           size = 9/.pt,
+           label = c("Dataset", 
+                     "10 myr - Species", "Stages - Species", 
+                     "Stages - Genus", "1 myr - Species", 
+                     "Modern - Species"), 
+           fontface = c("plain", 
+                        rep("italic", 5)), 
+           colour = alpha(c("grey20", 
+                      "#4C634C", 
+                      colour_yellow, 
+                      colour_coral, 
+                      colour_purple, 
+                      "#2E5B95"), 0.8), 
+           hjust = 0) +
+  scale_x_reverse() +
+  scale_fill_manual(values = c("#4C634C", 
+                               colour_yellow, 
+                               colour_coral, 
+                               "#2E5B95", 
+                               colour_purple), 
+                    name = NULL) +
+  coord_geo(xlim = c(150, 0), 
+            dat = list("epochs", "periods"),
+            pos = list("b", "b"),
+            alpha = 0.2, 
+            height = unit(0.8, "line"), 
+            size = list(5/.pt, 9/.pt),
+            lab_color = "grey20", 
+            color = "grey50", 
+            abbrv = list(TRUE, FALSE), 
+            fill = "white",
+            expand = TRUE, 
+            lwd = list(0.1, 0.2)) +
+  labs(x = "Million years", 
+       y = "Temperature dependancy\n(log-odds)") +
+  theme(legend.position = "none") 
+
+# save plot
+ggsave(plot_full, filename = here("figures",
+                                  "logit_relationship.png"), 
+       width = image_width, height = image_height,
+       units = image_units, 
+       bg = "white", device = ragg::agg_png)
 
 
 
