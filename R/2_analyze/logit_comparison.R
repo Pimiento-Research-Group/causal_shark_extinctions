@@ -129,8 +129,85 @@ dat_pred_ceno %>%
 
 # fit modern models --------------------------------------------------------------
 
+
+# read iucn data
+dat_iucn <- read_delim(here("data",
+                            "iucn",
+                            "CHONDRICHTHYES_iucn_history.txt"))
+
+# reformat
+dat_iucn <- dat_iucn %>% 
+  pivot_longer(cols = -c(species), 
+               names_to = "year", 
+               values_to = "iucn_status") %>% 
+  drop_na(iucn_status) %>% 
+  mutate(ext_signal = if_else(iucn_status %in% c("LR/lc", "LC",
+                                                 "LR / cd", "NT" ,
+                                                 "LR / nt"),
+                              1, 0))
+
+# read temperature data
+dat_ipcc <- tibble(filename = list.files(here("data",
+                                  "ipcc")) %>%
+         str_remove("tas_global_") %>%
+         str_remove(".csv")) %>% 
+  mutate(file_contents = map(list.files(here("data",
+                                             "ipcc"),
+                                        full.names = TRUE),  
+                             ~ read_csv(.x))) %>% 
+  filter(filename %in% c("Historical", "SSP1_1_9")) %>% 
+  unnest(file_contents) %>% 
+  select(year = Year, temp = Mean) %>% 
+  filter(year %in% unique(dat_iucn$year))
+
+# reformat
+dat_ipcc <- dat_ipcc %>% 
+  mutate(temp_st = temp - lead(temp), 
+         temp_lt1 = lead(temp_st), 
+         temp_lt2 = lead(temp_st, n = 2), 
+         temp_lt3 = lead(temp_st, n = 3), 
+         temp_lt4 = lead(temp_st, n = 4)) %>% 
+  fill(contains("temp"), .direction = "downup") %>% 
+  mutate(year = as.character(year))
+  
+
+# merge together
+dat_merged <- left_join(dat_iucn, dat_ipcc)
+
+
+# average over potential long-term trends
+mod1 <- brm_logistic("ext_signal ~ temp + temp_st:temp_lt1")
+mod2 <- brm_logistic("ext_signal ~ temp + temp_st:temp_lt2")
+mod3 <- brm_logistic("ext_signal ~ temp + temp_st:temp_lt3")
+mod4 <- brm_logistic("ext_signal ~ temp + temp_st:temp_lt4")
+
+# average posterior draws by model stacking
+dat_pred_modern <- posterior_average(mod1, mod2,
+                                     mod3, mod4,
+                                     variable = c("b_temp"),
+                                     seed = 1708,
+                                     ndraws =  1e4,
+                                     missing = NA) 
+
+
+dat_pred_modern %>% 
+  as_tibble() %>% 
+  mean_qi(b_temp)
+
+
+dat_pred_deep %>% 
+  left_join(dat_stages %>% 
+              select(bin = stg, mid)) %>% 
+  ggplot(aes(mid, value)) +
+  geom_hline(yintercept = 0) +
+  geom_pointrange(aes(ymin = .lower, 
+                      ymax = .upper)) +
+  scale_x_continuous(breaks = seq(0, 150, 5))
+
+
 dat_pred_ceno %>% 
   ggplot(aes(bin, value)) +
   geom_hline(yintercept = 0) +
   geom_pointrange(aes(ymin = .lower, 
-                      ymax = .upper))
+                      ymax = .upper)) 
+                     
