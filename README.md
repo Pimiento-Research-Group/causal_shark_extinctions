@@ -12,5 +12,5 @@ This is the repo for the current project from the Pimiento lab under the lead of
 - [X] Repeat analysis with Cenozoic subset at higher resolution
 - [X] Repeat analysis with Superorders
 - [X] Omit the last temporal stage 
-- [ ] Add productivity comparison (computational burdensome)
-- [ ] Calculate log-odds for temperature per bin by using a mixed effect model
+- [X] Calculate log-odds for temperature per bin by using a mixed effect model
+- [ ] Clean-up and streamline according to temperature analysis

@@ -38,4 +38,3 @@ The environmental parameters
 ### Shelf area
 - **cont_area_full.rds** [Kocsis and Scotese 2021](https://www.sciencedirect.com/science/article/pii/S0012825220305092), Phanerozoic flooded continental area as proportion of earths surface area
 - **cont_area_ceno.rds** [Miller et al 2005](https://www.science.org/doi/full/10.1126/science.1116412) Cenozoic flooded continental area (10^6 km^2), taken from WebPlotDigitizer
-	
