@@ -421,6 +421,42 @@ dat_pred_post %>%
             compress = "gz")
 
 
+# estimate trend lines
+# set up grid to average over
+dat_new <- tibble(temp_binned = 0:25) %>%
+  expand_grid(temp_st = -3:3, 
+              temp_lt = -3:3) %>% 
+  mutate(temp_lt1 = temp_lt,
+         temp_lt2 = temp_lt,
+         temp_lt3 = temp_lt,
+         temp_lt4 = temp_lt)
+
+# set up number of draws 
+nr_draws <- 100
+
+# average prediction by model stacking
+dat_pred <- pp_average(mod1, mod2,
+                       mod3, mod4, 
+                       newdata = dat_new,
+                       seed = 1708,
+                       summary = FALSE, 
+                       method = "posterior_epred", 
+                       ndraws = nr_draws) %>% 
+  as_tibble() %>% 
+  mutate(nr_draw = rownames(.)) %>% 
+  pivot_longer(cols = contains("V")) %>% 
+  add_column(temperature = rep(dat_new$temp_binned, nr_draws)) %>% 
+  group_by(nr_draw, temperature) %>%
+  ggdist::mean_qi(value) %>% 
+  select(temperature, value, nr_draw)
+
+
+# save predictions
+dat_pred %>% 
+  write_rds(here("data", 
+                 "predictions", 
+                 "pred_temperature_ceno.rds"), 
+            compress = "gz")
 
 # mod shelf area ----------------------------------------------------------
 
