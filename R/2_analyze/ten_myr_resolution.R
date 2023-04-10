@@ -575,3 +575,48 @@ dat_pred_post %>%
                  "pred_trend_temperature_10myr.rds"), 
             compress = "gz")
 
+
+# estimate trend lines
+# set up grid to average over
+dat_new <- tibble(temp_deep_binned = 0:25) %>%
+  expand_grid(temp_deep_st = -3:3, 
+              temp_deep_lt = -3:3) %>% 
+  mutate(temp_deep_lt1 = temp_deep_lt,
+         temp_deep_lt2 = temp_deep_lt,
+         temp_deep_lt3 = temp_deep_lt,
+         temp_deep_lt4 = temp_deep_lt,
+         temp_gat_binned = temp_deep_binned, 
+         temp_gat_st = temp_deep_st,
+         temp_gat_lt1 = temp_deep_lt,
+         temp_gat_lt2 = temp_deep_lt,
+         temp_gat_lt3 = temp_deep_lt,
+         temp_gat_lt4 = temp_deep_lt)
+
+# set up number of draws 
+nr_draws <- 100
+
+# average prediction by model stacking
+dat_pred <- pp_average(mod1, mod2,
+                       mod3, mod4, 
+                       mod5, mod6,
+                       mod7, mod8,
+                       newdata = dat_new,
+                       seed = 1708,
+                       summary = FALSE, 
+                       method = "posterior_epred", 
+                       ndraws = nr_draws) %>% 
+  as_tibble() %>% 
+  mutate(nr_draw = rownames(.)) %>% 
+  pivot_longer(cols = contains("V")) %>% 
+  add_column(temperature = rep(dat_new$temp_deep_binned, nr_draws)) %>% 
+  group_by(nr_draw, temperature) %>%
+  ggdist::mean_qi(value) %>% 
+  select(temperature, value, nr_draw)
+
+
+# save predictions
+dat_pred %>% 
+  write_rds(here("data", 
+                 "predictions", 
+                 "pred_temperature_tenmyr.rds"), 
+            compress = "gz")
