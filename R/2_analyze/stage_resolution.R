@@ -106,7 +106,7 @@ dat_pred <- pp_average(mod1, mod2,
 dat_pred %>% 
   write_rds(here("data", 
                  "predictions", 
-                 "pred_temperature.rds"), 
+                 "pred_temperature_stage.rds"), 
             compress = "gz")
 
 
