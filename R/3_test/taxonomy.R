@@ -132,6 +132,8 @@ dat_pred_fossil_smr <- dat_pred_fossil %>%
 
 # visualise
 plot_fossil <- dat_pred_fossil_smr %>%
+  # abbreviate order for nicer plotting
+  mutate(order = str_replace_all(order, "formes", ".")) %>%
   ggplot(aes(.epred, fct_reorder(order, .epred))) +
   geom_linerange(aes(xmin = .lower, 
                      xmax = .upper), 
@@ -141,19 +143,32 @@ plot_fossil <- dat_pred_fossil_smr %>%
              shape = 21, 
              colour = "grey20", 
              alpha = 0.8) +
-  scale_y_discrete(position = "right") +
-  scale_x_continuous(breaks = c(0, 0.2, 0.4, 0.6, 0.8, 1), 
-                     labels = c("0", "20", "40", "60", "80", "100")) +
+  geom_text(aes(x = .epred, 
+                y = fct_reorder(order, .epred), 
+                label = order), 
+            position = position_nudge(x = c(rep(0.2, 12), 
+                                            -0.25)),
+            size = 8/.pt, 
+            colour = "grey40") +
   scale_fill_manual(name = NULL, 
                     values = c("#EA8778", "#FFBE62"), 
                     limits = c("Sharks", "Rays")) +
   scale_size(name = NULL, 
              breaks = c(100, 250, 500)) +
-  coord_cartesian(xlim = c(0, 1)) +
+  scale_y_discrete(breaks = dat_pred_fossil_smr %>%
+                     mutate(order = str_replace_all(order, 
+                                                    "formes",
+                                                    ".")) %>% 
+                     arrange(.epred) %>% 
+                     pull(order) %>% 
+                     .[seq(1, 13, by = 2)]) +
+  coord_cartesian(xlim = c(0, 0.6)) +
   labs(y = NULL, 
-       x = "Extinction Risk [%]") +
-  theme(legend.position = c(0.8, 0.3), 
-        legend.text = element_text(colour = "grey50", size = 10)) 
+       x = NULL) +
+  theme(legend.position = "none", 
+        legend.text = element_text(colour = "grey50", size = 10), 
+        axis.text = element_blank(), 
+        axis.ticks = element_blank()) 
 
 
 
@@ -189,27 +204,47 @@ dat_pred_modern_smr <- dat_pred_modern %>%
 
 # visualise
 plot_modern <- dat_pred_modern_smr %>%
-  ggplot(aes(.epred, fct_reorder(order, .epred))) +
-  geom_linerange(aes(xmin = .lower, 
-                     xmax = .upper), 
+  # abbreviate order for nicer plotting
+  mutate(order = str_replace_all(order, "formes", ".")) %>%
+  ggplot(aes(fct_reorder(order, .epred), 
+             .epred)) +
+  geom_linerange(aes(ymin = .lower, 
+                     ymax = .upper), 
                  colour = "grey30") +
   geom_point(aes(size = n, 
                  fill = superorder), 
              shape = 21, 
              colour = "grey20", 
              alpha = 0.8) +
-  scale_x_continuous(breaks = c(0, 0.2, 0.4, 0.6, 0.8, 1), 
-                     labels = c("0", "20", "40", "60", "80", "100")) +
+  geom_text(aes(y = .epred, 
+                x = fct_reorder(order, .epred), 
+                label = order), 
+            position = position_nudge(x = -0.4, 
+                                      y = c(rep(-0.28, 6), 
+                                            0.28, 
+                                            rep(-0.28, 6))),
+            size = 8/.pt, 
+            angle = 90, 
+            colour = "grey40") +
+  scale_x_discrete(breaks = dat_pred_modern_smr %>%
+                     mutate(order = str_replace_all(order, 
+                                                    "formes",
+                                                    ".")) %>% 
+                     arrange(.epred) %>% 
+                     pull(order) %>% 
+                     .[seq(1, 13, by = 2)]) +
   scale_fill_manual(name = NULL, 
                     values = c("#EA8778", "#FFBE62"), 
                     limits = c("Sharks", "Rays")) +
   scale_size(name = NULL, 
              breaks = c(100, 250, 500)) +
-  coord_cartesian(xlim = c(0, 1)) +
+  coord_cartesian(ylim = c(0, 1)) +
   labs(y = NULL, 
-       x = "Extinction Risk [%]") +
+       x = NULL) +
   theme(legend.position = "none", 
-        legend.text = element_text(colour = "grey50", size = 10)) 
+        legend.text = element_text(colour = "grey50", size = 10), 
+        axis.text = element_blank(), 
+        axis.ticks = element_blank()) 
 
 
 
@@ -237,13 +272,14 @@ plot_scatter <- dat_pred_fossil_smr %>%
              shape = 21, 
              colour = "grey20", 
              size = 2.5) +
-  scale_x_continuous(breaks = c(0.2, 0.4, 0.6), 
-                     labels = c("20", "40", "60"), 
-                     name = "Fossil extinction risk [%]") +
-  scale_y_continuous(breaks = c(0.2, 0.4, 0.6, 0.8, 1), 
-                     labels = c("20", "40", "60", "80", "100"), 
+  scale_x_continuous(breaks = c(0, 0.2, 0.4, 0.6), 
+                     labels = c("0", "20", "40", "60"), 
+                     name = "Fossil extinction risk [%]", 
+                     limits = c(0, 0.6)) +
+  scale_y_continuous(breaks = c(0, 0.2, 0.4, 0.6, 0.8, 1), 
+                     labels = c("0", "20", "40", "60", "80", "100"), 
                      name = "Modern extinction risk [%]", 
-                     limits = c(0.05, 1.05), 
+                     limits = c(0, 1), 
                      position = "right") +
   scale_fill_manual(name = NULL, 
                     values = c("#EA8778", "#FFBE62"), 
@@ -320,7 +356,7 @@ dat_ranks_modern <- 1:13 %>%
               select(superorder, order))
 
 # visualise
-plot_rank <- dat_ranks_fossil %>% 
+plot_rank <- dat_ranks_fossil %>%
   left_join(dat_ranks_modern) %>% 
   ggplot(aes(x, y)) +
   stat_smooth(method = "lm", 
@@ -338,11 +374,9 @@ plot_rank <- dat_ranks_fossil %>%
              shape = 21, 
              colour = "grey20", 
              size = 2.5) +
-  scale_x_continuous(expand = c(0.15, 0.15), 
-                     breaks = 1:13, 
+  scale_x_continuous(breaks = seq(1, 13, by = 2), 
                      name = "Modern rank") +
-  scale_y_continuous(expand = c(0.15, 0.15), 
-                     breaks = 1:13, 
+  scale_y_continuous(breaks = seq(1, 13, by = 2), 
                      name = "Fossil rank") +
   scale_fill_manual(name = NULL, 
                     values = c("#EA8778", "#FFBE62"), 
@@ -359,7 +393,8 @@ plot_final <- plot_rank +
   plot_fossil +
   plot_modern + 
   plot_scatter &
-  theme(legend.position = 'none')
+  theme(legend.position = 'none', 
+        panel.grid.major = element_line(colour = "grey96"))
 
 # save plot
 ggsave(plot_final, filename = here("figures",
