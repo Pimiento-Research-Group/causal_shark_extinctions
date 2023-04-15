@@ -221,25 +221,27 @@ dat_paleotemp <- dat_temp %>%
 
 # extinction signal -------------------------------------------------------
 
+# get those species that survive until now
+spec_modern <- read_delim(here("data",
+                                   "fossil_occurrences",
+                                   "combined_10_se_est_species_names.txt")) %>% 
+  filter(te == 0) %>% 
+  pull(species)
+
 # load PyRate estimates
 dat_ext <- read_delim(here("data",
                            "fossil_occurrences",
-                           "all_species_10_Grj_se_est_species_names.txt")) %>% 
+                           "combined_10_se_est_species_names.txt")) %>% 
   # estimate fad and lad for each species
-  pivot_longer(cols = contains("ts"), 
-               names_to = "origination", 
-               values_to = "origination_age") %>% 
-  pivot_longer(cols = contains("te"), 
-               names_to = "extinction", 
-               values_to = "extinction_age") %>% 
+  mutate(across(c(ts, te), abs)) %>% 
   group_by(species) %>% 
-  summarise(ori_age = mean(origination_age),
-            ext_age = mean(extinction_age)) %>% 
+  summarise(ori_age = mean(ts),
+            ext_age = mean(te)) %>% 
   # bin fad and lad to stages
   mutate(bin_ori = 95 - cut(ori_age, breaks = dat_stages$bottom,
                             include.lowest = TRUE,
                             labels = FALSE), 
-         bin_ext = 95 - cut(ext_age, breaks = dat_stages$bottom,
+         bin_ext = 96 - cut(ext_age, breaks = dat_stages$top,
                             include.lowest = TRUE,
                             labels = FALSE)) %>% 
   drop_na(bin_ori, bin_ext) %>% 
@@ -251,15 +253,16 @@ dat_ext <- read_delim(here("data",
   unnest(bin_occ) %>% 
   # create extinction signal
   group_by(species) %>% 
-  mutate(ext_signal = if_else(bin_occ == bin_ext, 1, 0)) %>% 
+  mutate(ext_signal = if_else(bin_occ == bin_ext, 1, 0), 
+         # assign 0 to those species that survive until the modern
+         ext_signal = if_else(species %in% spec_modern, 
+                              0, ext_signal)) %>% 
   # clean up
   ungroup() %>% 
   select(-bin_ext, 
          bin = bin_occ) %>% 
   mutate(accepted_name = str_replace(species, "_", " ")) %>%
-  select(-species)
-
-
+  select(-species) 
 
 
 # sampling effort ---------------------------------------------------------
@@ -267,14 +270,14 @@ dat_ext <- read_delim(here("data",
 # load occurrence database
 dat_occurrences <- read_rds(here("data",
                                  "fossil_occurrences",
-                                 "database_occurrences_10_Jan_2023.rds"))
+                                 "database_occurrences_15_Apr_2023.rds"))
 
 # bin the occurrences to stages
 dat_occ_binned <- dat_occurrences %>% 
   mutate(bin_min = 95 - cut(Min_Ma, breaks = dat_stages$bottom,
                             include.lowest = TRUE,
                             labels = FALSE), 
-         bin_max = 95 - cut(Max_Ma, breaks = dat_stages$bottom,
+         bin_max = 96 - cut(Max_Ma, breaks = dat_stages$top,
                             include.lowest = TRUE,
                             labels = FALSE)) %>% 
   # select entries, where the early and late interval fields indicate 
@@ -307,7 +310,7 @@ dat_pbdb_sampling <- dat_pbdb %>%
   mutate(bin_min = 95 - cut(min_ma, breaks = dat_stages$bottom,
                             include.lowest = TRUE,
                             labels = FALSE), 
-         bin_max = 95 - cut(max_ma, breaks = dat_stages$bottom,
+         bin_max = 96 - cut(max_ma, breaks = dat_stages$top,
                             include.lowest = TRUE,
                             labels = FALSE)) %>% 
   # select entries, where the early and late interval fields indicate 
