@@ -46,8 +46,7 @@ mod_weights <- loo_model_weights(mod1, mod2,
                                  mod3, mod4,
                                  mod5, mod6,
                                  mod7, mod8,
-                                 method = "pseudobma",
-                                 cores = parallelly::availableCores())
+                                 method = "pseudobma")
 
 
 # perform model averaging
