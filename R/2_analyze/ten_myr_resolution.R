@@ -174,20 +174,22 @@ dat_paleotemp <- dat_temp %>%
 # fossil data -------------------------------------------------------------
 
 
+# get those species that survive until now
+spec_modern <- read_delim(here("data",
+                               "fossil_occurrences",
+                               "combined_10_se_est_species_names.txt")) %>% 
+  filter(te == 0) %>% 
+  pull(species)
+
 # load PyRate estimates
 dat_ext <- read_delim(here("data",
                                "fossil_occurrences",
-                               "all_species_10_Grj_se_est_species_names.txt")) %>% 
+                               "combined_10_se_est_species_names.txt")) %>% 
   # estimate fad and lad for each species
-  pivot_longer(cols = contains("ts"), 
-               names_to = "origination", 
-               values_to = "origination_age") %>% 
-  pivot_longer(cols = contains("te"), 
-               names_to = "extinction", 
-               values_to = "extinction_age") %>% 
+  mutate(across(c(ts, te), abs)) %>% 
   group_by(species) %>% 
-  summarise(ori_age = mean(origination_age),
-            ext_age = mean(extinction_age)) %>% 
+  summarise(ori_age = mean(ts),
+            ext_age = mean(te)) %>% 
   # bin to 10myr
   mutate(bin_ori = cut(ori_age, breaks = seq(250, 0, by = -10),
                        include.lowest = TRUE,
@@ -204,8 +206,10 @@ dat_ext <- read_delim(here("data",
   unnest(bin_occ) %>% 
   # create extinction signal
   group_by(species) %>% 
-  mutate(ext_signal = if_else(bin_occ == bin_ext, 1, 0)) %>% 
-  # clean up
+  mutate(ext_signal = if_else(bin_occ == bin_ext, 1, 0), 
+         # assign 0 to those species that survive until the modern
+         ext_signal = if_else(species %in% spec_modern, 
+                              0, ext_signal)) %>% 
   # clean up
   ungroup() %>% 
   select(-bin_ext, 
@@ -218,7 +222,7 @@ dat_ext <- read_delim(here("data",
 # load occurrence database
 dat_occurrences <- read_rds(here("data",
                                  "fossil_occurrences",
-                                 "database_occurrences_10_Jan_2023.rds"))
+                                 "database_occurrences_15_Apr_2023.rds"))
 
 # bin the occurrences to 10 myr
 dat_occ_binned <- dat_occurrences %>% 
