@@ -408,29 +408,29 @@ dat_stages <- stages %>%
 dat_pred_full <- dat_pred_deep %>% 
   # add stages
   left_join(dat_stages) %>%
-  add_column(data_set = "deep_time") %>% 
+  add_column(data_set = "Stages") %>% 
   select(-bin) %>% 
   # same for genus resolution
   bind_rows(dat_pred_genus %>% 
               # add stages
               left_join(dat_stages) %>%
-              add_column(data_set = "genus") %>% 
+              add_column(data_set = "Genus") %>% 
               select(-bin)) %>% 
   # add cenozoic resolution data
   bind_rows(dat_pred_ceno %>% 
               rename(myr = bin) %>% 
-              add_column(data_set = "near_time") %>% 
+              add_column(data_set = "1myr") %>% 
               mutate(xmin = myr - 0.5, 
                      xmax = myr + 0.5)) %>% 
   # add modern data
   bind_rows(dat_pred_modern %>% 
-              add_column(data_set = "modern", 
+              add_column(data_set = "Modern", 
                          myr = 0, 
                          xmin = 0, 
                          xmax = 0)) %>% 
   # add future data
   bind_rows(dat_pred_future %>% 
-              add_column(data_set = "future", 
+              add_column(data_set = "Future", 
                          myr = 0, 
                          xmin = -0.00002, 
                          xmax = 0.00002)) 
@@ -445,11 +445,11 @@ dat_pred_full %>%
 # create plot
 plot_logit <- dat_pred_full %>%
   mutate(data_set = factor(data_set, 
-                           levels = c("deep_time", 
-                                      "genus", 
-                                      "near_time", 
-                                      "modern", 
-                                      "future"))) %>% 
+                           levels = c("Stages", 
+                                      "Genus", 
+                                      "1myr", 
+                                      "Modern", 
+                                      "Future"))) %>% 
   ggplot(aes(myr, value, group = data_set)) +
   geom_hline(yintercept = 0, 
              colour = "grey20") +
@@ -464,27 +464,6 @@ plot_logit <- dat_pred_full %>%
              alpha = 0.8, 
              shape = 21, 
              colour = "grey20") +
-  annotate("text", 
-           x = c(150, 
-                 rep(148, 3), 
-                 rep(115, 2)), 
-           y = c(2.8, 
-                 2.1, 1.6, 1.1, 
-                 1.8, 1.3),
-           size = 9/.pt,
-           label = c("Dataset", 
-                     "Stages - Species", "Stages - Genus", 
-                     "1 myr - Species", "Modern (1990-2019) - Species", 
-                     "Future (2023-2123) - Species"), 
-           fontface = c("plain", 
-                        rep("italic", 5)), 
-           colour = alpha(c("grey20", 
-                            "#4C634C", 
-                            colour_coral, 
-                            colour_purple, 
-                            "#DF5B08", 
-                            "#e71ed5"), 0.8), 
-           hjust = 0) +
   scale_x_reverse() +
   scale_fill_manual(values = c("#4C634C", 
                                colour_coral, 
@@ -492,6 +471,8 @@ plot_logit <- dat_pred_full %>%
                                "#DF5B08", 
                                "#e71ed5"), 
                     name = NULL) +
+  scale_y_continuous(limits = c(-7, 2), 
+                     breaks = seq(-6, 2, by = 2)) +
   coord_geo(xlim = c(150, 0), 
             dat = list("epochs", "periods"),
             pos = list("b", "b"),
@@ -506,14 +487,10 @@ plot_logit <- dat_pred_full %>%
             lwd = list(0.1, 0.2)) +
   labs(x = "Million years", 
        y = "Temperature dependancy\n(log-odds)") +
-  theme(legend.position = "none") 
+  theme(legend.position = "bottom") 
+   
 
-# save plot
-ggsave(plot_full, filename = here("figures",
-                                  "logit_relationship.png"), 
-       width = image_width, height = image_height,
-       units = image_units, 
-       bg = "white", device = ragg::agg_png)                 
+
 
 # same for r-squared
 # combine data 
@@ -545,26 +522,41 @@ dat_rsq %>%
                  "r_squared_full.rds"))
 
 # visualise
-plot_rsq <- dat_rsq %>% 
-  ggplot(aes(x_axis, R2, colour = data_set)) +
-  geom_pointrange(aes(ymin = .lower, 
-                      ymax = .upper), 
-                  position = position_dodge(width = 0.2)) +
-  scale_colour_manual(values = c("#4C634C", 
+plot_rsq <- dat_rsq %>%
+  ggplot(aes(x_axis, R2)) +
+  geom_linerange(aes(ymin = .lower,
+                     ymax = .upper, 
+                     group = data_set),
+                 colour = "grey75", 
+                 position = position_dodge(width = 0.2)) +
+  geom_point(aes(fill = data_set),
+             alpha = 0.8, 
+             shape = 21, 
+             size = 2, 
+             colour = "grey20", 
+             position = position_dodge(width = 0.2)) +
+  scale_fill_manual(values = c("#4C634C", 
                                colour_coral, 
                                colour_purple, 
                                "#DF5B08", 
                                "#e71ed5"), 
                     name = NULL) +
+  scale_y_continuous(breaks = c(0, 0.1, 0.2)) +
   labs(x = NULL, 
        y = "Bayesian R-squared") +
   theme(legend.position = "none")
 
 
 
+# patch together
+plot_full <- plot_logit / plot_rsq +
+  plot_annotation(tag_levels = "a") +
+  plot_layout(heights = c(3, 1))
+
+
 # save plot
-ggsave(plot_rsq, filename = here("figures",
-                                 "r_squared_comparison.png"), 
-       width = image_width, height = image_height,
+ggsave(plot_full, filename = here("figures",
+                                  "logit_r_squared.png"), 
+       width = image_width, height = image_height*1.5,
        units = image_units, 
-       bg = "white", device = ragg::agg_png)                 
+       bg = "white", device = ragg::agg_png)     
