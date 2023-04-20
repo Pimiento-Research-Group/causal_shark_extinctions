@@ -76,6 +76,16 @@ dat_pred_deep %>%
                  "logits", 
                  "logit_deep.rds"))
 
+# same for bayesian r-squared
+dat_r_deep <- list(mod1, mod2,
+                   mod3, mod4,
+                   mod5, mod6,
+                   mod7, mod8) %>%
+  map_df(~ .x %>% 
+           bayes_R2(summary = FALSE, 
+                    ndraws = 1000) %>% 
+           as_tibble()) %>% 
+  median_qi(R2)
 
 
 # genus models --------------------------------------------------------
@@ -140,6 +150,16 @@ dat_pred_genus %>%
                  "logit_genus.rds"))
 
 
+# same for bayesian r-squared
+dat_r_genus <- list(mod1, mod2,
+                    mod3, mod4,
+                    mod5, mod6,
+                    mod7, mod8) %>%
+  map_df(~ .x %>% 
+           bayes_R2(summary = FALSE, 
+                    ndraws = 1000) %>% 
+           as_tibble()) %>% 
+  median_qi(R2)
 
 # cenozoic models --------------------------------------------------------------
 
@@ -190,7 +210,14 @@ dat_pred_ceno %>%
                  "logits", 
                  "logit_ceno.rds"))
 
-
+# same for bayesian r-squared
+dat_r_ceno <- list(mod1, mod2,
+                   mod3, mod4) %>%
+  map_df(~ .x %>% 
+           bayes_R2(summary = FALSE, 
+                    ndraws = 1000) %>% 
+           as_tibble()) %>% 
+  median_qi(R2)
 
 # modern models --------------------------------------------------------------
 
@@ -264,7 +291,14 @@ dat_pred_modern %>%
                  "logits", 
                  "logit_modern.rds"))
 
-
+# same for bayesian r-squared
+dat_r_modern <- list(mod1, mod2,
+                     mod3, mod4) %>%
+  map_df(~ .x %>% 
+           bayes_R2(summary = FALSE, 
+                    ndraws = 1000) %>% 
+           as_tibble()) %>% 
+  median_qi(R2)
 
 
 # future models -------------------------------------------------------
@@ -345,6 +379,15 @@ dat_pred_future %>%
                  "logit_future.rds"))
 
 
+# same for bayesian r-squared
+dat_r_future <- list(mod1, mod2,
+                     mod3, mod4) %>%
+  map_df(~ .x %>% 
+           bayes_R2(summary = FALSE, 
+                    ndraws = 1000) %>% 
+           as_tibble()) %>% 
+  median_qi(R2)
+
 
 # visualise ---------------------------------------------------------------
 
@@ -400,7 +443,7 @@ dat_pred_full %>%
                  "logit_full.rds"))
 
 # create plot
-plot_full <- dat_pred_full %>%
+plot_logit <- dat_pred_full %>%
   mutate(data_set = factor(data_set, 
                            levels = c("deep_time", 
                                       "genus", 
@@ -470,9 +513,58 @@ ggsave(plot_full, filename = here("figures",
                                   "logit_relationship.png"), 
        width = image_width, height = image_height,
        units = image_units, 
-       bg = "white", device = ragg::agg_png)
+       bg = "white", device = ragg::agg_png)                 
+
+# same for r-squared
+# combine data 
+dat_rsq <- list(dat_r_deep, 
+     dat_r_genus, 
+     dat_r_ceno, 
+     dat_r_modern, 
+     dat_r_future) %>% 
+  bind_rows() %>% 
+  add_column(x_axis = factor(c(rep("Fossil", 3),
+                               "Modern",
+                               "Future"),
+                             levels = c("Fossil",
+                                        "Modern",
+                                        "Future")), 
+             data_set = factor(c("deep", 
+                                 "genus", 
+                                 "ceno", 
+                                 "modern", 
+                                 "future"), 
+                               levels = c("deep", 
+                                          "genus", 
+                                          "ceno", 
+                                          "modern", 
+                                          "future")))
+# and save
+dat_rsq %>% 
+  write_rds(here("data", 
+                 "r_squared_full.rds"))
+
+# visualise
+plot_rsq <- dat_rsq %>% 
+  ggplot(aes(x_axis, R2, colour = data_set)) +
+  geom_pointrange(aes(ymin = .lower, 
+                      ymax = .upper), 
+                  position = position_dodge(width = 0.2)) +
+  scale_colour_manual(values = c("#4C634C", 
+                               colour_coral, 
+                               colour_purple, 
+                               "#DF5B08", 
+                               "#e71ed5"), 
+                    name = NULL) +
+  labs(x = NULL, 
+       y = "Bayesian R-squared") +
+  theme(legend.position = "none")
 
 
 
-
-                     
+# save plot
+ggsave(plot_rsq, filename = here("figures",
+                                 "r_squared_comparison.png"), 
+       width = image_width, height = image_height,
+       units = image_units, 
+       bg = "white", device = ragg::agg_png)                 
