@@ -400,8 +400,13 @@ dat_pred_full %>%
                  "logit_full.rds"))
 
 # create plot
-# plot_full <- 
-dat_pred_full %>% 
+plot_full <- dat_pred_full %>%
+  mutate(data_set = factor(data_set, 
+                           levels = c("deep_time", 
+                                      "genus", 
+                                      "near_time", 
+                                      "modern", 
+                                      "future"))) %>% 
   ggplot(aes(myr, value, group = data_set)) +
   geom_hline(yintercept = 0, 
              colour = "grey20") +
@@ -418,31 +423,31 @@ dat_pred_full %>%
              colour = "grey20") +
   annotate("text", 
            x = c(150, 
-                 rep(148, 5)), 
-           y = c(12.7, 
-                 11.5, 10.4, 
-                 9.3, 8.2,
-                 7.1),
+                 rep(148, 3), 
+                 rep(115, 2)), 
+           y = c(2.8, 
+                 2.1, 1.6, 1.1, 
+                 1.8, 1.3),
            size = 9/.pt,
            label = c("Dataset", 
-                     "10 myr - Species", "Stages - Species", 
-                     "Stages - Genus", "1 myr - Species", 
-                     "Modern - Species"), 
+                     "Stages - Species", "Stages - Genus", 
+                     "1 myr - Species", "Modern (1990-2019) - Species", 
+                     "Future (2023-2123) - Species"), 
            fontface = c("plain", 
                         rep("italic", 5)), 
            colour = alpha(c("grey20", 
-                      "#4C634C", 
-                      colour_yellow, 
-                      colour_coral, 
-                      colour_purple, 
-                      "#2E5B95"), 0.8), 
+                            "#4C634C", 
+                            colour_coral, 
+                            colour_purple, 
+                            "#DF5B08", 
+                            "#e71ed5"), 0.8), 
            hjust = 0) +
   scale_x_reverse() +
   scale_fill_manual(values = c("#4C634C", 
-                               colour_yellow, 
                                colour_coral, 
-                               "#2E5B95", 
-                               colour_purple), 
+                               colour_purple, 
+                               "#DF5B08", 
+                               "#e71ed5"), 
                     name = NULL) +
   coord_geo(xlim = c(150, 0), 
             dat = list("epochs", "periods"),
