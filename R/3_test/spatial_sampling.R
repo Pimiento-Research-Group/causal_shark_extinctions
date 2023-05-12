@@ -49,7 +49,7 @@ dat_binned <- dat_occ %>%
          bin_high = cut(Min_Ma,
                         breaks = map_res-2.5,
                         labels = map_res[1:length(map_res)-1]))  %>%
-  filter(bin_low == bin_high) %>%
+  # filter(bin_low == bin_high) %>%
   select(everything(), bin = bin_low,
          -c(Max_Ma, Min_Ma, bin_high)) %>%
   mutate(bin = as.numeric(as.character(bin)))
