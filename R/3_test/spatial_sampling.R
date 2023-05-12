@@ -18,6 +18,7 @@ dat_occ <-  read_rds(here("data",
                           "database_occurrences_15_Apr_2023.rds"))
 
 
+
 # gplates -----------------------------------------------------------------
 
 # download gplates continental plate model
@@ -39,20 +40,30 @@ map_res <- layers(dat_maps) %>%
   unique() %>%
   as.numeric()
 
+# geologic series
+data(stages, package = "divDyn")
+
+# get mean point of series
+series_age <- stages %>% 
+  as_tibble() %>% 
+  group_by(series) %>% 
+  summarise(age = mean(mid)) %>% 
+  arrange(age) %>% 
+  # assign to map
+  mutate(bin = cut(age,
+                   breaks = map_res - 2.5,
+                   labels = map_res[1:length(map_res)-1])) 
+
 
 # bin fossil data
 dat_binned <- dat_occ %>%
   # bin fad and lad to stages
-  mutate(bin_low = cut(Max_Ma,
-                       breaks = map_res-2.5,
-                       labels = map_res[1:length(map_res)-1]),
-         bin_high = cut(Min_Ma,
-                        breaks = map_res-2.5,
-                        labels = map_res[1:length(map_res)-1]))  %>%
-  # filter(bin_low == bin_high) %>%
-  select(everything(), bin = bin_low,
-         -c(Max_Ma, Min_Ma, bin_high)) %>%
-  mutate(bin = as.numeric(as.character(bin)))
+  mutate(mid_age = (Max_Ma - Min_Ma)/2 + Min_Ma,
+         bin = cut(Max_Ma,
+                   breaks = series_age$age,
+                   labels = series_age$bin[1:nrow(series_age)-1]))  %>%
+  mutate(bin = as.numeric(as.character(bin))) %>% 
+  drop_na(bin) 
 
 
 
@@ -73,7 +84,7 @@ plot_list <- unique(dat_binned$bin) %>%
          ggplot() +
          geom_sf(colour = "white",
                  fill = "grey70") +
-         theme_minimal() +
+         theme_void() +
          geom_point(aes(geometry = geometry),
                     colour = "grey20",
                     fill = alpha("#44978C", 0.4),
@@ -91,8 +102,10 @@ plot_list <- unique(dat_binned$bin) %>%
                                crs = st_crs("WGS84"))) +
          labs(y = NULL,
               x = NULL,
-              fill = NULL, title = paste(.x, "myr")) +
-         theme(legend.position = "bottom") +
+              fill = NULL, title = paste0(na.omit(series_age$series[series_age$bin == .x]), 
+                                         " [~",
+                                         .x, "myr", 
+                                         "]")) +
          coord_sf(ylim = c(-90, 90),
                   datum = st_crs("WGS84"))
 
@@ -123,5 +136,5 @@ list.files(here("figures",
   gifski::gifski(.,
                  gif_file = here("figures",
                                  "animation_sampling.gif"), 
-                 width = 800, height = 600, delay = 1)
+                 width = 800, height = 600, delay = 1.3)
 
