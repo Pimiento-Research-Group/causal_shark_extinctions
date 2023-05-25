@@ -83,7 +83,10 @@ dat_dag_list %>%
   map(part_cor) %>% 
   reduce(full_join) %>% 
   group_by(name) %>% 
-  summarise(mean_cl_normal(value)) 
+  summarise(mean_cl_normal(value)) %>% 
+  add_column(imp_cond = implied_conditions %>%
+               map_chr(as.character)) %>% 
+  filter(y >= 0.3)
 
 implied_conditions[abs(cor_val) >= 0.3]
 
