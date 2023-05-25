@@ -86,7 +86,17 @@ dat_dag_list %>%
   summarise(mean_cl_normal(value)) %>% 
   add_column(imp_cond = implied_conditions %>%
                map_chr(as.character)) %>% 
-  filter(y >= 0.3)
+  ggplot() +
+  geom_vline(xintercept = 0, 
+             linetype = "dotted", 
+             colour = "grey20") +
+  geom_vline(xintercept = c(-0.3, 0.3), 
+             linetype = "dashed", 
+             colour = "coral3") +
+  geom_pointrange(aes(y, imp_cond, 
+                      xmin = ymin, xmax = ymax)) +
+  labs(y = NULL, 
+       x = "Partial correlation")
 
 implied_conditions[abs(cor_val) >= 0.3]
 
