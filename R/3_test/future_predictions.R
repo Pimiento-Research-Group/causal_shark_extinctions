@@ -68,9 +68,6 @@ mod3 <- brm_logistic("ext_signal ~ temp_gat_binned + temp_gat_st:temp_gat_lt3")
 mod4 <- brm_logistic("ext_signal ~ temp_gat_binned + temp_gat_st:temp_gat_lt4")
 
 
-# read fossil models
-mod_fossil <- read_rds(here("data", 
-                             "fossil_temp_models.rds"))
 
 
 
@@ -81,12 +78,20 @@ mod_fossil <- read_rds(here("data",
 # set up number of draws 
 nr_draws <- 1000
 
+# extract logit averaged over models
+# get model weights 
+mod_weights <- loo_model_weights(mod1, mod2,
+                                 mod3, mod4,
+                                 method = "pseudobma")
+
+
 # average prediction by model stacking
 dat_pred_iucn <- pp_average(mod1, mod2,
                             mod3, mod4,
                             newdata = dat_ipcc %>%
                               filter(year >= 2023),
                             seed = 1708,
+                            weights = mod_weights,
                             summary = FALSE,
                             method = "posterior_epred",
                             ndraws = nr_draws) %>%
@@ -97,12 +102,12 @@ dat_pred_iucn <- pp_average(mod1, mod2,
                           filter(year >= 2023) %>% 
                           pull(year), nr_draws)) %>% 
   # bin to 10 year
-  mutate(year_bin = cut(year, breaks = seq(2020, 2100, by = 10),
-                        include.lowest = TRUE,
-                        labels = FALSE)) %>% 
-  group_by(year_bin) %>%
+  # mutate(year_bin = cut(year, breaks = seq(2020, 2100, by = 10),
+  #                       include.lowest = TRUE,
+  #                       labels = FALSE)) %>% 
+  group_by(year) %>%
   mean_qi(value) %>% 
-  add_column(year = seq(2020, 2090, by = 10)) %>% 
+  # add_column(year = seq(2020, 2090, by = 10)) %>% 
   select(year, value, .lower, .upper)
 
 

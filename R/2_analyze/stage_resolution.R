@@ -211,9 +211,9 @@ plot_final <- plot_temp +
                 top = 0.8) 
 
 
-# save plot
-ggsave(plot_final, filename = here("figures",
-                                   "effect_temperature.png"), 
-       width = image_width, height = image_height,
-       units = image_units, 
-       bg = "white", device = ragg::agg_png)
+# # save plot
+# ggsave(plot_final, filename = here("figures",
+#                                    "effect_temperature.png"), 
+#        width = image_width, height = image_height,
+#        units = image_units, 
+#        bg = "white", device = ragg::agg_png)

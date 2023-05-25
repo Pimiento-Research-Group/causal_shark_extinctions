@@ -112,11 +112,11 @@ dat_diatom <- dat_diatom_list %>%
 
 
 # # save file
-# dat_diatom %>% 
-#   write_rds(here("data", 
-#                  "raw", 
-#                  "productivity", 
-#                  "diatom_full.rds"))
+dat_diatom %>%
+  write_rds(here("data",
+                 "raw",
+                 "productivity",
+                 "diatom_full.rds"))
 
 
 # outcrop area ------------------------------------------------------------
@@ -202,27 +202,29 @@ dat_paleotemp <- dat_temp %>%
 
 # extinction signal -------------------------------------------------------
 
+# get those species that survive until now
+spec_modern <- read_delim(here("data",
+                               "fossil_occurrences",
+                               "combined_10_se_est_species_names.txt")) %>% 
+  filter(te == 0) %>% 
+  pull(species)
+
 # load PyRate estimates
 dat_ext <- read_delim(here("data",
                            "fossil_occurrences",
-                           "all_species_10_Grj_se_est_species_names.txt")) %>% 
+                           "combined_10_se_est_species_names.txt")) %>% 
   # estimate fad and lad for each species
-  pivot_longer(cols = contains("ts"), 
-               names_to = "origination", 
-               values_to = "origination_age") %>% 
-  pivot_longer(cols = contains("te"), 
-               names_to = "extinction", 
-               values_to = "extinction_age") %>% 
+  mutate(across(c(ts, te), abs)) %>% 
   group_by(species) %>% 
-  summarise(ori_age = mean(origination_age),
-            ext_age = mean(extinction_age)) %>% 
+  summarise(ori_age = mean(ts),
+            ext_age = mean(te)) %>% 
   # bin fad and lad to 1myr
   mutate(bin_ori = cut(ori_age, breaks = seq(66, 0, by = -1),
                        include.lowest = TRUE,
                        labels = FALSE), 
          bin_ext = cut(ext_age, breaks = seq(66, 0, by = -1),
                        include.lowest = TRUE,
-                       labels = FALSE)) %>% 
+                       labels = FALSE)) %>%
   drop_na(bin_ori, bin_ext) %>% 
   # fill in duration bins
   mutate(bin_occ = map2(.x = bin_ori, 
@@ -232,7 +234,10 @@ dat_ext <- read_delim(here("data",
   unnest(bin_occ) %>% 
   # create extinction signal
   group_by(species) %>% 
-  mutate(ext_signal = if_else(bin_occ == bin_ext, 1, 0))  %>% 
+  mutate(ext_signal = if_else(bin_occ == bin_ext, 1, 0), 
+         # assign 0 to those species that survive until the modern
+         ext_signal = if_else(species %in% spec_modern, 
+                              0, ext_signal)) %>% 
   # clean up
   ungroup() %>% 
   select(-bin_ext, 
@@ -249,7 +254,7 @@ dat_ext <- read_delim(here("data",
 # load occurrence database
 dat_occurrences <- read_rds(here("data",
                                  "fossil_occurrences",
-                                 "database_occurrences_10_Jan_2023.rds"))
+                                 "database_occurrences_15_Apr_2023.rds"))
 
 # bin the occurrences to 1myr
 dat_occ_binned <- dat_occurrences %>% 
@@ -278,9 +283,9 @@ dat_sampling <- dat_occ_binned %>%
 
 # alternatively the number of collections per bin from the pbdb
 
-# download pbdb collections from bin 72 (Hauterivian) to bin 95 (Holocene)
+# download pbdb collections from Danian to Holocene
 # via the api call
-dat_pbdb <- read_csv("https://paleobiodb.org/data1.2/colls/list.csv?interval=Hauterivian,Holocene")
+dat_pbdb <- read_csv("https://paleobiodb.org/data1.2/colls/list.csv?interval=Danian,Holocene")
 
 # bin the data
 dat_pbdb_sampling <- dat_pbdb %>% 

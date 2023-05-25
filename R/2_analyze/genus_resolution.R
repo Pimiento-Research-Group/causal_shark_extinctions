@@ -22,26 +22,30 @@ dat_stages <- stages %>%
 
 # fossil data -------------------------------------------------------------
 
+# get those species that survive until now
+gen_modern <- read_delim(here("data",
+                               "fossil_occurrences",
+                               "combined_10_se_est_species_names.txt")) %>% 
+  filter(te == 0) %>% 
+  mutate(genus = word(species, 1)) %>% 
+  distinct(genus) %>% 
+  pull(genus)
 
 # load PyRate estimates
 dat_genus <- read_delim(here("data",
-                               "fossil_occurrences",
-                               "all_genera_pg_10_Grj_se_est_genus_name.txt")) %>% 
-  # estimate fad and lad for each species
-  pivot_longer(cols = contains("ts"), 
-               names_to = "origination", 
-               values_to = "origination_age") %>% 
-  pivot_longer(cols = contains("te"), 
-               names_to = "extinction", 
-               values_to = "extinction_age") %>% 
+                             "fossil_occurrences",
+                             "combined_10_se_est_species_names.txt")) %>% 
+  # estimate fad and lad for each genus
+  mutate(across(c(ts, te), abs)) %>% 
+  mutate(genus = word(species, 1)) %>% 
   group_by(genus) %>% 
-  summarise(ori_age = mean(origination_age),
-            ext_age = mean(extinction_age)) %>% 
+  summarise(ori_age = mean(ts),
+            ext_age = mean(te)) %>% 
   # bin fad and lad to stages
   mutate(bin_ori = 95 - cut(ori_age, breaks = dat_stages$bottom,
                             include.lowest = TRUE,
                             labels = FALSE), 
-         bin_ext = 95 - cut(ext_age, breaks = dat_stages$bottom,
+         bin_ext = 96 - cut(ext_age, breaks = dat_stages$top,
                             include.lowest = TRUE,
                             labels = FALSE)) %>%
   drop_na(bin_ori, bin_ext) %>% 
@@ -53,7 +57,10 @@ dat_genus <- read_delim(here("data",
   unnest(bin_occ) %>% 
   # create extinction signal
   group_by(genus) %>% 
-  mutate(ext_signal = if_else(bin_occ == bin_ext, 1, 0)) %>% 
+  mutate(ext_signal = if_else(bin_occ == bin_ext, 1, 0), 
+         # assign 0 to those species that survive until the modern
+         ext_signal = if_else(genus %in% gen_modern, 
+                              0, ext_signal)) %>% 
   # clean up
   ungroup() %>% 
   select(-bin_ext, 
@@ -66,14 +73,14 @@ dat_genus <- read_delim(here("data",
 # load occurrence database
 dat_occurrences <- read_rds(here("data",
                                  "fossil_occurrences",
-                                 "database_occurrences_10_Jan_2023.rds"))
+                                 "database_occurrences_15_Apr_2023.rds"))
 
 # bin the occurrences to stages
 dat_occ_binned <- dat_occurrences %>% 
   mutate(bin_min = 95 - cut(Min_Ma, breaks = dat_stages$bottom,
                             include.lowest = TRUE,
                             labels = FALSE), 
-         bin_max = 95 - cut(Max_Ma, breaks = dat_stages$bottom,
+         bin_max = 96 - cut(Max_Ma, breaks = dat_stages$top,
                             include.lowest = TRUE,
                             labels = FALSE)) %>% 
   # select entries, where the early and late interval fields indicate 

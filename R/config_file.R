@@ -41,10 +41,12 @@ brm_logistic <- function(model_formula) {
       family = "bernoulli", 
       data = dat_merged, 
       seed = 1708, 
-      cores = parallel::detectCores(), 
-      chains = 4, 
       iter = 10000, 
-      warmup = 2000)
+      warmup = 2000, 
+      chains = 4,
+      cores = 4,
+      threads = threading(4), 
+      backend = "cmdstanr")
   
 }
 
