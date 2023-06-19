@@ -11,6 +11,7 @@ source(here("R", "config_file.R"))
 # load data  ------------------------------------------------------------
 
 # get predictions from different scales/ data sets
+set.seed(123)
 dat_pred <- paste0("pred_temperature_", 
        c("ceno", 
          "genus", 

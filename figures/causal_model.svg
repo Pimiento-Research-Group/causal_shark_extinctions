@@ -28,12 +28,12 @@
      inkscape:document-units="mm"
      showgrid="false"
      inkscape:zoom="1.0519801"
-     inkscape:cx="178.23531"
-     inkscape:cy="441.54828"
-     inkscape:window-width="2880"
-     inkscape:window-height="1721"
-     inkscape:window-x="2869"
-     inkscape:window-y="-11"
+     inkscape:cx="144.48943"
+     inkscape:cy="746.21183"
+     inkscape:window-width="1898"
+     inkscape:window-height="978"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
      inkscape:window-maximized="1"
      inkscape:current-layer="layer1">
     <inkscape:grid
@@ -1475,12 +1475,12 @@
          style="stroke-width:0.5"
          x="14.58757"
          y="262.19604"
-         id="tspan29662">α  ~ student_t(3, 0, 2.5)</tspan><tspan
+         id="tspan29662">α  ~ Student-T(3, 0, 2.5)</tspan><tspan
          sodipodi:role="line"
          style="stroke-width:0.5"
          x="14.58757"
          y="273.44965"
-         id="tspan26682">(    ,      ) ~ normal(0, 1) </tspan></text>
+         id="tspan26682">(    ,      ) ~ Normal(0, 1) </tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.7611px;line-height:0.55;font-family:Bahnschrift;-inkscape-font-specification:'Bahnschrift, @wght=300,wdth=86.5';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;font-variation-settings:'wdth' 86.5, 'wght' 300;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.499999;stroke-linecap:round;stroke-linejoin:bevel;stroke-dasharray:none;stroke-opacity:1;paint-order:normal"
