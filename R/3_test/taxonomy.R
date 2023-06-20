@@ -119,6 +119,7 @@ dat_pred_fossil <- dat_merged %>%
   add_epred_draws(mod1, 
                   ndraws = 1000) %>% 
   ungroup()
+
   
 # summarise
 dat_pred_fossil_smr <- dat_pred_fossil %>% 
@@ -146,7 +147,7 @@ plot_fossil <- dat_pred_fossil_smr %>%
   geom_text(aes(x = .epred, 
                 y = fct_reorder(order, .epred), 
                 label = order), 
-            position = position_nudge(x = c(rep(0.2, 12), 
+            position = position_nudge(x = c(rep(0.23, 12), 
                                             -0.25)),
             size = 8/.pt, 
             colour = "grey40") +
@@ -250,6 +251,21 @@ plot_modern <- dat_pred_modern_smr %>%
 
 # scatter plot ------------------------------------------------------------
 
+# calculate correlation
+cor_pear <- cor.test(dat_pred_fossil_smr$.epred, 
+                      dat_pred_modern_smr$.epred,
+                      method = "pearson") 
+
+# create label
+dat_cor_pear <- paste0("r = ",
+                       round(cor_pear$estimate, 2),
+                       " [",
+                       round(cor_pear$conf.int[[1]], 1),
+                       ", ",
+                       round(cor_pear$conf.int[[2]], 1),
+                       "]") 
+
+# visualise
 plot_scatter <- dat_pred_fossil_smr %>%
   left_join(dat_pred_modern_smr %>% 
               rename(.epred_mod = .epred, 
@@ -272,6 +288,13 @@ plot_scatter <- dat_pred_fossil_smr %>%
              shape = 21, 
              colour = "grey20", 
              size = 2.5) +
+  annotate("label", 
+           x = 0.47, 
+           y = 0.01, 
+           label.size = 0,
+           colour = "grey20", 
+           size = 8/.pt,
+           label = dat_cor_pear) +
   scale_x_continuous(breaks = c(0, 0.2, 0.4, 0.6), 
                      labels = c("0", "20", "40", "60"), 
                      name = "Fossil extinction risk [%]", 
@@ -290,90 +313,94 @@ plot_scatter <- dat_pred_fossil_smr %>%
 
 # rank plot ---------------------------------------------------------------
 
-# loop through samples and calculate ranks
+# iterate through samples and calculate ranks with uncertainty
 
 # first for fossil ranks
 
-# first set up matrix to save results
-rank_vec <- matrix(nrow = 13, ncol = 1000)
-
-# loop through samples
-for (i in 1:1000) {
-  rank_vec[, i] <- dat_pred_fossil %>% 
-    filter(.draw == i) %>% 
-    mutate(r_rank = dense_rank(.epred)) %>% 
-    pull(r_rank) 
-}
-
 # extract results for each order
-dat_ranks_fossil <- 1:13 %>% 
-  map_df(~ rank_vec[.x, ] %>% 
-           tabulate() %>% 
-           desc() %>% 
-           dense_rank() %>% 
-           { . %in% c(1, 2, 3) } %>% 
-           which() %>% 
-           enframe() %>% 
-           pivot_wider(names_from = name, 
-                       values_from = value)) %>% 
-  rename(xmin = 1, 
-         x = 2, 
-         xmax = 3) %>% 
-  bind_cols(dat_pred_fossil %>% 
-              filter(.draw == 1) %>% 
-              select(superorder, order))
+dat_ranks_fossil <- dat_pred_fossil %>% 
+  group_by(order) %>%
+  summarise(sd = sd(.epred)) %>% 
+  left_join(dat_pred_fossil_smr %>% 
+              mutate(y_rank = dense_rank(.epred)) %>% 
+              select(superorder, order, y_rank)) %>% 
+  mutate(y_lwr = qnorm(0.025, y_rank, sd),
+         y_lwr = floor(y_lwr),
+         y_upr = qnorm(0.975, y_rank, sd), 
+         y_upr = ceiling(y_upr)) %>% 
+  select(-sd)
 
 
 # and for modern ranks
 
-# first set up matrix to save results
-rank_vec <- matrix(nrow = 13, ncol = 1000)
+# extract results for each order
+dat_ranks_modern <- dat_pred_modern %>% 
+  group_by(order) %>%
+  summarise(sd = sd(.epred)) %>% 
+  left_join(dat_pred_modern_smr %>% 
+              mutate(x_rank = dense_rank(.epred)) %>% 
+              select(superorder, order, x_rank)) %>% 
+  mutate(x_lwr = qnorm(0.025, x_rank, sd),
+         x_lwr = floor(x_lwr),
+         x_upr = qnorm(0.975, x_rank, sd), 
+         x_upr = ceiling(x_upr)) %>% 
+  select(-sd)
 
-# loop through samples
-for (i in 1:1000) {
-  rank_vec[, i] <- dat_pred_modern %>% 
-    filter(.draw == i) %>% 
-    mutate(r_rank = dense_rank(.epred)) %>% 
-    pull(r_rank) 
+# calculate correlation
+cor_kend <- dat_ranks_fossil %>%
+  left_join(dat_ranks_modern) %>% 
+  { cor.test(.$x_rank, .$y_rank, method = "kendall") }
+
+# get function for tau confidence interval from Fieller et al. (1957)
+tau.ci <- function(tau, N, conf.level = 0.95, correct='fieller') {
+  if(correct=='none') tau.se <- 1/(N - 3)^0.5
+  if(correct=='fieller') tau.se <- (0.437/(N - 4))^0.5
+  moe <- qnorm(1 - (1 - conf.level)/2) * tau.se
+  zu <- atanh(tau) + moe
+  zl <- atanh(tau) - moe
+  tanh(c(zl, zu))
 }
 
-# extract results for each order
-dat_ranks_modern <- 1:13 %>%
-  map_df(~ rank_vec[.x, ] %>% 
-           tabulate() %>% 
-           desc() %>% 
-           dense_rank() %>% 
-           { . %in% c(1, 2, 3) } %>% 
-           which() %>% 
-           enframe() %>% 
-           pivot_wider(names_from = name, 
-                       values_from = value)) %>% 
-  rename(ymin = 1, 
-         y = 2, 
-         ymax = 3) %>% 
-  bind_cols(dat_pred_modern %>% 
-              filter(.draw == 1) %>% 
-              select(superorder, order))
+# apply function
+cor_kend_ci <- tau.ci(tau = cor_kend$estimate, N = nrow(dat_ranks_fossil))
+
+# create label
+dat_cor_kend <- paste0("tau = ",
+                       round(cor_kend$estimate, 2),
+                       " [",
+                       round(cor_kend_ci[[1]], 1),
+                       ", ",
+                       round(cor_kend_ci[[2]], 1),
+                       "]") 
+
+
 
 # visualise
 plot_rank <- dat_ranks_fossil %>%
   left_join(dat_ranks_modern) %>% 
-  ggplot(aes(x, y)) +
+  ggplot(aes(x_rank, y_rank)) +
   stat_smooth(method = "lm", 
               se = FALSE, 
               colour = "grey70", 
               fullrange = TRUE, 
               linetype = "dashed") +
-  geom_linerange(aes(ymin = ymin, 
-                     ymax = ymax), 
+  geom_linerange(aes(ymin = y_lwr, 
+                     ymax = y_upr), 
                  colour = "grey50") +
-  geom_linerange(aes(xmin = xmin, 
-                     xmax = xmax), 
+  geom_linerange(aes(xmin = x_lwr, 
+                     xmax = x_upr), 
                  colour = "grey50") +
   geom_point(aes(fill = superorder), 
              shape = 21, 
              colour = "grey20", 
              size = 2.5) +
+  annotate("label", 
+           x = 3, 
+           y = 13, 
+           label.size = 0,
+           colour = "grey20", 
+           size = 8/.pt,
+           label = dat_cor_kend) +
   scale_x_continuous(breaks = seq(1, 13, by = 2), 
                      name = "Modern rank") +
   scale_y_continuous(breaks = seq(1, 13, by = 2), 
@@ -392,9 +419,9 @@ plot_rank <- dat_ranks_fossil %>%
 plot_final <- plot_rank + 
   plot_fossil +
   plot_modern + 
-  plot_scatter &
-  theme(legend.position = 'none', 
-        panel.grid.major = element_line(colour = "grey96"))
+  plot_scatter +
+  plot_annotation(tag_levels = "a") &
+  theme(legend.position = 'none') 
 
 # save plot
 ggsave(plot_final, filename = here("figures",
