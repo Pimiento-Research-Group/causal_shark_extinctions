@@ -31,7 +31,7 @@ dat_dag <- dat_merged %>%
   drop_na(everything())
 
 # create subsets for bootstrapping
-dat_dag_list <- replicate(5, slice_sample(dat_dag,
+dat_dag_list <- replicate(2, slice_sample(dat_dag,
                                           n = nrow(dat_dag),
                                           replace = TRUE),
                           simplify = FALSE)
@@ -79,13 +79,30 @@ part_cor <- function(data_set) {
   
 }
 
-dat_dag_list %>% 
+
+
+# visualise ---------------------------------------------------------------
+
+
+plot_cor <- dat_dag_list %>% 
   map(part_cor) %>% 
   reduce(full_join) %>% 
   group_by(name) %>% 
   summarise(mean_cl_normal(value)) %>% 
   add_column(imp_cond = implied_conditions %>%
                map_chr(as.character)) %>% 
+  # use the same notation as in Figure 1
+  mutate(imp_cond = str_replace_all(imp_cond, "txni", "I"), 
+         imp_cond = str_replace_all(imp_cond, "prsp", "P"),
+         imp_cond = str_replace_all(imp_cond, "smpe", "Se"),
+         imp_cond = str_replace_all(imp_cond, "prdc", "N"),
+         imp_cond = str_replace_all(imp_cond, "shla", "As"),
+         imp_cond = str_replace_all(imp_cond, "otca", "Ao"),
+         imp_cond = str_replace_all(imp_cond, "slvl", "L"),
+         imp_cond = str_replace_all(imp_cond, "tmpr", "T"),
+         imp_cond = str_replace_all(imp_cond, "pltm", "Tp"),
+         imp_cond = str_replace_all(imp_cond, "extr", "E"),
+         imp_cond = fct_reorder(imp_cond, desc(y))) %>% 
   ggplot() +
   geom_vline(xintercept = 0, 
              linetype = "dotted", 
@@ -93,10 +110,25 @@ dat_dag_list %>%
   geom_vline(xintercept = c(-0.3, 0.3), 
              linetype = "dashed", 
              colour = "coral3") +
-  geom_pointrange(aes(y, imp_cond, 
-                      xmin = ymin, xmax = ymax)) +
+  geom_linerange(aes(y, imp_cond, 
+                     xmin = ymin, xmax = ymax)) +
+  geom_point(aes(y, imp_cond), 
+             size = 4, 
+             shape = 21, 
+             fill = "white", 
+             colour = "grey10") +
   labs(y = NULL, 
        x = "Partial correlation")
 
-implied_conditions[abs(cor_val) >= 0.3]
+
+
+# save plot
+ggsave(plot_cor,
+       filename = here("figures",
+                       "supplement",
+                       "conditional_dependencies.png"),
+       width = image_width, height = image_height*1.5,
+       units = image_units,
+       bg = "white", device = ragg::agg_png)
+
 
