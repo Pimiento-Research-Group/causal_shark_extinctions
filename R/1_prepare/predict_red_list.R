@@ -106,32 +106,81 @@ tibble(species = rownames(extinction_times),
                  "iucn_extinction_times.rds"))
 
 
-# safe transition rates
-future_sim_output[[3]] %>% 
-  py_to_r() %>% 
-  as_tibble() %>% 
-  # write_rds(here("data", 
-  #                "iucn"))
-  pivot_longer(-year, 
-               names_to = "status", 
-               values_to = "status_count") %>% 
-  mutate(year = year + 2023, 
-         status = factor(status, 
-                         levels = rev(c("LC", "NT", "VU", 
-                                    "EN", "CR", "EX")))) %>% 
-  ggplot(aes(year, status_count, 
-             fill = status, 
-             colour = status)) +
-  geom_col(width = 1) +
-  scale_color_manual(values = colorspace::lighten(c("grey10", "#DF5436", "#E79609",
-                                                    "#E7BA29", "lightgreen", "#4C634C"), 0.4)) +
-  scale_fill_manual(values = colorspace::lighten(c("grey10", "#DF5436", "#E79609",
-                                                   "#E7BA29", "lightgreen", "#4C634C"), 0.4)) +
-  scale_x_continuous(breaks = c(2023, 2100, 2200), 
-                     name = "Year") +
-  theme(legend.position = "top")
+# visualisations ----------------------------------------------------------
+
+
+
+# # visualise transition rates
+# future_sim_output[[3]] %>%
+#   py_to_r() %>%
+#   as_tibble() %>%
+#   mutate(year = year + 2023, 
+#          status = factor(status, 
+#                          levels = rev(c("LC", "NT", "VU", 
+#                                     "EN", "CR", "EX")))) %>% 
+#   ggplot(aes(year, status_count, 
+#              fill = status, 
+#              colour = status)) +
+#   geom_col(width = 1) +
+#   scale_color_manual(values = colorspace::lighten(c("grey10", "#DF5436", "#E79609",
+#                                                     "#E7BA29", "lightgreen", "#4C634C"), 0.4)) +
+#   scale_fill_manual(values = colorspace::lighten(c("grey10", "#DF5436", "#E79609",
+#                                                    "#E7BA29", "lightgreen", "#4C634C"), 0.4)) +
+#   scale_x_continuous(breaks = c(2023, 2100, 2200), 
+#                      name = "Year") +
+#   theme(legend.position = "top")
   
 
+# IUCN history
+# read in dataset
+dat_status <- read_delim(here("data",
+                              "iucn",
+                              "CHONDRICHTHYES_iucn_history.txt"))
+
+# plot
+plot_status <- dat_status %>% 
+  pivot_longer(-species, 
+               names_to = "year", 
+               values_to = "status") %>% 
+  mutate(status = case_when(
+    status == "LR/nt" ~ "NT", 
+    status == "LR/lc" ~ "LC", 
+    status == "LR/cd" ~ "NT", 
+    .default = status)) %>% 
+  filter(!status %in% c("K", "I")) %>% 
+  drop_na() %>% 
+  count(year, status) %>% 
+  mutate(status = factor(status, 
+                         levels = c("LC", 
+                                    "NT", 
+                                    "VU", 
+                                    "EN", 
+                                    "CR", 
+                                    "DD"))) %>% 
+  ggplot(aes(year, 
+             n, 
+             fill = status)) +
+  geom_col(position = position_dodge()) +
+  scale_fill_manual(values = c("#2eb774", "#E7BA29", "#E79609", 
+                               "#DF5436", "darkred", "grey70"), 
+                    name = "Red list status") +
+  labs(y = "Number of species", 
+       x = NULL) +
+  theme(legend.position = c(0.8, 0.8), 
+        legend.key.size = unit(3, "mm"))
+
+
+# save
+ggsave(plot_status, 
+       filename = here("figures",
+                       "supplement", 
+                       "redlist_status_history.png"), 
+       width = image_width, height = image_height,
+       units = image_units, 
+       bg = "white", device = ragg::agg_png)
+
+
+# number of extinctions
 testi <- read_table(here("data",
                 "iucn", 
                 "te_all_species.txt"), 
@@ -179,20 +228,17 @@ p2 <- future_sim_output[[3]] %>%
   labs(x = "Year", 
        y = "Number of Extinctions")
   
-
+# patch together
 p3 <- p1 + inset_element(p2, -0.07, -0.09, 1, 1)  
   
+
+# save
 ggsave(p3, filename = here("figures",
-                            "simulated_extinctions.png"), 
+                           "supplement",
+                           "simulated_extinctions.png"), 
          width = image_width, height = image_height,
          units = image_units, 
          bg = "white", device = ragg::agg_png)
 
 
-read_rds(here("data",
-              "iucn_extinction_times.rds")) %>% 
-  mutate(species = fct_reorder(species, ext_time)) %>% 
-  ggplot(aes(ext_time, species)) +
-  geom_point()
 
-future_sim_output[[2]]
