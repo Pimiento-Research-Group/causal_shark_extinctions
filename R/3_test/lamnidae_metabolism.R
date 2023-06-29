@@ -158,6 +158,34 @@ mod7 <- brm_logistic("ext_signal ~ temp + temp_st:temp_lt3")
 mod8 <- brm_logistic("ext_signal ~ temp + temp_st:temp_lt4")
 
 # extract R-values
+dat_r_lamn <- list(mod5,
+                   mod6,
+                   mod7,
+                   mod8) %>%
+  map_df(~ .x %>%
+           bayes_R2(summary = FALSE,
+                    ndraws = 1000) %>%
+           as_tibble()) %>%
+  median_qi(R2)
+
+
+# and for remaining species
+dat_merged <- left_join(dat_iucn, dat_ipcc) %>% 
+  filter(!species %in% c(
+    "Carcharodon carcharias", 
+    "Lamna nasus", 
+    "Lamna ditropis", 
+    "Isurus oxyrinchus", 
+    "Isurus paucus"
+  ))
+
+# average over potential long-term trends
+mod9 <- brm_logistic("ext_signal ~ temp + temp_st:temp_lt1")
+mod10 <- brm_logistic("ext_signal ~ temp + temp_st:temp_lt2")
+mod11 <- brm_logistic("ext_signal ~ temp + temp_st:temp_lt3")
+mod12 <- brm_logistic("ext_signal ~ temp + temp_st:temp_lt4")
+
+# extract R-values
 dat_r <- list(mod5,
               mod6,
               mod7,
