@@ -429,3 +429,69 @@ ggsave(plot_final, filename = here("figures",
        width = image_width, height = image_height,
        units = image_units, 
        bg = "white", device = ragg::agg_png)  
+
+
+
+
+# 1myr resolution ---------------------------------------------------------
+
+# fossil data and environmental proxy data on species level
+dat_merged <- read_rds(here("data",
+                            "processed_fossil_data_cenozoic.rds")) %>% 
+  drop_na(order) %>% 
+  mutate(superorder = fct_collapse(order,
+                                   Sharks = c("Carcharhiniformes",
+                                              "Orectolobiformes",
+                                              "Lamniformes",
+                                              "Squaliformes",
+                                              "Hexanchiformes",
+                                              "Echinorhiniformes",
+                                              "Heterodontiformes",
+                                              "Pristiophoriformes",
+                                              "Squatiniformes",
+                                              "Synechodontiformes"),
+                                   Rays = c("Myliobatiformes",
+                                            "Rajiformes",
+                                            "Rhinopristiformes",
+                                            "Torpediniformes"))) 
+
+
+# fit cenozoic subset model
+mod3 <- brm_logistic("ext_signal ~ order")
+
+
+# set up grid to average over
+dat_pred_ceno_smr <- dat_merged %>% 
+  distinct(order, superorder) %>% 
+  # select only those that have modern equivalents
+  filter(order %in% dat_modern$order) %>% 
+  # add posterior draws
+  add_epred_draws(mod3, 
+                  ndraws = 1000) %>% 
+  group_by(superorder, order) %>% 
+  median_qi(.epred) %>% 
+  # clean up
+  drop_na(superorder) %>% 
+  select(-c(.width, .point, .interval))
+
+# extract results for each order
+dat_ranks_ceno <- dat_pred_ceno_smr %>% 
+  mutate(y_rank = dense_rank(.epred)) %>% 
+  select(superorder, order, y_rank)
+
+
+# calculate correlation
+cor_pear_ceno <- cor.test(dat_pred_ceno_smr$.epred,
+                          dat_pred_modern_smr$.epred,
+                          method = "pearson") 
+
+# calculate correlation
+cor_kend_ceno <- dat_ranks_ceno %>%
+  left_join(dat_ranks_modern) %>% 
+  { cor.test(.$x_rank, .$y_rank, method = "kendall") }
+
+
+
+# apply function
+cor_kend_ci <- tau.ci(tau = cor_kend_ceno$estimate, N = nrow(dat_ranks_ceno))
+
