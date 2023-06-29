@@ -145,3 +145,25 @@ dat_av %>%
 
 
 
+# r-squared ---------------------------------------------------------------
+
+# estimate r-squared for lamnidae subset
+dat_merged <- dat_merged %>% 
+  filter(metab == "mesotherm")
+
+# average over potential long-term trends
+mod5 <- brm_logistic("ext_signal ~ temp + temp_st:temp_lt1")
+mod6 <- brm_logistic("ext_signal ~ temp + temp_st:temp_lt2")
+mod7 <- brm_logistic("ext_signal ~ temp + temp_st:temp_lt3")
+mod8 <- brm_logistic("ext_signal ~ temp + temp_st:temp_lt4")
+
+# extract R-values
+dat_r <- list(mod5,
+              mod6,
+              mod7,
+              mod8) %>%
+  map_df(~ .x %>%
+           bayes_R2(summary = FALSE,
+                    ndraws = 1000) %>%
+           as_tibble()) %>%
+  median_qi(R2)
