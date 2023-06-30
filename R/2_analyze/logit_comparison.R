@@ -3,7 +3,7 @@ library(here)
 library(brms)
 library(tidybayes)
 library(deeptime)
-
+library(patchwork)
 
 # plotting configurations
 source(here("R", "config_file.R"))
@@ -543,7 +543,7 @@ plot_rsq <- dat_rsq %>%
                     name = NULL) +
   scale_y_continuous(breaks = c(0, 0.1, 0.2)) +
   labs(x = NULL, 
-       y = "Bayesian R-squared") +
+       y = bquote("Bayesian" ~R^2)) +
   theme(legend.position = "none")
 
 
