@@ -90,7 +90,7 @@ dat_r_deep <- list(mod1, mod2,
 
 # genus models --------------------------------------------------------
 
-# read in cenozoic resolution data
+# read in genus resolution data
 dat_merged <- read_rds(here("data",
                             "processed_fossil_data_genus.rds")) %>% 
   mutate(bin = as.factor(bin))
