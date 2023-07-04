@@ -444,12 +444,12 @@ dat_pred_full %>%
 
 # create plot
 plot_logit <- dat_pred_full %>%
+  filter(data_set != "Future") %>% 
   mutate(data_set = factor(data_set, 
                            levels = c("Stages", 
                                       "Genus", 
                                       "1myr", 
-                                      "Modern", 
-                                      "Future"))) %>% 
+                                      "Modern"))) %>% 
   ggplot(aes(myr, value, group = data_set)) +
   geom_hline(yintercept = 0, 
              colour = "grey20") +
@@ -468,8 +468,11 @@ plot_logit <- dat_pred_full %>%
   scale_fill_manual(values = c("#4C634C", 
                                colour_coral, 
                                colour_purple, 
-                               "#DF5B08", 
-                               "#e71ed5"), 
+                               "#FF5F1F"), 
+                    labels = c("Stages - Species", 
+                               "Stages - Genus", 
+                               "1myr - Species", 
+                               "Modern - Species"), 
                     name = NULL) +
   scale_y_continuous(limits = c(-7, 2), 
                      breaks = seq(-6, 2, by = 2)) +
@@ -486,77 +489,80 @@ plot_logit <- dat_pred_full %>%
             expand = TRUE, 
             lwd = list(0.1, 0.2)) +
   labs(x = "Million years", 
-       y = "Temperature dependancy\n(log-odds)") +
+       y = "Temperature dependancy\n[log-odds]") +
   theme(legend.position = "bottom") 
    
 
 
 
-# same for r-squared
-# combine data 
-dat_rsq <- list(dat_r_deep, 
-     dat_r_genus, 
-     dat_r_ceno, 
-     dat_r_modern, 
-     dat_r_future) %>% 
-  bind_rows() %>% 
-  add_column(x_axis = factor(c(rep("Fossil", 3),
-                               "Modern",
-                               "Future"),
-                             levels = c("Fossil",
-                                        "Modern",
-                                        "Future")), 
-             data_set = factor(c("deep", 
-                                 "genus", 
-                                 "ceno", 
-                                 "modern", 
-                                 "future"), 
-                               levels = c("deep", 
-                                          "genus", 
-                                          "ceno", 
-                                          "modern", 
-                                          "future")))
-# and save
-dat_rsq %>% 
-  write_rds(here("data", 
-                 "r_squared_full.rds"))
+# # same for r-squared
+# # combine data 
+# dat_rsq <- list(dat_r_deep, 
+#      dat_r_genus, 
+#      dat_r_ceno, 
+#      dat_r_modern, 
+#      dat_r_future) %>% 
+#   bind_rows() %>% 
+#   add_column(x_axis = factor(c(rep("Fossil", 3),
+#                                "Modern",
+#                                "Future"),
+#                              levels = c("Fossil",
+#                                         "Modern",
+#                                         "Future")), 
+#              data_set = factor(c("deep", 
+#                                  "genus", 
+#                                  "ceno", 
+#                                  "modern", 
+#                                  "future"), 
+#                                levels = c("deep", 
+#                                           "genus", 
+#                                           "ceno", 
+#                                           "modern", 
+#                                           "future")))
+# # and save
+# dat_rsq %>% 
+#   write_rds(here("data", 
+#                  "r_squared_full.rds"))
+# 
+# # visualise
+# plot_rsq <- dat_rsq %>%
+#   ggplot(aes(x_axis, R2)) +
+#   geom_linerange(aes(ymin = .lower,
+#                      ymax = .upper, 
+#                      group = data_set),
+#                  colour = "grey75", 
+#                  position = position_dodge(width = 0.2)) +
+#   geom_point(aes(fill = data_set),
+#              alpha = 0.8, 
+#              shape = 21, 
+#              size = 2, 
+#              colour = "grey20", 
+#              position = position_dodge(width = 0.2)) +
+#   scale_fill_manual(values = c("#4C634C", 
+#                                colour_coral, 
+#                                colour_purple, 
+#                                "#DF5B08", 
+#                                "#e71ed5"), 
+#                     name = NULL) +
+#   scale_y_continuous(breaks = c(0, 0.1, 0.2)) +
+#   labs(x = NULL, 
+#        y = bquote("Bayesian" ~R^2)) +
+#   theme(legend.position = "none")
+# 
+# 
+# 
+# # patch together
+# plot_full <- plot_logit / plot_rsq +
+#   plot_annotation(tag_levels = "a") +
+#   plot_layout(heights = c(3, 1))
 
-# visualise
-plot_rsq <- dat_rsq %>%
-  ggplot(aes(x_axis, R2)) +
-  geom_linerange(aes(ymin = .lower,
-                     ymax = .upper, 
-                     group = data_set),
-                 colour = "grey75", 
-                 position = position_dodge(width = 0.2)) +
-  geom_point(aes(fill = data_set),
-             alpha = 0.8, 
-             shape = 21, 
-             size = 2, 
-             colour = "grey20", 
-             position = position_dodge(width = 0.2)) +
-  scale_fill_manual(values = c("#4C634C", 
-                               colour_coral, 
-                               colour_purple, 
-                               "#DF5B08", 
-                               "#e71ed5"), 
-                    name = NULL) +
-  scale_y_continuous(breaks = c(0, 0.1, 0.2)) +
-  labs(x = NULL, 
-       y = bquote("Bayesian" ~R^2)) +
-  theme(legend.position = "none")
-
-
-
-# patch together
-plot_full <- plot_logit / plot_rsq +
-  plot_annotation(tag_levels = "a") +
-  plot_layout(heights = c(3, 1))
+# add ranked dependancy versus red list status
 
 
 # save plot
-ggsave(plot_full, filename = here("figures",
-                                  "logit_r_squared.png"), 
-       width = image_width, height = image_height*1.5,
+ggsave(plot_logit, filename = here("figures",
+                                   "logit_over_time.png"), 
+       width = image_width, height = image_height,
        units = image_units, 
        bg = "white", device = ragg::agg_png)     
+
