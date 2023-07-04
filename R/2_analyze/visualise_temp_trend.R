@@ -51,6 +51,9 @@ plot_temp <- dat_pred %>%
     values = c("#4C634C",
                colour_coral, 
                colour_purple),
+    labels = c("Stages - Species", 
+               "Stages - Genus", 
+               "1myr - Species"),
     name = NULL
   ) +
   guides(colour = guide_legend(override.aes = list(alpha = 0.9, 
