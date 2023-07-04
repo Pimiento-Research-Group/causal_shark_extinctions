@@ -1,7 +1,47 @@
-dat_fossil -> dat_merged
+library(tidyverse)
+library(here)
+library(brms)
+library(tidybayes)
 
+
+# plotting configurations
+source(here("R", "config_file.R"))
+
+
+
+# read data ---------------------------------------------------------------
+
+# fossil data on species level
+dat_fossil <- read_rds(here("data",
+                            "processed_merged_data.rds")) 
+
+# fossil data on genus level
+dat_fossil_genus <-  read_rds(here("data",
+                                   "processed_fossil_data_genus.rds"))
+
+# fossil data on species level over Cenozoic
+dat_fossil_ceno <- read_rds(here("data",
+                                 "processed_fossil_data_genus.rds")) 
+
+# modern red list data
+dat_modern <- read_delim(here("data",
+                              "iucn",
+                              "species_data.txt"), 
+                         col_names = FALSE) %>% 
+  rename(species = X1, 
+         status = X2)
+
+
+
+# fit models --------------------------------------------------------------
+
+# start with species level
+dat_merged <- dat_fossil 
+
+# fit model
 mod_fossil <- brm_logistic("ext_signal ~ temp_gat_binned +  (temp_gat_binned | genus)")
 
+# extract ranks
 risk_fossil <- tibble(temp_gat_binned = 10,
        genus = distinct(dat_merged, genus) %>% 
          pull()) %>% 
@@ -9,7 +49,21 @@ risk_fossil <- tibble(temp_gat_binned = 10,
   group_by(genus) %>% 
   summarise(median_risk = median(.linpred))
 
-dat_fossil_ceno -> dat_merged
+# same for genus level
+dat_merged <- dat_fossil_genus
+
+mod_genus <- brm_logistic("ext_signal ~ temp_gat_binned + (temp_gat_binned | genus)")
+
+risk_genus <- tibble(temp_gat_binned = 10,
+                     genus = distinct(dat_merged, genus) %>% 
+                       pull()) %>% 
+  add_linpred_draws(mod_genus) %>% 
+  group_by(genus) %>% 
+  summarise(median_risk = median(.linpred))
+
+# and for cenozoic species
+dat_merged <- dat_fossil_ceno 
+
 mod_ceno <- brm_logistic("ext_signal ~ temp_binned + (temp_binned | genus)")
 
 risk_ceno <- tibble(temp_binned = 10,
@@ -19,27 +73,11 @@ risk_ceno <- tibble(temp_binned = 10,
   group_by(genus) %>% 
   summarise(median_risk = median(.linpred))
 
-dat_merged <- read_rds(here("data",
-                            "processed_fossil_data_genus.rds")) %>% 
-  mutate(bin = as.factor(bin))
 
-mod_genus <- brm_logistic("ext_signal ~ temp_gat_binned + (temp_gat_binned | genus)")
 
-risk_genus <- tibble(temp_gat_binned = 10,
-                    genus = distinct(dat_merged, genus) %>% 
-                      pull()) %>% 
-  add_linpred_draws(mod_genus) %>% 
-  group_by(genus) %>% 
-  summarise(median_risk = median(.linpred))
+# merge data --------------------------------------------------------------
 
-dat_modern <- read_delim(here("data",
-                              "iucn",
-                              "species_data.txt"), 
-                         col_names = FALSE) %>% 
-  rename(species = X1, 
-         status = X2)
-
-dat_modern %>% 
+dat_combined <- dat_modern %>% 
   mutate(genus = word(species, 1), 
          status = factor(status,
                          levels = c("DD",
@@ -65,7 +103,19 @@ dat_modern %>%
   pivot_longer(cols = c(risk_fos, risk_ceno, risk_genus), 
                names_to = "scale", 
                values_to = "median_risk") %>% 
-  drop_na(median_risk) %>% 
+  drop_na(median_risk) 
+
+# save data
+dat_combined %>% 
+  write_rds(here("data", 
+                 "iucn", 
+                 "temp_susceptibility.rds"))
+
+
+
+# visualise ---------------------------------------------------------------
+
+dat_combined %>% 
   ggplot(aes(status, median_risk)) +
   geom_point(aes(fill = scale),
              position = position_jitter(width = 0.05,
@@ -73,28 +123,59 @@ dat_modern %>%
               alpha = 0.7, 
               shape = 21, 
               colour = "white",
-              size = 3) +
-  stat_slab(alpha = 0.5, 
-               position = position_nudge(x = 0.1), 
-            fill = "grey93", 
-            slab_colour = "grey60", 
-            slab_linewidth = 0.6) +
+              size = 3.5) +
+  stat_halfeye(alpha = 0.5, 
+               position = position_nudge(x = 0.1),
+               limits = c(1, NA),
+               fill = "grey80",
+               slab_linewidth = 0.6,
+               point_interval = "mean_qi",
+               shape = 21,
+               point_alpha = 1,
+               point_size = 4,
+               point_fill = "white",
+               interval_alpha = 0) +
   geom_smooth(aes(as.numeric(status)),
               position = position_nudge(x = -1.9),
-              method = "lm", 
-              se = FALSE, 
-              colour = "white", 
-              linewidth = 4.5) +
+              method = "lm",
+              se = FALSE,
+              colour = "white",
+              linewidth = 3) +
   geom_smooth(aes(as.numeric(status)),
               position = position_nudge(x = -1.9),
-              method = "lm", 
-              se = FALSE, 
-              colour = colour_yellow, 
-              linewidth = 1.5) +
+              method = "lm",
+              se = FALSE,
+              colour = colour_yellow,
+              linewidth = 1) +
+  annotate("text",
+           y = 7, 
+           x = 0.6, 
+           colour = "grey30", 
+           size = 11/.pt, 
+           label = "High susceptibility") +
+  annotate("text",
+           y = 58, 
+           x = 0.6, 
+           colour = "grey30", 
+           size = 11/.pt, 
+           label = "Low susceptibility") +
+  annotate("curve",
+           y = 17, 
+           yend = 50, 
+           x = 0.6, 
+           xend = 0.6,
+           colour = "grey30", 
+           curvature = 0,
+           arrow = arrow(length = unit(.2,"cm"), 
+                         ends = "both")) +
   scale_fill_manual(values = c("#4C634C",
                                colour_coral,
                                colour_purple)) +
-  theme(legend.position = "none")
+  scale_y_continuous(breaks = c(1, 20, 40, 60)) +
+  labs(x = "IUCN red list status", 
+       y = "Temperature susceptibility [ranked]") +
+  theme(legend.position = "none") + 
+  coord_flip()
 
 
-  
+
