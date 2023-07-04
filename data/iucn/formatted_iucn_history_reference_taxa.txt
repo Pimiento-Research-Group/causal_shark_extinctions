@@ -1,0 +1,1123 @@
+	species	2001	2002	2003	2004	2005	2006	2007	2008	2009	2010	2011	2012	2013	2014	2015	2016	2017	2018	2019	2020	2021	2022	2023
+0	Acroteriobatus annulatus						LC										LC							
+1	Acroteriobatus blochii						LC										LC			LC				
+2	Acroteriobatus leucospilus									DD							DD			EN				
+3	Acroteriobatus ocellatus									DD							DD			DD				
+4	Acroteriobatus omanensis																	DD						
+5	Acroteriobatus salalah						DD										DD	NT						
+6	Acroteriobatus variegatus									DD							DD	CR						
+7	Acroteriobatus zanzibarensis						NT										NT							
+8	Aculeola nigra				DD																			
+9	Aetobatus flagellum						EN																	
+10	Aetobatus narinari						NT																	
+11	Aetobatus ocellatus																VU							
+12	Aetomylaeus asperrimus									DD							DD							
+13	Aetomylaeus bovinus						DD										DD							
+14	Aetomylaeus caeruleofasciatus																LC							
+15	Aetomylaeus maculatus						EN																	
+16	Aetomylaeus milvus																	EN						
+17	Aetomylaeus nichofii																VU							
+18	Aetomylaeus vespertilio						EN										EN							
+19	Alopias pelagicus									VU										EN				
+20	Alopias superciliosus									VU										VU				
+21	Alopias vulpinus		DD							VU										VU				
+22	Amblyraja badia									LC							LC							
+23	Amblyraja doellojuradoi							LC																
+24	Amblyraja frerichsi				DD																			
+25	Amblyraja georgiana									DD														
+26	Amblyraja hyperborea							LC									LC							
+27	Amblyraja jenseni									LC														
+28	Amblyraja radiata									VU														
+29	Amblyraja reversa									DD								DD						
+30	Amblyraja robertsi									LC														
+31	Amblyraja taaf									DD														
+32	Anacanthobatis donghaiensis									DD														
+33	Anacanthobatis marmorata				DD																			
+34	Anacanthobatis nanhaiensis									DD														
+35	Anacanthobatis stenosoma									DD														
+36	Anoxypristis cuspidata						CR							EN										
+37	Apristurus albisoma			NT												LC								
+38	Apristurus ampliceps			DD												LC								
+39	Apristurus aphyodes				DD											LC								
+40	Apristurus australis			DD													LC	LC						
+41	Apristurus breviventralis																	LC						
+42	Apristurus brunneus				DD											DD								
+43	Apristurus bucephalus			DD												DD								
+44	Apristurus canutus				DD			DD																
+45	Apristurus exsanguis			LC															LC					
+46	Apristurus fedorovi				DD																			
+47	Apristurus garricki																		LC					
+48	Apristurus gibbosus				DD																			
+49	Apristurus herklotsi				DD																			
+50	Apristurus indicus									DD								LC						
+51	Apristurus internatus				DD																			
+52	Apristurus investigatoris				DD																			
+53	Apristurus japonicus									DD														
+54	Apristurus kampae				DD											DD								
+55	Apristurus laurussonii				DD			DD																
+56	Apristurus longicephalus				DD											LC								
+57	Apristurus macrorhynchus				DD																			
+58	Apristurus macrostomus				DD																			
+59	Apristurus manis				LC															LC				
+60	Apristurus melanoasper			DD						DD							LC							
+61	Apristurus microps				LC															LC				
+62	Apristurus micropterygeus				DD																			
+63	Apristurus nasutus				DD																			
+64	Apristurus parvipinnis				DD																			
+65	Apristurus pinguis				DD											LC								
+66	Apristurus platyrhynchus				DD											LC								
+67	Apristurus profundorum				DD																			
+68	Apristurus riveri				DD			DD																
+69	Apristurus saldanha				LC															LC				
+70	Apristurus sibogae									DD														
+71	Apristurus sinensis				DD											DD								
+72	Apristurus spongiceps				DD											DD								
+73	Apristurus stenseni				DD																			
+74	Aptychotrema rostrata									LC						LC								
+75	Aptychotrema timorensis			LC			VU									VU								
+76	Aptychotrema vincentiana				LC											LC								
+77	Arhynchobatis asperrimus									DD									DD					
+78	Asymbolus analis			DD												LC								
+79	Asymbolus funebris			DD													DD							
+80	Asymbolus galacticus											LC							LC					
+81	Asymbolus occiduus			LC													LC							
+82	Asymbolus pallidus			LC													LC							
+83	Asymbolus parvus			LC													LC							
+84	Asymbolus rubiginosus			LC												LC								
+85	Asymbolus submaculatus			LC													LC							
+86	Asymbolus vincenti			LC													LC							
+87	Atelomycterus baliensis									VU														
+88	Atelomycterus fasciatus			LC												LC								
+89	Atelomycterus macleayi			LC												LC								
+90	Atelomycterus marmoratus			NT																				
+91	Atelomycterus marnkalha									DD						DD								
+92	Atlantoraja castelnaui				EN																			
+93	Atlantoraja cyclophora						VU																	
+94	Atlantoraja platana							VU																
+95	Aulohalaelurus kanakorum			VU															DD					
+96	Aulohalaelurus labiosus			LC												LC								
+97	Bathyraja abyssicola									DD						DD								
+98	Bathyraja aguja						DD																	
+99	Bathyraja albomaculata							VU											VU					
+100	Bathyraja aleutica									LC						LC								
+101	Bathyraja andriashevi									LC														
+102	Bathyraja bergi									LC														
+103	Bathyraja brachyurops							LC																
+104	Bathyraja cousseauae							NT																
+105	Bathyraja diplotaenia									LC														
+106	Bathyraja eatonii									DD														
+107	Bathyraja fedorovi									LC														
+108	Bathyraja griseocauda							EN																
+109	Bathyraja hesperafricana									DD														
+110	Bathyraja interrupta									LC							LC							
+111	Bathyraja irrasa									NT														
+112	Bathyraja ishiharai									DD						DD								
+113	Bathyraja isotrachys									LC														
+114	Bathyraja kincaidii									DD														
+115	Bathyraja leucomelanos																		LC					
+116	Bathyraja lindbergi									LC						LC								
+117	Bathyraja longicauda				DD																			
+118	Bathyraja maccaini									NT														
+119	Bathyraja macloviana							NT											NT					
+120	Bathyraja maculata									LC						LC								
+121	Bathyraja magellanica							DD											DD					
+122	Bathyraja mariposa									DD							LC							
+123	Bathyraja matsubarai									DD														
+124	Bathyraja meridionalis									DD														
+125	Bathyraja microtrachys									LC						LC								
+126	Bathyraja minispinosa									LC						LC								
+127	Bathyraja multispinis							NT																
+128	Bathyraja murrayi									NT														
+129	Bathyraja pacifica																		LC					
+130	Bathyraja pallida							LC																
+131	Bathyraja panthera															LC								
+132	Bathyraja papilonifera							DD																
+133	Bathyraja parmifera									LC						LC								
+134	Bathyraja peruana							DD																
+135	Bathyraja richardsoni							LC								LC								
+136	Bathyraja scaphiops							NT																
+137	Bathyraja schroederi							DD																
+138	Bathyraja shuntovi									DD									DD					
+139	Bathyraja smirnovi									LC														
+140	Bathyraja smithii									DD										LC				
+141	Bathyraja spinicauda									NT														
+142	Bathyraja spinosissima									LC						LC								
+143	Bathyraja taranetzi									LC						LC								
+144	Bathyraja trachouros									LC														
+145	Bathyraja trachura									LC						LC								
+146	Bathyraja tunae									DD										LC				
+147	Bathyraja tzinovskii									LC														
+148	Bathyraja violacea									DD														
+149	Bathytoshia brevicaudata			LC													LC							
+150	Bathytoshia centroura							LC									LC							
+151	Bathytoshia lata									LC							LC							
+152	Benthobatis kreffti				VU																			
+153	Benthobatis marcida									LC														
+154	Benthobatis moresbyi									DD								LC						
+155	Benthobatis yangi									VU														
+156	Beringraja binoculata					NT											LC							
+157	Beringraja cortezensis									DD														
+158	Beringraja pulchra									VU														
+159	Beringraja rhina									LC														
+160	Brachaelurus colcloughi									VU						VU								
+161	Brachaelurus waddi			LC												LC								
+162	Breviraja claramaculata									DD														
+163	Breviraja colesi									DD														
+164	Breviraja mouldi									DD														
+165	Breviraja nigriventralis									DD														
+166	Breviraja spinosa									DD														
+167	Brevitrygon imbricata									DD							DD							
+168	Brevitrygon walga																	NT						
+169	Brochiraja aenigma									DD									DD					
+170	Brochiraja albilabiata									DD									DD					
+171	Brochiraja asperula									DD									DD					
+172	Brochiraja heuresa																		DD					
+173	Brochiraja leviveneta									DD									DD					
+174	Brochiraja microspinifera									DD									DD					
+175	Brochiraja spinifera									DD									DD					
+176	Brochiraja vittacauda																		DD					
+177	Bythaelurus alcockii				DD													DD						
+178	Bythaelurus bachi																			DD				
+179	Bythaelurus canescens						DD																	
+180	Bythaelurus clevai				DD															DD				
+181	Bythaelurus dawsoni			DD															LC					
+182	Bythaelurus hispidus				DD															NT				
+183	Bythaelurus immaculatus				DD																			
+184	Bythaelurus incanus			DD												DD								
+185	Bythaelurus lutarius																			DD				
+186	Bythaelurus naylori																			DD				
+187	Bythaelurus tenuicephalus																			LC				
+188	Callorhinchus callorynchus							LC																
+189	Callorhinchus capensis						LC																	
+190	Callorhinchus milii			LC												LC								
+191	Carcharhinus acronotus									NT														
+192	Carcharhinus albimarginatus									NT							VU							
+193	Carcharhinus altimus									DD														
+194	Carcharhinus amblyrhynchoides									NT														
+195	Carcharhinus amblyrhynchos									NT														
+196	Carcharhinus amboinensis									NT														
+197	Carcharhinus borneensis									EN														
+198	Carcharhinus brachyurus			VU																				
+199	Carcharhinus brevipinna									NT														
+200	Carcharhinus cautus			DD																				
+201	Carcharhinus coatesi																			LC				
+202	Carcharhinus dussumieri																			EN				
+203	Carcharhinus falciformis									NT							NT	VU						
+204	Carcharhinus fitzroyensis			LC																LC				
+205	Carcharhinus galapagensis			NT																LC				
+206	Carcharhinus humani																			DD				
+207	Carcharhinus isodon									LC														
+208	Carcharhinus leiodon									VU								EN						
+209	Carcharhinus leucas									NT														
+210	Carcharhinus limbatus									NT														
+211	Carcharhinus longimanus						VU									VU				CR				
+212	Carcharhinus macloti			NT																				
+213	Carcharhinus melanopterus									NT														
+214	Carcharhinus obscurus									VU										EN				
+215	Carcharhinus perezi						NT																	
+216	Carcharhinus plumbeus									VU														
+217	Carcharhinus porosus						DD																	
+218	Carcharhinus sealei			NT																				
+219	Carcharhinus signatus						DD																	
+220	Carcharhinus sorrah									NT														
+221	Carcharhinus tilstoni			LC																LC				
+222	Carcharhinus tjutjot																			VU				
+223	Carcharias taurus			NT				CR		VU														
+224	Carcharodon carcharias									VU										VU				
+225	Centrophorus atromarginatus									DD														
+226	Centrophorus granulosus						DD																	
+227	Centrophorus harrissoni			CR										EN										
+228	Centrophorus isodon				DD																			
+229	Centrophorus lusitanicus									VU														
+230	Centrophorus moluccensis			DD										LC										
+231	Centrophorus seychellorum									DD										LC				
+232	Centrophorus squamosus			VU																				
+233	Centrophorus tessellatus						DD																	
+234	Centrophorus uyato			DD																				
+235	Centrophorus westraliensis											LC				DD								
+236	Centroscyllium excelsum									DD														
+237	Centroscyllium fabricii									LC														
+238	Centroscyllium granulatum				DD																			
+239	Centroscyllium kamoharai			DD															LC					
+240	Centroscyllium nigrum				DD																			
+241	Centroscyllium ornatum									DD														
+242	Centroscyllium ritteri									DD														
+243	Centroscymnus coelolepis			NT																				
+244	Centroscymnus macracanthus																		DD					
+245	Centroscymnus owstonii			LC															VU					
+246	Centroselachus crepidater			LC																				
+247	Cephaloscyllium albipinnum			NT								NT								CR				
+248	Cephaloscyllium cooki											DD				DD								
+249	Cephaloscyllium fasciatum											DD												
+250	Cephaloscyllium hiscosellum											LC				LC								
+251	Cephaloscyllium isabellum			LC															LC					
+252	Cephaloscyllium laticeps			LC													LC							
+253	Cephaloscyllium maculatum											DD												
+254	Cephaloscyllium pardelotum											DD												
+255	Cephaloscyllium sarawakensis									DD														
+256	Cephaloscyllium signourum											DD					DD							
+257	Cephaloscyllium silasi									DD														
+258	Cephaloscyllium speccum			DD								DD					DD							
+259	Cephaloscyllium sufflans				LC																			
+260	Cephaloscyllium umbratile									DD														
+261	Cephaloscyllium variegatum			DD								NT								NT				
+262	Cephaloscyllium ventriosum						LC									LC								
+263	Cephaloscyllium zebrum			DD								DD					DD							
+264	Cephalurus cephalus									DD														
+265	Cetorhinus maximus									VU										EN				
+266	Chaenogaleus macrostoma									VU														
+267	Chiloscyllium arabicum									NT								NT						
+268	Chiloscyllium burmensis									DD														
+269	Chiloscyllium griseum			NT																				
+270	Chiloscyllium hasselti									NT														
+271	Chiloscyllium indicum			NT																				
+272	Chiloscyllium plagiosum						NT																	
+273	Chiloscyllium punctatum			NT													NT							
+274	Chimaera argiloba											LC				LC								
+275	Chimaera bahamaensis											DD												
+276	Chimaera carophila																		LC					
+277	Chimaera cubana						DD																	
+278	Chimaera fulva											LC				LC								
+279	Chimaera jordani						DD																	
+280	Chimaera lignaria						DD									LC								
+281	Chimaera macrospina											LC				LC								
+282	Chimaera monstrosa							NT																
+283	Chimaera notafricana											LC												
+284	Chimaera obscura											LC				DD								
+285	Chimaera owstoni						DD																	
+286	Chimaera panthera			DD															DD					
+287	Chimaera phantasma						DD																	
+288	Chlamydoselachus africana				DD															LC				
+289	Chlamydoselachus anguineus			NT													LC							
+290	Cirrhigaleus asper						DD																	
+291	Cirrhigaleus australis									DD							DD							
+292	Cirrhigaleus barbifer			NT						DD														
+293	Cirrhoscyllium expolitum									DD														
+294	Cirrhoscyllium formosanum									DD														
+295	Cirrhoscyllium japonicum									DD														
+296	Crassinarke dormitor									DD														
+297	Cruriraja andamanica									DD										DD				
+298	Cruriraja atlantis									DD														
+299	Cruriraja cadenati									DD														
+300	Cruriraja durbanensis									DD										DD				
+301	Cruriraja hulleyi									LC										LC				
+302	Cruriraja parcomaculata									DD									DD	LC				
+303	Cruriraja poeyi									DD														
+304	Cruriraja rugosa									DD														
+305	Ctenacis fehlmanni									DD								LC						
+306	Dactylobatus armatus									DD														
+307	Dactylobatus clarkii									DD														
+308	Dalatias licha									NT									VU					
+309	Dasyatis chrysonota									LC														
+310	Dasyatis hypostigma						DD																	
+311	Dasyatis marmorata									DD														
+312	Dasyatis pastinaca									DD														
+313	Deania calcea			LC																				
+314	Deania hystricosa									DD														
+315	Deania profundorum									LC														
+316	Deania quadrispinosa									NT														
+317	Dentiraja flindersi											DD				DD								
+318	Dentiraja lemprieri									LC						LC								
+319	Diplobatis colombiensis						VU																	
+320	Diplobatis guamachensis						VU																	
+321	Diplobatis ommata						VU																	
+322	Diplobatis picta						VU																	
+323	Dipturus acrobelus											LC				LC								
+324	Dipturus apricus											LC				LC								
+325	Dipturus australis									VU														
+326	Dipturus batis						CR																	
+327	Dipturus bullisi									DD														
+328	Dipturus campbelli				NT																			
+329	Dipturus canutus																EN							
+330	Dipturus cerva									NT														
+331	Dipturus confusus																CR							
+332	Dipturus crosnieri						VU													VU				
+333	Dipturus doutrei									DD														
+334	Dipturus ecuadoriensis							DD																
+335	Dipturus endeavouri											NT												
+336	Dipturus falloargus											DD				DD								
+337	Dipturus garricki									DD														
+338	Dipturus gigas									DD														
+339	Dipturus grahami												LC			LC								
+340	Dipturus gudgeri									NT							NT							
+341	Dipturus healdi											DD				LC								
+342	Dipturus innominatus			NT															LC					
+343	Dipturus johannisdavisi									DD										DD				
+344	Dipturus kwangtungensis									DD														
+345	Dipturus laevis			EN																				
+346	Dipturus lanceorostratus				DD															DD				
+347	Dipturus leptocaudus				DD																			
+348	Dipturus macrocauda									DD														
+349	Dipturus melanospilus											DD				DD								
+350	Dipturus mennii							VU																
+351	Dipturus nidarosiensis									NT						NT								
+352	Dipturus oculus											LC				LC								
+353	Dipturus olseni									DD														
+354	Dipturus oregoni									DD														
+355	Dipturus oxyrinchus							NT								NT								
+356	Dipturus polyommata											LC				LC								
+357	Dipturus pullopunctatus				LC																			
+358	Dipturus queenslandicus											DD				DD								
+359	Dipturus springeri									DD										LC				
+360	Dipturus stenorhynchus				DD															DD				
+361	Dipturus teevani									DD														
+362	Dipturus tengu									DD														
+363	Dipturus trachyderma							VU																
+364	Dipturus wengi											LC				LC								
+365	Dipturus wuhanlingi											DD												
+366	Discopyge tschudii				DD																			
+367	Echinorhinus brucus			DD																				
+368	Echinorhinus cookei			NT															DD					
+369	Electrolux addisoni									CR										LC				
+370	Eridacnis barbouri									DD														
+371	Eridacnis radcliffei									LC										LC				
+372	Eridacnis sinuans				LC															LC				
+373	Etmopterus alphus																			LC				
+374	Etmopterus bigelowi						LC																	
+375	Etmopterus brachyurus									DD						DD								
+376	Etmopterus bullisi						DD																	
+377	Etmopterus burgessi									DD														
+378	Etmopterus carteri						DD																	
+379	Etmopterus caudistigmus			LC															LC					
+380	Etmopterus compagnoi																			LC				
+381	Etmopterus decacuspidatus									DD														
+382	Etmopterus dianthus			LC												LC								
+383	Etmopterus dislineatus			LC												LC								
+384	Etmopterus evansi			LC												LC								
+385	Etmopterus fusus			LC												LC								
+386	Etmopterus gracilispinis							LC																
+387	Etmopterus granulosus																		LC					
+388	Etmopterus hillianus						LC																	
+389	Etmopterus litvinovi							DD																
+390	Etmopterus lucifer									LC									LC					
+391	Etmopterus molleri									LC						DD								
+392	Etmopterus perryi						DD																	
+393	Etmopterus polli						DD																	
+394	Etmopterus princeps						DD																	
+395	Etmopterus pseudosqualiolus			LC															LC					
+396	Etmopterus pusillus									LC														
+397	Etmopterus pycnolepis							DD																
+398	Etmopterus robinsi						LC																	
+399	Etmopterus schultzi						LC																	
+400	Etmopterus sculptus																			LC				
+401	Etmopterus sentosus						LC													LC				
+402	Etmopterus spinax									LC														
+403	Etmopterus splendidus									DD														
+404	Etmopterus unicolor																		DD					
+405	Etmopterus viator																		LC					
+406	Etmopterus villosus									LC														
+407	Etmopterus virens						LC																	
+408	Eucrossorhinus dasypogon			NT												LC								
+409	Euprotomicroides zantedeschia				DD		DD			DD										LC				
+410	Euprotomicrus bispinatus						LC									LC								
+411	Eusphyra blochii			NT													EN							
+412	Fenestraja atripinna									DD														
+413	Fenestraja cubensis									DD														
+414	Fenestraja ishiyamai									DD														
+415	Fenestraja maceachrani									DD										DD				
+416	Fenestraja mamillidens									DD														
+417	Fenestraja plutonia									DD														
+418	Fenestraja sibogae									DD														
+419	Fenestraja sinusmexicanus									DD														
+420	Figaro boardmani			LC													LC							
+421	Figaro striatus			DD													DD							
+422	Fluvitrygon kittipongi									EN							EN							
+423	Fluvitrygon oxyrhyncha					EN											EN							
+424	Fluvitrygon signifer					EN											EN							
+425	Fontitrygon colarensis						VU										VU							
+426	Fontitrygon garouaensis					VU											VU							
+427	Fontitrygon geijskesi						NT										NT							
+428	Fontitrygon margarita									EN							EN							
+429	Fontitrygon margaritella									DD							DD							
+430	Fontitrygon ukpam									EN							EN							
+431	Furgaleus macki			LC													LC							
+432	Galeocerdo cuvier									NT										NT				
+433	Galeorhinus galeus						VU																	
+434	Galeus antillensis									DD														
+435	Galeus arae									LC														
+436	Galeus atlanticus							NT																
+437	Galeus cadenati									DD														
+438	Galeus eastmani									LC														
+439	Galeus gracilis			DD													DD							
+440	Galeus longirostris									DD														
+441	Galeus melastomus									LC														
+442	Galeus mincaronei				VU																			
+443	Galeus murinus									LC						LC								
+444	Galeus nipponensis									DD														
+445	Galeus piperatus						LC																	
+446	Galeus polli				LC																			
+447	Galeus priapus											LC							LC					
+448	Galeus sauteri									DD														
+449	Galeus schultzi									DD														
+450	Galeus springeri									DD														
+451	Ginglymostoma cirratum						NT																	
+452	Glaucostegus cemiculus																			CR				
+453	Glaucostegus granulatus						VU										VU			CR				
+454	Glaucostegus halavi									DD							DD	VU		CR				
+455	Glaucostegus obtusus						VU										VU			CR				
+456	Glaucostegus thouin						VU										VU			CR				
+457	Glaucostegus typus																			CR				
+458	Glyphis gangeticus							CR																
+459	Glyphis garricki			CR																				
+460	Glyphis glyphis									EN														
+461	Glyphis siamensis									CR														
+462	Gogolia filewoodi			DD																				
+463	Gollum attenuatus			LC															LC					
+464	Gurgesiella atlantica							DD																
+465	Gurgesiella dorsalifera				VU																			
+466	Gurgesiella furvescens				LC																			
+467	Gymnura altavela							VU																
+468	Gymnura australis									LC						LC								
+469	Gymnura crebripunctata												DD											
+470	Gymnura japonica									DD														
+471	Gymnura marmorata												LC											
+472	Gymnura micrura						DD																	
+473	Gymnura natalensis						DD													LC				
+474	Gymnura poecilura						NT																	
+475	Gymnura tentaculata									DD														
+476	Gymnura zonura						VU																	
+477	Halaelurus boesemani									DD								VU						
+478	Halaelurus buergeri									DD														
+479	Halaelurus lineatus				DD															LC				
+480	Halaelurus maculosus									LC														
+481	Halaelurus natalensis				DD																			
+482	Halaelurus quagga									DD								DD						
+483	Halaelurus sellus			LC						LC							LC							
+484	Haploblepharus edwardsii									NT														
+485	Haploblepharus fuscus									VU														
+486	Haploblepharus kistnasamyi									CR										VU				
+487	Haploblepharus pictus									LC										LC				
+488	Harriotta haeckeli						DD									LC								
+489	Harriotta raleighana						LC										LC							
+490	Hemigaleus australiensis									LC							LC							
+491	Hemigaleus microstoma			LC						VU														
+492	Hemipristis elongata			VU													VU							
+493	Hemiscyllium freycineti											NT												
+494	Hemiscyllium galei												DD											
+495	Hemiscyllium hallstromi			VU													VU							
+496	Hemiscyllium henryi												DD											
+497	Hemiscyllium michaeli												NT											
+498	Hemiscyllium ocellatum			NT												LC								
+499	Hemiscyllium strahani			VU																				
+500	Hemiscyllium trispeculare			LC												LC								
+501	Hemitriakis abdita			DD													DD							
+502	Hemitriakis complicofasciata									DD														
+503	Hemitriakis falcata			LC													LC							
+504	Hemitriakis japanica									LC														
+505	Hemitriakis leucoperiptera						EN																	
+506	Hemitrygon akajei						NT										NT							
+507	Hemitrygon bennetti									DD							DD							
+508	Hemitrygon fluviorum			VU													VU							
+509	Hemitrygon izuensis						NT										NT							
+510	Hemitrygon laevigata									NT							NT							
+511	Hemitrygon laosensis					EN						EN					EN							
+512	Hemitrygon navarrae									DD							DD							
+513	Hemitrygon parvonigra											DD				DD	DD							
+514	Hemitrygon sinensis									DD							DD							
+515	Heptranchias perlo			NT																				
+516	Heterodontus francisci						DD									DD								
+517	Heterodontus galeatus			LC													LC							
+518	Heterodontus japonicus									LC														
+519	Heterodontus mexicanus						DD																	
+520	Heterodontus omanensis									DD								DD						
+521	Heterodontus portusjacksoni					LC										LC								
+522	Heterodontus quoyi				DD																			
+523	Heterodontus ramalheira				DD															DD				
+524	Heterodontus zebra			LC																				
+525	Heteronarce bentuviai									DD								DD						
+526	Heteronarce garmani									VU														
+527	Heteronarce mollis									DD								DD						
+528	Heteronarce prabhui									DD														
+529	Heteroscymnoides marleyi						LC													LC				
+530	Hexanchus griseus									NT														
+531	Hexanchus nakamurai									DD														
+532	Hexatrygon bickelli									LC						LC								
+533	Himantura leoparda												VU				VU							
+534	Himantura uarnak									VU							VU							
+535	Himantura undulata									VU			VU											
+536	Holohalaelurus favus									EN														
+537	Holohalaelurus grennian									DD										DD				
+538	Holohalaelurus melanostigma						DD													LC				
+539	Holohalaelurus punctatus									EN														
+540	Holohalaelurus regani									LC														
+541	Hongeo koreana									DD														
+542	Hydrolagus affinis							LC																
+543	Hydrolagus africanus						DD																	
+544	Hydrolagus alberti						DD																	
+545	Hydrolagus alphus									DD														
+546	Hydrolagus barbouri						DD																	
+547	Hydrolagus bemisi			LC															LC					
+548	Hydrolagus colliei						LC									LC								
+549	Hydrolagus homonycteris											DD				LC								
+550	Hydrolagus lemures						LC										LC							
+551	Hydrolagus lusitanicus									DD						LC								
+552	Hydrolagus macrophthalmus						DD																	
+553	Hydrolagus marmoratus											DD				LC								
+554	Hydrolagus matallanasi							DD																
+555	Hydrolagus mccoskeri							DD																
+556	Hydrolagus melanophasma											LC												
+557	Hydrolagus mirabilis							NT																
+558	Hydrolagus mitsukurii						DD																	
+559	Hydrolagus novaezealandiae			LC															LC					
+560	Hydrolagus ogilbyi						NT										VU							
+561	Hydrolagus pallidus							LC																
+562	Hydrolagus purpurescens						DD									DD								
+563	Hydrolagus trolli						DD									LC								
+564	Hypanus americanus						DD										DD							
+565	Hypanus dipterurus						DD										DD							
+566	Hypanus guttatus				DD												DD							
+567	Hypanus longus						DD										DD							
+568	Hypanus marianae				DD												DD							
+569	Hypanus rudis									DD							DD							
+570	Hypanus sabinus						LC										LC							
+571	Hypanus say						LC										LC							
+572	Hypnos monopterygius			LC												LC								
+573	Hypogaleus hyugaensis					NT											LC							
+574	Iago garricki			LC													LC							
+575	Iago omanensis									LC														
+576	Indobatis ori				DD															LC				
+577	Insentiraja laxipella									DD						DD								
+578	Insentiraja subtilispinosa									LC						LC								
+579	Irolita waitii									LC						LC								
+580	Irolita westraliensis											LC				DD								
+581	Isistius brasiliensis			LC															LC					
+582	Isistius labialis									DD														
+583	Isistius plutodus						LC									LC								
+584	Isogomphodon oxyrhynchus						CR																	
+585	Isurus oxyrinchus									NT										EN				
+586	Isurus paucus						VU													EN				
+587	Lamiopsis temminckii									EN														
+588	Lamna ditropis									LC										LC				
+589	Lamna nasus						VU													VU				
+590	Leptocharias smithii									NT														
+591	Leucoraja circularis									VU						EN								
+592	Leucoraja compagnoi									DD										DD				
+593	Leucoraja erinacea									NT														
+594	Leucoraja fullonica									NT						VU								
+595	Leucoraja garmani									LC														
+596	Leucoraja lentiginosa									DD														
+597	Leucoraja leucosticta									DD														
+598	Leucoraja melitensis						CR									CR								
+599	Leucoraja naevus									LC						LC								
+600	Leucoraja ocellata									EN														
+601	Leucoraja pristispina											LC				LC								
+602	Leucoraja wallacei									LC														
+603	Leucoraja yucatanensis									DD														
+604	Loxodon macrorhinus			LC																				
+605	Maculabatis ambigua																			NT				
+606	Maculabatis arabica																	CR						
+607	Maculabatis astra											LC				LC	LC							
+608	Maculabatis gerrardi									VU							VU							
+609	Maculabatis pastinacoides									VU							VU							
+610	Maculabatis randalli																	LC						
+611	Maculabatis toshi									LC			LC			LC	LC							
+612	Makararaja chindwinensis									DD	DD													
+613	Malacoraja kreffti							LC								LC								
+614	Malacoraja obscura							DD																
+615	Malacoraja senta									EN														
+616	Malacoraja spinacidermis							LC																
+617	Megachasma pelagios					DD										LC				LC				
+618	Megatrygon microps									DD						DD	DD							
+619	Miroscyllium sheikoi				DD																			
+620	Mitsukurina owstoni				LC														LC					
+621	Mobula alfredi											VU								VU				
+622	Mobula birostris											VU							VU					
+623	Mobula eregoodoo			NT																				
+624	Mobula hypostoma																			EN				
+625	Mobula kuhlii									DD														
+626	Mobula mobular																			EN				
+627	Mobula munkiana						NT													VU				
+628	Mobula tarapacana						DD										VU			EN				
+629	Mobula thurstoni						NT										NT			EN				
+630	Mollisquama parini				DD																			
+631	Mustelus albipinnis									DD														
+632	Mustelus antarcticus			LC													LC							
+633	Mustelus asterias									LC														
+634	Mustelus californicus									LC						LC								
+635	Mustelus canis									NT														
+636	Mustelus dorsalis				DD																			
+637	Mustelus fasciatus				CR																			
+638	Mustelus griseus									DD														
+639	Mustelus henlei									LC							LC							
+640	Mustelus higmani						LC																	
+641	Mustelus lenticulatus			LC															LC					
+642	Mustelus lunulatus									LC							LC							
+643	Mustelus manazo									DD														
+644	Mustelus mento							NT																
+645	Mustelus minicanis						DD																	
+646	Mustelus mosis									DD										NT				
+647	Mustelus mustelus									VU														
+648	Mustelus norrisi									DD														
+649	Mustelus palumbes						DD																	
+650	Mustelus punctulatus									DD														
+651	Mustelus ravidus			LC								LC								LC				
+652	Mustelus schmitti						EN																	
+653	Mustelus sinusmexicanus						DD																	
+654	Mustelus stevensi			LC								LC								LC				
+655	Mustelus walkeri											DD					DD							
+656	Mustelus whitneyi							VU																
+657	Mustelus widodoi									DD														
+658	Myliobatis aquila									DD														
+659	Myliobatis californicus						LC									LC								
+660	Myliobatis chilensis						DD																	
+661	Myliobatis freminvillii									DD														
+662	Myliobatis goodei									DD														
+663	Myliobatis hamlyni						EN										NT							
+664	Myliobatis longirostris						NT																	
+665	Myliobatis peruvianus						DD																	
+666	Myliobatis tenuicaudatus																LC							
+667	Myliobatis tobijei									DD														
+668	Narcine atzi									DD														
+669	Narcine bancroftii							CR												LC				
+670	Narcine brasiliensis							DD																
+671	Narcine brevilabiata						VU																	
+672	Narcine entemedor									DD														
+673	Narcine insolita									DD										DD				
+674	Narcine lasti									LC						LC								
+675	Narcine leoparda							NT																
+676	Narcine lingula									DD														
+677	Narcine maculata									DD														
+678	Narcine nelsoni											LC				LC								
+679	Narcine oculifera									DD			DD					DD						
+680	Narcine ornata											LC				LC								
+681	Narcine prodorsalis									DD														
+682	Narcine rierai									DD										DD				
+683	Narcine tasmaniensis									LC						LC								
+684	Narcine timlei									DD														
+685	Narcine vermiculatus									NT														
+686	Narcine westraliensis									LC						LC								
+687	Narke capensis									DD										LC				
+688	Narke dipterygia									DD														
+689	Narke japonica									VU														
+690	Nasolamia velox									DD														
+691	Nebrius ferrugineus			VU																				
+692	Negaprion acutidens			EN																				
+693	Negaprion brevirostris									NT						NT								
+694	Neoharriotta carri						DD																	
+695	Neoharriotta pinnata						DD																	
+696	Neoharriotta pumila						DD											LC						
+697	Neoraja africana									DD														
+698	Neoraja caerulea									DD						LC								
+699	Neoraja carolinensis									DD														
+700	Neoraja iberica									DD						LC								
+701	Neoraja stehmanni				DD															LC				
+702	Neotrygon annotata						NT									NT								
+703	Neotrygon kuhlii																		DD					
+704	Neotrygon leylandi						NT					LC				LC								
+705	Neotrygon ningalooensis											DD				DD								
+706	Neotrygon picta											LC				LC								
+707	Notoraja alisae																		LC					
+708	Notoraja azurea											LC				LC								
+709	Notoraja fijiensis																		LC					
+710	Notoraja hirticauda									DD						DD								
+711	Notoraja inusitata																		LC					
+712	Notoraja lira											LC							DD					
+713	Notoraja longiventralis																		LC					
+714	Notoraja ochroderma									DD						DD								
+715	Notoraja sapphira											DD							DD					
+716	Notoraja sticta											LC				LC								
+717	Notoraja tobitukai									DD														
+718	Notorynchus cepedianus									DD														
+719	Odontaspis ferox			DD						VU							VU							
+720	Odontaspis noronhai									DD										LC				
+721	Okamejei acutispina									DD														
+722	Okamejei arafurensis											LC				LC								
+723	Okamejei boesemani									DD														
+724	Okamejei heemstrai									DD										LC				
+725	Okamejei hollandi									DD														
+726	Okamejei kenojei									DD														
+727	Okamejei leptoura												LC			LC								
+728	Okamejei meerdervoortii									DD														
+729	Okamejei mengae									DD														
+730	Okamejei ornata																	LC						
+731	Okamejei philipi									DD														
+732	Okamejei schmidti									DD														
+733	Orbiraja powelli									DD								DD						
+734	Orectolobus floridus									DD						LC								
+735	Orectolobus halei									NT						LC								
+736	Orectolobus hutchinsi			LC						DD						LC								
+737	Orectolobus japonicus									DD														
+738	Orectolobus maculatus			NT						NT						LC								
+739	Orectolobus ornatus			NT						NT						LC								
+740	Orectolobus parvimaculatus									DD						LC								
+741	Orectolobus reticulatus											DD				DD								
+742	Orectolobus wardi			LC												LC								
+743	Oxynotus bruniensis			DD															NT					
+744	Oxynotus caribbaeus				DD																			
+745	Oxynotus centrina							VU																
+746	Oxynotus japonicus				DD																			
+747	Oxynotus paradoxus									DD														
+748	Paragaleus leucolomatus									DD														
+749	Paragaleus pectoralis									DD														
+750	Paragaleus randalli									NT														
+751	Paragaleus tengi									DD														
+752	Parascyllium collare			LC													LC							
+753	Parascyllium elongatum											DD				DD								
+754	Parascyllium ferrugineum			LC													LC							
+755	Parascyllium sparsimaculatum			DD												DD								
+756	Parascyllium variolatum			LC													LC							
+757	Paratrygon aiereba									DD									DD					
+758	Parmaturus albimarginatus									DD									LC					
+759	Parmaturus albipenis									DD									LC					
+760	Parmaturus bigus			DD						DD							DD							
+761	Parmaturus campechiensis						DD																	
+762	Parmaturus lanatus									DD														
+763	Parmaturus macmillani			DD															DD					
+764	Parmaturus melanobranchus									DD														
+765	Parmaturus pilosus									DD														
+766	Parmaturus xaniurus						DD									LC								
+767	Pastinachus ater																LC							
+768	Pastinachus sephen																	NT						
+769	Pastinachus solocirostris									EN														
+770	Pateobatis fai									LC							VU							
+771	Pateobatis hortlei									VU							VU							
+772	Pateobatis jenkinsii									LC							VU							
+773	Pateobatis uarnacoides									VU							VU							
+774	Pavoraja alleni									LC						LC								
+775	Pavoraja arenaria											DD				DD								
+776	Pavoraja mosaica											LC				LC								
+777	Pavoraja nitida									NT						LC								
+778	Pavoraja pseudonitida											LC				LC								
+779	Pavoraja umbrosa															LC								
+780	Pentanchus profundicolus									DD														
+781	Planonasus parini																	LC						
+782	Platyrhina sinensis									VU														
+783	Platyrhinoidis triseriata						LC										LC							
+784	Plesiobatis daviesi						LC									LC								
+785	Plesiotrygon iwamae									DD														
+786	Pliotrema warreni				NT																			
+787	Poroderma africanum									NT														
+788	Poroderma pantherinum									DD														
+789	Potamotrygon brachyura									DD														
+790	Potamotrygon castexi									DD														
+791	Potamotrygon constellata									DD														
+792	Potamotrygon falkneri									DD														
+793	Potamotrygon henlei				LC																			
+794	Potamotrygon histrix									DD														
+795	Potamotrygon leopoldi									DD														
+796	Potamotrygon magdalenae									NT							LC							
+797	Potamotrygon marinae									DD														
+798	Potamotrygon motoro									DD														
+799	Potamotrygon ocellata									DD														
+800	Potamotrygon orbignyi									LC														
+801	Potamotrygon schroederi									DD														
+802	Potamotrygon schuemacheri				DD																			
+803	Potamotrygon scobina				DD																			
+804	Potamotrygon signata									DD														
+805	Potamotrygon tigrina																EN							
+806	Potamotrygon yepezi									DD														
+807	Prionace glauca									NT										NT				
+808	Pristiophorus cirratus			LC													LC							
+809	Pristiophorus delicatus			LC												LC								
+810	Pristiophorus japonicus									DD														
+811	Pristiophorus nancyae																			LC				
+812	Pristiophorus nudipinnis			LC													LC							
+813	Pristiophorus schroederi						DD																	
+814	Pristis clavata						CR							EN										
+815	Pristis pectinata						CR							CR										
+816	Pristis pristis													CR										
+817	Pristis zijsron						CR							CR										
+818	Proscyllium habereri									DD														
+819	Proscymnodon macracanthus				DD																			
+820	Psammobatis bergi				LC																			
+821	Psammobatis extenta				LC																			
+822	Psammobatis lentiginosa							DD																
+823	Psammobatis normani				DD																			
+824	Psammobatis parvacauda							DD																
+825	Psammobatis rudis				DD																			
+826	Psammobatis rutrum							DD																
+827	Psammobatis scobina							DD																
+828	Pseudobatos glaucostigmus									DD							DD							
+829	Pseudobatos horkelii							CR									CR							
+830	Pseudobatos lentiginosus									NT							NT							
+831	Pseudobatos leucorhynchus						NT										NT							
+832	Pseudobatos percellens									NT							NT							
+833	Pseudobatos planiceps				DD												DD							
+834	Pseudobatos prahli							DD									DD							
+835	Pseudobatos productus						NT										NT							
+836	Pseudocarcharias kamoharai									NT										LC				
+837	Pseudoginglymostoma brevicaudatum				VU															CR				
+838	Pseudoraja fischeri									DD														
+839	Pseudotriakis microdon				DD											LC								
+840	Pteroplatytrygon violacea									LC										LC				
+841	Raja asterias							LC								NT								
+842	Raja brachyura									NT														
+843	Raja clavata					NT											NT							
+844	Raja herwigi									DD														
+845	Raja inornata									DD							LC							
+846	Raja maderensis									DD						VU								
+847	Raja microocellata									NT														
+848	Raja miraletus																			LC				
+849	Raja montagui							LC																
+850	Raja pita									CR							DD	DD						
+851	Raja polystigma									NT						LC								
+852	Raja radula									DD						EN	EN							
+853	Raja stellulata									LC							LC							
+854	Raja straeleni									DD														
+855	Raja undulata									EN														
+856	Rajella annandalei									DD														
+857	Rajella barnardi				LC																			
+858	Rajella bathyphila									LC														
+859	Rajella bigelowi									LC														
+860	Rajella caudaspinosa				NT															LC				
+861	Rajella challengeri															LC								
+862	Rajella dissimilis				LC																			
+863	Rajella eisenhardti							DD																
+864	Rajella fuliginea									LC														
+865	Rajella fyllae									LC														
+866	Rajella kukujevi									DD						LC								
+867	Rajella leoparda				LC														LC					
+868	Rajella lintea									LC														
+869	Rajella nigerrima				LC																			
+870	Rajella paucispinosa																			LC				
+871	Rajella purpuriventralis									LC														
+872	Rajella ravidula				LC															LC				
+873	Rajella sadowskii				DD																			
+874	Rhina ancylostoma			VU													VU			CR				
+875	Rhincodon typus					VU											EN							
+876	Rhinobatos albomaculatus									VU														
+877	Rhinobatos annandalei									DD														
+878	Rhinobatos austini																			DD				
+879	Rhinobatos holcorhynchus									DD										DD				
+880	Rhinobatos hynnicephalus						NT																	
+881	Rhinobatos irvinei									VU														
+882	Rhinobatos jimbaranensis						VU																	
+883	Rhinobatos lionotus									DD														
+884	Rhinobatos nudidorsalis						NT													DD				
+885	Rhinobatos penggali						VU																	
+886	Rhinobatos punctifer									DD								NT						
+887	Rhinobatos rhinobatos							EN																
+888	Rhinobatos sainsburyi			LC												LC								
+889	Rhinobatos schlegelii									DD														
+890	Rhinochimaera africana						DD										DD							
+891	Rhinochimaera atlantica						LC																	
+892	Rhinochimaera pacifica						LC									LC								
+893	Rhinoptera bonasus						NT																	
+894	Rhinoptera brasiliensis				EN																			
+895	Rhinoptera javanica						VU																	
+896	Rhinoptera marginata									NT														
+897	Rhinoptera neglecta									DD						DD								
+898	Rhinoptera steindachneri						NT																	
+899	Rhinoraja kujiensis									LC														
+900	Rhinoraja longicauda									LC														
+901	Rhinoraja odai									LC														
+902	Rhizoprionodon acutus			LC																				
+903	Rhizoprionodon lalandii				DD																			
+904	Rhizoprionodon longurio									DD														
+905	Rhizoprionodon oligolinx			LC																				
+906	Rhizoprionodon porosus						LC																	
+907	Rhizoprionodon taylori			LC																LC				
+908	Rhizoprionodon terraenovae									LC														
+909	Rhynchobatus australiae			VU																CR				
+910	Rhynchobatus cooki						VU													CR				
+911	Rhynchobatus djiddensis						VU													CR				
+912	Rhynchobatus immaculatus																			CR				
+913	Rhynchobatus laevis			VU													VU			CR				
+914	Rhynchobatus luebberti						EN													CR				
+915	Rhynchobatus palpebratus																			NT				
+916	Rhynchobatus springeri						VU													CR				
+917	Rhynchorhina mauritaniensis																			CR				
+918	Rioraja agassizii							VU																
+919	Rostroraja ackleyi									DD														
+920	Rostroraja alba						EN																	
+921	Rostroraja bahamensis									DD														
+922	Rostroraja cervigoni							NT																
+923	Rostroraja eglanteria									LC														
+924	Rostroraja equatorialis									DD														
+925	Rostroraja texana									DD														
+926	Rostroraja velezi									DD														
+927	Schroederichthys bivius									DD														
+928	Schroederichthys chilensis				DD																			
+929	Schroederichthys maculatus									LC														
+930	Schroederichthys saurisqualus				VU																			
+931	Schroederichthys tenuis				DD																			
+932	Schroederobatis americana									DD														
+933	Scoliodon laticaudus									NT														
+934	Scyliorhinus besnardi				DD																			
+935	Scyliorhinus boa									LC														
+936	Scyliorhinus canicula									LC														
+937	Scyliorhinus capensis				NT																			
+938	Scyliorhinus cervigoni						DD																	
+939	Scyliorhinus comoroensis									DD										DD				
+940	Scyliorhinus garmani									DD														
+941	Scyliorhinus haeckelii				DD																			
+942	Scyliorhinus hesperius				DD																			
+943	Scyliorhinus meadi						DD																	
+944	Scyliorhinus retifer						LC																	
+945	Scyliorhinus stellaris									NT														
+946	Scyliorhinus tokubee									DD														
+947	Scyliorhinus torazame									LC														
+948	Scyliorhinus torrei									LC														
+949	Scylliogaleus quecketti									VU										VU				
+950	Scymnodalatias albicauda			DD															DD					
+951	Scymnodalatias garricki									DD						DD								
+952	Scymnodalatias oligodon				DD																			
+953	Scymnodalatias sherwoodi			DD															DD					
+954	Scymnodon plunketi			NT															VU					
+955	Scymnodon ringens									DD														
+956	Sinobatis borneensis									LC														
+957	Sinobatis bulbicauda												DD			LC								
+958	Sinobatis caerulea												DD			DD								
+959	Sinobatis filicauda											DD				DD								
+960	Sinobatis melanosoma									LC														
+961	Somniosus antarcticus			DD															LC					
+962	Somniosus longus									DD									DD					
+963	Somniosus microcephalus						NT																	
+964	Somniosus pacificus									DD														
+965	Somniosus rostratus									DD														
+966	Sphyrna corona				NT																			
+967	Sphyrna lewini									EN										CR				
+968	Sphyrna media						DD																	
+969	Sphyrna mokarran							EN												CR				
+970	Sphyrna tiburo					LC											LC							
+971	Sphyrna tudes						VU																	
+972	Sphyrna zygaena									VU										VU				
+973	Spiniraja whitleyi									VU														
+974	Springeria folirostris									DD														
+975	Springeria longirostris									DD														
+976	Squaliolus aliae			LC												LC								
+977	Squaliolus laticaudus						LC																	
+978	Squalus acanthias			VU			LC										VU							
+979	Squalus acutirostris												DD											
+980	Squalus albifrons			DD																LC				
+981	Squalus altipinnis									DD										DD				
+982	Squalus blainville									DD														
+983	Squalus brevirostris									DD														
+984	Squalus bucephalus									DD									DD					
+985	Squalus chloroculus									NT										EN				
+986	Squalus crassispinus			DD																LC				
+987	Squalus cubensis						DD																	
+988	Squalus edmundsi									NT										NT				
+989	Squalus grahami			NT																NT				
+990	Squalus griffini											LC							LC					
+991	Squalus hemipinnis									NT														
+992	Squalus japonicus									DD														
+993	Squalus lalannei									DD										LC				
+994	Squalus megalops			DD																				
+995	Squalus melanurus			LC															DD					
+996	Squalus mitsukurii			DD						DD														
+997	Squalus montalbani									VU										VU				
+998	Squalus nasutus			DD																NT				
+999	Squalus notocaudatus			DD																LC				
+1000	Squalus rancureli			NT															NT					
+1001	Squalus raoulensis									DD		LC							LC					
+1002	Squalus suckleyi																LC							
+1003	Squatina aculeata						EN	CR												CR				
+1004	Squatina africana				DD															NT				
+1005	Squatina albipunctata			VU													VU							
+1006	Squatina argentina						EN													CR				
+1007	Squatina armata				DD																			
+1008	Squatina australis			LC													LC							
+1009	Squatina caillieti																			DD				
+1010	Squatina californica					NT											NT							
+1011	Squatina david																			NT				
+1012	Squatina dumeril																			LC				
+1013	Squatina formosa									EN														
+1014	Squatina guggenheim																			EN				
+1015	Squatina japonica									VU														
+1016	Squatina legnota									DD														
+1017	Squatina nebulosa									VU														
+1018	Squatina occulta							EN												CR				
+1019	Squatina oculata						EN	CR												CR				
+1020	Squatina pseudocellata			DD													LC							
+1021	Squatina squatina						CR									CR				CR				
+1022	Squatina tergocellata			LC													LC							
+1023	Squatina tergocellatoides									VU														
+1024	Squatina varii																			LC				
+1025	Stegostoma tigrinum			VU													EN			EN				
+1026	Styracura schmardae						DD																	
+1027	Sutorectus tentaculatus			LC												LC								
+1028	Sympterygia acuta				VU																			
+1029	Sympterygia bonapartii				DD																			
+1030	Sympterygia brevicaudata				DD																			
+1031	Sympterygia lima				DD																			
+1032	Taeniura lessoni																		DD					
+1033	Taeniura lymma									NT														
+1034	Taeniurops grabata									DD														
+1035	Taeniurops meyeni						VU									VU								
+1036	Telatrygon acutirostra						NT										NT							
+1037	Telatrygon zugei						NT										NT							
+1038	Temera hardwickii									VU														
+1039	Tetronarce californica					LC										LC								
+1040	Tetronarce cowleyi																			LC				
+1041	Tetronarce formosa									DD														
+1042	Tetronarce nobiliana									DD														
+1043	Tetronarce puelcha						DD																	
+1044	Tetronarce tokionis									DD							DD							
+1045	Tetronarce tremens						DD																	
+1046	Torpedo adenensis						NT											EN						
+1047	Torpedo andersoni						DD																	
+1048	Torpedo bauchotae									DD														
+1049	Torpedo fuscomaculata				DD															DD				
+1050	Torpedo mackayana									DD														
+1051	Torpedo marmorata									DD														
+1052	Torpedo microdiscus						DD																	
+1053	Torpedo panthera						DD																	
+1054	Torpedo sinuspersici						DD													DD				
+1055	Torpedo torpedo									DD														
+1056	Triaenodon obesus									NT														
+1057	Triakis acutipinna									EN														
+1058	Triakis maculata							VU																
+1059	Triakis megalopterus									NT														
+1060	Triakis scyllium									LC														
+1061	Triakis semifasciata									LC						LC								
+1062	Trigonognathus kabeyai				DD																			
+1063	Trygonoptera galba									DD										LC				
+1064	Trygonoptera imitata						NT													LC				
+1065	Trygonoptera mucosa						LC													LC				
+1066	Trygonoptera ovalis						LC													LC				
+1067	Trygonoptera personata						LC													LC				
+1068	Trygonoptera testacea						LC													NT				
+1069	Trygonorrhina dumerilii			LC												LC								
+1070	Trygonorrhina fasciata															LC								
+1071	Typhlonarke aysoni																		LC					
+1072	Urobatis concentricus						DD																	
+1073	Urobatis halleri						LC									LC								
+1074	Urobatis jamaicensis						LC																	
+1075	Urobatis maculatus						DD																	
+1076	Urobatis marmoratus				DD																			
+1077	Urobatis tumbesensis							DD																
+1078	Urogymnus asperrimus					VU											VU							
+1079	Urogymnus dalyensis											DD				LC	LC							
+1080	Urogymnus granulatus									NT							VU							
+1081	Urogymnus lobistomus									VU							VU							
+1082	Urogymnus polylepis											EN					EN							
+1083	Urolophus armatus						DD																	
+1084	Urolophus aurantiacus						NT																	
+1085	Urolophus bucculentus						VU													VU				
+1086	Urolophus circularis						LC													LC				
+1087	Urolophus cruciatus						LC													LC				
+1088	Urolophus deforgesi						LC												LC					
+1089	Urolophus expansus						LC													LC				
+1090	Urolophus flavomosaicus						LC													LC				
+1091	Urolophus gigas						LC													LC				
+1092	Urolophus kaianus						DD																	
+1093	Urolophus kapalensis			NT																NT				
+1094	Urolophus lobatus						LC													LC				
+1095	Urolophus mitosis						LC													LC				
+1096	Urolophus neocaledoniensis						LC												LC					
+1097	Urolophus orarius						EN													EN				
+1098	Urolophus papilio						LC												LC					
+1099	Urolophus paucimaculatus						LC													LC				
+1100	Urolophus piperatus						LC													LC				
+1101	Urolophus sufflavus						VU													VU				
+1102	Urolophus viridis						VU													VU				
+1103	Urolophus westraliensis						LC													LC				
+1104	Urotrygon aspidura									DD														
+1105	Urotrygon chilensis				DD																			
+1106	Urotrygon microphthalmum				LC																			
+1107	Urotrygon munda									DD														
+1108	Urotrygon nana									DD														
+1109	Urotrygon reticulata									VU														
+1110	Urotrygon rogersi									DD														
+1111	Urotrygon simulatrix									VU														
+1112	Urotrygon venezuelae							NT																
+1113	Zameus ichiharai									DD														
+1114	Zameus squamulosus						DD																	
+1115	Zanobatus schoenleinii									DD														
+1116	Zapteryx brevirostris						VU																	
+1117	Zapteryx exasperata						DD									DD								
+1118	Zapteryx xyster						DD			DD														
+1119	Zearaja chilensis							VU																
+1120	Zearaja maugeana					EN											EN							
+1121	Zearaja nasutus			LC															LC					

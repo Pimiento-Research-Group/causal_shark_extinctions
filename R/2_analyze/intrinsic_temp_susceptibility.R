@@ -70,14 +70,14 @@ dat_modern %>%
   geom_point(aes(fill = scale),
              position = position_jitter(width = 0.05,
                                         seed = 123),
-              alpha = 0.5, 
+              alpha = 0.7, 
               shape = 21, 
-              colour = "grey40",
-              size = 2) +
+              colour = "white",
+              size = 3) +
   stat_slab(alpha = 0.5, 
                position = position_nudge(x = 0.1), 
             fill = "grey93", 
-            slab_colour = "grey20", 
+            slab_colour = "grey60", 
             slab_linewidth = 0.6) +
   geom_smooth(aes(as.numeric(status)),
               position = position_nudge(x = -1.9),
@@ -89,7 +89,7 @@ dat_modern %>%
               position = position_nudge(x = -1.9),
               method = "lm", 
               se = FALSE, 
-              colour = "coral", 
+              colour = colour_yellow, 
               linewidth = 1.5) +
   scale_fill_manual(values = c("#4C634C",
                                colour_coral,
