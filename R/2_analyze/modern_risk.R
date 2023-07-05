@@ -2,6 +2,7 @@ library(tidyverse)
 library(here)
 library(brms)
 library(tidybayes)
+library(patchwork)
 
 
 # plotting configurations
@@ -31,6 +32,19 @@ dat_modern <- read_delim(here("data",
   rename(species = X1, 
          status = X2)
 
+# temperature data
+dat_ipcc <- tibble(filename = list.files(here("data",
+                                              "ipcc")) %>%
+                     str_remove("tas_global_") %>%
+                     str_remove(".csv")) %>% 
+  mutate(file_contents = map(list.files(here("data",
+                                             "ipcc"),
+                                        full.names = TRUE),  
+                             ~ read_csv(.x))) %>% 
+  filter(filename %in% c("Historical", "SSP1_1_9")) %>% 
+  unnest(file_contents) %>% 
+  select(year = Year, temp = Mean) %>% 
+  filter(year %in% unique(dat_iucn$year))
 
 
 # fit models --------------------------------------------------------------
@@ -117,32 +131,21 @@ dat_combined %>%
 
 plot_dep <- dat_combined %>%
   ggplot(aes(status, median_risk)) +
-  geom_point(aes(fill = scale),
-             position = position_jitter(width = 0.1,
-                                        seed = 123),
-              alpha = 0.6, 
-              shape = 21, 
-              colour = "white",
-              size = 2.3) +
-  stat_halfeye(alpha = 0.5, 
-               position = position_nudge(x = 0.1),
-               limits = c(1, NA),
-               fill = "white",
+  stat_halfeye(limits = c(1, NA),
                point_interval = "mean_qi",
                shape = 21,
                point_alpha = 1,
-               point_size = 4,
                point_fill = "white",
-               interval_alpha = 0.3, 
+               linewidth = 0.5, 
                .width = 0.55) +
   geom_smooth(aes(as.numeric(status)),
-              position = position_nudge(x = -1.9),
+              position = position_nudge(x = -2),
               method = "lm",
               se = FALSE,
               colour = "white",
               linewidth = 3) +
   geom_smooth(aes(as.numeric(status)),
-              position = position_nudge(x = -1.9),
+              position = position_nudge(x = -2),
               method = "lm",
               se = FALSE,
               colour = colour_yellow,
@@ -204,10 +207,79 @@ plot_dep <- dat_combined %>%
   coord_flip()
 
 
+
+# increase in risk --------------------------------------------------------
+
+# prepare data
+dat_merged <- dat_modern %>% 
+  filter(!status %in% c("DD", "NE")) %>% 
+  mutate(ext_signal = if_else(status %in% c("LC", "NT"),
+                              0, 1))
+# fit model to estimate average extinction risk in modern ocean
+mod1 <- brm_logistic("ext_signal ~ 1")
+
+# calculate the buffer factor of temperature adaptation
+buffer_factor <- dat_ipcc$temp[dat_ipcc$year == 2019] - 
+  dat_ipcc$temp[dat_ipcc$year == 1990] * 
+  (1-exp(dat_pred_modern$value))+1
+
+# estimate change in risk
+dat_risk <- posterior_epred(mod1, ndraws = 1000)[,1] %>% 
+  as_tibble() %>% 
+  pivot_longer(everything(),
+               names_to = "draw", 
+               values_to = "ext_risk") %>% 
+  mutate(without_temp = ext_risk * buffer_factor) %>% 
+  # # calculate contrast
+  # mutate(risk_contr = without_temp - ext_risk) %>%
+  # median_qi(risk_contr)
+  pivot_longer(cols = -draw,
+               names_to = "ext_est", 
+               values_to = "ext_risk") 
+
+# visualise
+plot_risk <- dat_risk %>%
+  ggplot(aes(ext_est, ext_risk)) +
+  geom_point(position = position_jitter(width = 0.1, 
+                                        seed = 123), 
+             alpha = 0.1) +
+  stat_halfeye(position = position_nudge(x = 0.15), 
+               limits = c(0, 1),
+               shape = 21,
+               point_alpha = 1,
+               point_fill = "white", 
+               scale = 0.5) +
+  scale_y_continuous(breaks = c(0, 0.25, 0.5, 0.75, 1), 
+                     labels = c("0", "25", "50", "75", "100"), 
+                     limits = c(0, 1), 
+                     name = "Extinction risk [%]") +
+  scale_x_discrete(labels = c("Empirical", 
+                              "Without adaptation"), 
+                   name = NULL) +
+  annotate("text",
+           y = 0.65, 
+           x = 1.55, 
+           size = 10/.pt, 
+           label = "+28% [22%, 34%]", 
+           colour = colour_yellow, 
+           fontface = "bold", 
+           angle = 20) 
+  
+  
+
+
+
+# save plots --------------------------------------------------------------
+
+plot_full <- plot_risk /
+  plot_dep +
+  plot_layout(heights = c(2, 1)) +
+  plot_annotation(tag_levels = "a")
+
 # save plot
-ggsave(plot_dep, filename = here("figures",
-                                 "fossil_temp_dependancy.png"), 
-       width = image_width, height = image_height,
+ggsave(plot_full, filename = here("figures",
+                                 "modern_ext_risk.png"), 
+       width = image_width, height = image_height*1.5,
        units = image_units, 
        bg = "white", device = ragg::agg_png)     
 
