@@ -44,7 +44,7 @@ dat_ipcc <- tibble(filename = list.files(here("data",
   filter(filename %in% c("Historical", "SSP1_1_9")) %>% 
   unnest(file_contents) %>% 
   select(year = Year, temp = Mean) %>% 
-  filter(year %in% unique(dat_iucn$year))
+  filter(year %in% 1990:2020)
 
 
 # fit models --------------------------------------------------------------
@@ -78,9 +78,9 @@ risk_genus <- tibble(temp_gat_binned = 10,
 # and for cenozoic species
 dat_merged <- dat_fossil_ceno 
 
-mod_ceno <- brm_logistic("ext_signal ~ temp_binned + (temp_binned | genus)")
+mod_ceno <- brm_logistic("ext_signal ~ temp_gat_binned + (temp_gat_binned | genus)")
 
-risk_ceno <- tibble(temp_binned = 10,
+risk_ceno <- tibble(temp_gat_binned = 10,
                      genus = distinct(dat_merged, genus) %>% 
                        pull()) %>% 
   add_linpred_draws(mod_ceno) %>% 
@@ -105,7 +105,7 @@ dat_combined <- dat_modern %>%
   left_join(risk_fossil %>%
               filter(genus %in% word(dat_modern$species, 1)) %>% 
               rename(risk_fos = median_risk) %>% 
-              mutate(risk_fos = rank(risk_fos))) %>%
+              mutate(risk_fos2 = rank(risk_fos))) %>%
   left_join(risk_ceno %>% 
               filter(genus %in% word(dat_modern$species, 1)) %>% 
               rename(risk_ceno = median_risk) %>% 
@@ -152,46 +152,47 @@ plot_dep <- dat_combined %>%
               linewidth = 1) +
   annotate("text",
            y = 7, 
-           x = 5.8, 
-           colour = "grey40", 
-           size = 10/.pt, 
-           label = "High susceptibility") +
-  annotate("text",
-           y = 58, 
-           x = 5.8, 
+           x = 0, 
            colour = "grey40", 
            size = 10/.pt, 
            label = "Low susceptibility") +
+  annotate("text",
+           y = 58, 
+           x = 0, 
+           colour = "grey40", 
+           size = 10/.pt, 
+           label = "High susceptibility") +
   annotate("curve",
            y = 17, 
            yend = 47, 
-           x = 5.8, 
-           xend = 5.8,
+           x = 0, 
+           xend = 0,
            colour = "grey50", 
            curvature = 0,
            arrow = arrow(length = unit(.2,"cm"), 
                          ends = "both")) +
   annotate("text",
-           y = 72, 
+           y = 63, 
            x = 1.2, 
            colour = "grey40", 
            size = 10/.pt, 
            label = "Low risk") +
   annotate("text",
-           y = 72, 
+           y = 63, 
            x = 5, 
            colour = "grey40", 
            size = 10/.pt, 
            label = "High risk") +
   annotate("curve",
-           y = 72, 
-           yend = 72, 
+           y = 63, 
+           yend = 63, 
            x = 1.5, 
            xend = 4.7,
            colour = "grey50", 
            curvature = 0,
            arrow = arrow(length = unit(.2,"cm"), 
                          ends = "both")) +
+  scale_x_discrete(expand = expansion(mult = c(0.45, 0))) +
   scale_fill_manual(values = c("#4C634C", 
                                colour_coral, 
                                colour_purple), 
@@ -218,6 +219,11 @@ dat_merged <- dat_modern %>%
 # fit model to estimate average extinction risk in modern ocean
 mod1 <- brm_logistic("ext_signal ~ 1")
 
+# read in change in modern risk due to temperature
+dat_pred_modern <- read_rds(here("data",
+                                 "logits",
+                                 "logit_modern.rds"))
+            
 # calculate the buffer factor of temperature adaptation
 buffer_factor <- dat_ipcc$temp[dat_ipcc$year == 2019] - 
   dat_ipcc$temp[dat_ipcc$year == 1990] * 
