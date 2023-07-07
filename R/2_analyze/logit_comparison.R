@@ -13,7 +13,6 @@ nr_draws <- 100
 
 
 
-
 # deep-time models --------------------------------------------------------------
 
 
@@ -21,21 +20,23 @@ nr_draws <- 100
 # fossil data and environmental proxy data on species level
 dat_merged <- read_rds(here("data",
                             "processed_merged_data.rds")) %>% 
-  mutate(bin = as.factor(bin))
+  # merge bins
+  mutate(bin_merg = cut(bin, 
+                        breaks = 69:94))
 
 
 # start with deep ocean temperature
 # average over potential long-term trends
-mod1 <- brm_logistic("ext_signal ~ temp_deep_binned + temp_deep_st:temp_deep_lt1 + (1|bin)")
-mod2 <- brm_logistic("ext_signal ~ temp_deep_binned + temp_deep_st:temp_deep_lt2 + (1|bin)")
-mod3 <- brm_logistic("ext_signal ~ temp_deep_binned + temp_deep_st:temp_deep_lt3 + (1|bin)")
-mod4 <- brm_logistic("ext_signal ~ temp_deep_binned + temp_deep_st:temp_deep_lt4 + (1|bin)")
+mod1 <- brm_logistic("ext_signal ~ temp_deep_binned + temp_deep_st:temp_deep_lt1 + (temp_deep_binned|bin_merg)")
+mod2 <- brm_logistic("ext_signal ~ temp_deep_binned + temp_deep_st:temp_deep_lt2 + (temp_deep_binned|bin_merg)")
+mod3 <- brm_logistic("ext_signal ~ temp_deep_binned + temp_deep_st:temp_deep_lt3 + (temp_deep_binned|bin_merg)")
+mod4 <- brm_logistic("ext_signal ~ temp_deep_binned + temp_deep_st:temp_deep_lt4 + (temp_deep_binned|bin_merg)")
 
 # same for global average temperature
-mod5 <- brm_logistic("ext_signal ~ temp_gat_binned + temp_gat_st:temp_gat_lt1 + (1|bin)")
-mod6 <- brm_logistic("ext_signal ~ temp_gat_binned + temp_gat_st:temp_gat_lt2 + (1|bin)")
-mod7 <- brm_logistic("ext_signal ~ temp_gat_binned + temp_gat_st:temp_gat_lt3 + (1|bin)")
-mod8 <- brm_logistic("ext_signal ~ temp_gat_binned + temp_gat_st:temp_gat_lt4 + (1|bin)")
+mod5 <- brm_logistic("ext_signal ~ temp_gat_binned + temp_gat_st:temp_gat_lt1 + (temp_gat_binned|bin_merg)")
+mod6 <- brm_logistic("ext_signal ~ temp_gat_binned + temp_gat_st:temp_gat_lt2 + (temp_gat_binned|bin_merg)")
+mod7 <- brm_logistic("ext_signal ~ temp_gat_binned + temp_gat_st:temp_gat_lt3 + (temp_gat_binned|bin_merg)")
+mod8 <- brm_logistic("ext_signal ~ temp_gat_binned + temp_gat_st:temp_gat_lt4 + (temp_gat_binned|bin_merg)")
 
 
 # extract logit averaged over models
@@ -50,15 +51,15 @@ mod_weights <- loo_model_weights(mod1, mod2,
 
 
 # perform model averaging
-dat_pred_deep <- distinct(dat_merged, bin) %>%
-  mutate(bin = as.integer(as.character(bin))) %>% 
-  pull(bin) %>% 
+dat_pred_deep <- distinct(dat_merged, bin_merg) %>%
+  drop_na(bin_merg) %>% 
+  pull(bin_merg) %>% 
   map_df(.f = ~ pp_average(mod1, mod2,
                            mod3, mod4,
                            mod5, mod6,
                            mod7, mod8,
-                           newdata = dat_merged %>% 
-                             filter(bin == .x),
+                           newdata = filter(dat_merged, 
+                                            bin_merg == .x),
                            seed = 1708,
                            summary = FALSE,
                            method = "posterior_linpred",
@@ -93,21 +94,23 @@ dat_r_deep <- list(mod1, mod2,
 # read in genus resolution data
 dat_merged <- read_rds(here("data",
                             "processed_fossil_data_genus.rds")) %>% 
-  mutate(bin = as.factor(bin))
+  # merge bins
+  mutate(bin_merg = cut(bin, 
+                        breaks = 69:94))
 
 
 # start with deep ocean temperature
 # average over potential long-term trends
-mod1 <- brm_logistic("ext_signal ~ temp_deep_binned + temp_deep_st:temp_deep_lt1 + (1|bin)")
-mod2 <- brm_logistic("ext_signal ~ temp_deep_binned + temp_deep_st:temp_deep_lt2 + (1|bin)")
-mod3 <- brm_logistic("ext_signal ~ temp_deep_binned + temp_deep_st:temp_deep_lt3 + (1|bin)")
-mod4 <- brm_logistic("ext_signal ~ temp_deep_binned + temp_deep_st:temp_deep_lt4 + (1|bin)")
+mod1 <- brm_logistic("ext_signal ~ temp_deep_binned + temp_deep_st:temp_deep_lt1 + (temp_deep_binned|bin_merg)")
+mod2 <- brm_logistic("ext_signal ~ temp_deep_binned + temp_deep_st:temp_deep_lt2 + (temp_deep_binned|bin_merg)")
+mod3 <- brm_logistic("ext_signal ~ temp_deep_binned + temp_deep_st:temp_deep_lt3 + (temp_deep_binned|bin_merg)")
+mod4 <- brm_logistic("ext_signal ~ temp_deep_binned + temp_deep_st:temp_deep_lt4 + (temp_deep_binned|bin_merg)")
 
 # same for global average temperature
-mod5 <- brm_logistic("ext_signal ~ temp_gat_binned + temp_gat_st:temp_gat_lt1 + (1|bin)")
-mod6 <- brm_logistic("ext_signal ~ temp_gat_binned + temp_gat_st:temp_gat_lt2 + (1|bin)")
-mod7 <- brm_logistic("ext_signal ~ temp_gat_binned + temp_gat_st:temp_gat_lt3 + (1|bin)")
-mod8 <- brm_logistic("ext_signal ~ temp_gat_binned + temp_gat_st:temp_gat_lt4 + (1|bin)")
+mod5 <- brm_logistic("ext_signal ~ temp_gat_binned + temp_gat_st:temp_gat_lt1 + (temp_gat_binned|bin_merg)")
+mod6 <- brm_logistic("ext_signal ~ temp_gat_binned + temp_gat_st:temp_gat_lt2 + (temp_gat_binned|bin_merg)")
+mod7 <- brm_logistic("ext_signal ~ temp_gat_binned + temp_gat_st:temp_gat_lt3 + (temp_gat_binned|bin_merg)")
+mod8 <- brm_logistic("ext_signal ~ temp_gat_binned + temp_gat_st:temp_gat_lt4 + (temp_gat_binned|bin_merg)")
 
 
 # extract logit averaged over models
@@ -123,15 +126,15 @@ mod_weights <- loo_model_weights(mod1, mod2,
 
 
 # perform model averaging
-dat_pred_genus <- distinct(dat_merged, bin) %>%
-  mutate(bin = as.integer(as.character(bin))) %>% 
-  pull(bin) %>% 
+dat_pred_genus <- distinct(dat_merged, bin_merg) %>%
+  drop_na(bin_merg) %>% 
+  pull(bin_merg) %>% 
   map_df(.f = ~ pp_average(mod1, mod2,
                            mod3, mod4,
                            mod5, mod6,
                            mod7, mod8,
-                           newdata = dat_merged %>% 
-                             filter(bin == .x),
+                           newdata = filter(dat_merged, 
+                                            bin_merg == .x),
                            seed = 1708,
                            summary = FALSE,
                            method = "posterior_linpred",
@@ -167,14 +170,16 @@ dat_r_genus <- list(mod1, mod2,
 # read in cenozoic resolution data
 dat_merged <- read_rds(here("data",
                             "processed_fossil_data_cenozoic.rds")) %>% 
-  mutate(bin = as.factor(bin))
+  # merge bins
+  mutate(bin_merg = cut(bin, 
+                        breaks = 1:66))
 
 
 # average over potential long-term trends
-mod1 <- brm_logistic("ext_signal ~ temp_binned + temp_st:temp_lt1 + (1|bin)")
-mod2 <- brm_logistic("ext_signal ~ temp_binned + temp_st:temp_lt2 + (1|bin)")
-mod3 <- brm_logistic("ext_signal ~ temp_binned + temp_st:temp_lt3 + (1|bin)")
-mod4 <- brm_logistic("ext_signal ~ temp_binned + temp_st:temp_lt4 + (1|bin)")
+mod1 <- brm_logistic("ext_signal ~ temp_binned + temp_st:temp_lt1 + (temp_binned|bin_merg)")
+mod2 <- brm_logistic("ext_signal ~ temp_binned + temp_st:temp_lt2 + (temp_binned|bin_merg)")
+mod3 <- brm_logistic("ext_signal ~ temp_binned + temp_st:temp_lt3 + (temp_binned|bin_merg)")
+mod4 <- brm_logistic("ext_signal ~ temp_binned + temp_st:temp_lt4 + (temp_binned|bin_merg)")
 
 
 # extract logit averaged over models
@@ -185,13 +190,13 @@ mod_weights <- loo_model_weights(mod1, mod2,
 
 
 # perform model averaging
-dat_pred_ceno <- distinct(dat_merged, bin) %>%
-  mutate(bin = as.integer(as.character(bin))) %>% 
-  pull(bin) %>% 
+dat_pred_ceno <- distinct(dat_merged, bin_merg) %>%
+  drop_na(bin_merg) %>% 
+  pull(bin_merg) %>% 
   map_df(.f = ~ pp_average(mod1, mod2,
                            mod3, mod4,
-                           newdata = dat_merged %>% 
-                             filter(bin == .x),
+                           newdata = filter(dat_merged, 
+                                            bin_merg == .x),
                            seed = 1708,
                            summary = FALSE,
                            method = "posterior_linpred",
@@ -254,6 +259,7 @@ dat_ipcc <- tibble(filename = list.files(here("data",
 
 # reformat
 dat_ipcc <- dat_ipcc %>% 
+  arrange(desc(year)) %>% 
   mutate(temp_st = temp - lead(temp), 
          temp_lt1 = lead(temp_st), 
          temp_lt2 = lead(temp_st, n = 2), 
@@ -406,18 +412,25 @@ dat_stages <- stages %>%
 
 # merge datasets
 dat_pred_full <- dat_pred_deep %>% 
+  mutate(bin = as.character(bin) %>% 
+           str_sub(2, 3) %>% 
+           as.numeric()) %>% 
   # add stages
   left_join(dat_stages) %>%
   add_column(data_set = "Stages") %>% 
   select(-bin) %>% 
   # same for genus resolution
   bind_rows(dat_pred_genus %>% 
+              mutate(bin = as.character(bin) %>% 
+                       str_sub(2, 3) %>% 
+                       as.numeric()) %>%
               # add stages
               left_join(dat_stages) %>%
               add_column(data_set = "Genus") %>% 
               select(-bin)) %>% 
   # add cenozoic resolution data
   bind_rows(dat_pred_ceno %>% 
+              mutate(bin = 65:1) %>%
               rename(myr = bin) %>% 
               add_column(data_set = "1myr") %>% 
               mutate(xmin = myr - 0.5, 
@@ -443,6 +456,7 @@ dat_pred_full %>%
                  "logit_full.rds"))
 
 # create plot
+
 plot_logit <- dat_pred_full %>%
   filter(data_set != "Future") %>% 
   mutate(data_set = factor(data_set, 
@@ -451,6 +465,20 @@ plot_logit <- dat_pred_full %>%
                                       "1myr", 
                                       "Modern"))) %>% 
   ggplot(aes(myr, value, group = data_set)) +
+  annotate("rect", 
+           xmin = stages$bottom[c(81, 87)], 
+           xmax = stages$top[c(81, 87)], 
+           ymin = -Inf, 
+           ymax = Inf, 
+           fill = "#196AA5", 
+           alpha = 0.07) + 
+  annotate("rect", 
+           xmin = stages$bottom[c(76, 83, 91)], 
+           xmax = stages$top[c(76, 83, 91)], 
+           ymin = -Inf, 
+           ymax = Inf, 
+           fill = "#C75E6B", 
+           alpha = 0.07) + 
   geom_hline(yintercept = 0, 
              colour = "grey20") +
   geom_linerange(aes(xmin = xmin,
@@ -461,7 +489,7 @@ plot_logit <- dat_pred_full %>%
                  colour = "grey75") +
   geom_point(aes(fill = data_set), 
              size = 2, 
-             alpha = 0.8, 
+             alpha = 0.6, 
              shape = 21, 
              colour = "grey20") +
   scale_x_reverse() +
@@ -492,6 +520,100 @@ plot_logit <- dat_pred_full %>%
        y = "Temperature dependancy\n[log-odds]") +
   theme(legend.position = "bottom") 
    
+# summarise per hypo- and hyperthermal
+plot_log_hyp <- dat_pred_full %>%
+  filter(data_set != "Future") %>% 
+  # assign thermal status
+  mutate(therm_stat = case_when(between(myr, 66, 72) | between(myr, 34, 38) ~ "Hypothermal",
+                                between(myr, 94, 101) | between(myr, 56, 62) | between(myr, 12, 16) ~ "Hyperthermal",
+                                .default = "Background")) %>% 
+  group_by(therm_stat, data_set) %>% 
+  median_qi(value) %>% 
+  filter(therm_stat != "Background") %>% 
+  # select(therm_stat, value, data_set) %>%
+  # pivot_wider(names_from = therm_stat,
+  #             values_from = value) %>%
+  # mutate(perc_inc = (Hypothermal - Hyperthermal)/ Hypothermal)
+  ggplot(aes(therm_stat)) +
+  geom_linerange(aes(ymin = .lower, 
+                     ymax = .upper, 
+                     colour = data_set), 
+                 position = position_dodge(width = 0.4)) +
+  geom_point(aes(y = value, 
+                 fill = data_set), 
+             shape = 21, 
+             colour = "white", 
+             size = 2, 
+             stroke = 0.5, 
+             position = position_dodge(width = 0.4)) +
+  annotate("text",
+           y = -3, 
+           x = 1.4, 
+           size = 8/.pt, 
+           label = "-67%", 
+           colour = colour_purple, 
+           fontface = "bold") +
+  annotate("text",
+           y = -2.3, 
+           x = 1.5, 
+           size = 8/.pt, 
+           label = "+9%", 
+           colour = colour_coral, 
+           fontface = "bold") +
+  annotate("text",
+           y = -1.5, 
+           x = 1.6, 
+           size = 8/.pt, 
+           label = "+24%", 
+           colour = "#4C634C", 
+           fontface = "bold") +
+  annotate("rect", 
+           xmin = 0.8, 
+           xmax = 1.2, 
+           ymin = -Inf, 
+           ymax = Inf, 
+           fill = "#C75E6B", 
+           alpha = 0.07) + 
+  annotate("rect", 
+           xmin = 1.8, 
+           xmax = 2.2,
+           ymin = -Inf, 
+           ymax = Inf, 
+           fill = "#196AA5", 
+           alpha = 0.07) + 
+  labs(y = "Temperature dependancy\n[log-odds]", 
+       x = NULL) +
+  scale_fill_manual(values = c(colour_purple, 
+                               colour_coral, 
+                               "#4C634C")) +
+  scale_colour_manual(values = c(colour_purple, 
+                                 colour_coral, 
+                                 "#4C634C")) +
+  scale_y_continuous(breaks = c(0, -2, -4)) +
+  theme(legend.position = "none", 
+        axis.ticks.x = element_blank())
+
+# read in second plot for figure c
+plot_thermal <- read_rds(here("data",
+                              "predictions",
+                              "thermal_plot.rds"))
+
+
+# plot_full <- 
+plot_full <- plot_logit /
+  (plot_log_hyp +
+  plot_thermal) +
+  plot_layout(heights = c(2.3, 1)) +
+  plot_annotation(tag_levels = "a")
+ 
+
+# save plot
+ggsave(plot_full, filename = here("figures",
+                                  "logit_over_time.png"), 
+       width = image_width, height = image_height*1.5,
+       units = image_units, 
+       bg = "white", device = ragg::agg_png)    
+
 
 
 
@@ -559,10 +681,5 @@ plot_logit <- dat_pred_full %>%
 # add ranked dependancy versus red list status
 
 
-# save plot
-ggsave(plot_logit, filename = here("figures",
-                                   "logit_over_time.png"), 
-       width = image_width, height = image_height,
-       units = image_units, 
-       bg = "white", device = ragg::agg_png)     
+ 
 
