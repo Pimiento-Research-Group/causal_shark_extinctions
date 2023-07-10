@@ -456,7 +456,6 @@ dat_pred_full %>%
                  "logit_full.rds"))
 
 # create plot
-
 plot_logit <- dat_pred_full %>%
   filter(data_set != "Future") %>% 
   mutate(data_set = factor(data_set, 
@@ -479,6 +478,20 @@ plot_logit <- dat_pred_full %>%
            ymax = Inf, 
            fill = "#C75E6B", 
            alpha = 0.07) + 
+  annotate("text",
+           y = 1.8, 
+           x = 112, 
+           colour = "#C75E6B", 
+           size = 9/.pt, 
+           label = "Hyperthermal", 
+           alpha = 0.5) +
+  annotate("text",
+           y = 1.8, 
+           x = 83, 
+           colour = "#196AA5", 
+           size = 9/.pt, 
+           label = "Hypothermal", 
+           alpha = 0.4) +
   geom_hline(yintercept = 0, 
              colour = "grey20") +
   geom_linerange(aes(xmin = xmin,
@@ -489,9 +502,8 @@ plot_logit <- dat_pred_full %>%
                  colour = "grey75") +
   geom_point(aes(fill = data_set), 
              size = 2, 
-             alpha = 0.6, 
              shape = 21, 
-             colour = "grey20") +
+             colour = "white") +
   scale_x_reverse() +
   scale_fill_manual(values = c("#4C634C", 
                                colour_coral, 
@@ -504,6 +516,7 @@ plot_logit <- dat_pred_full %>%
                     name = NULL) +
   scale_y_continuous(limits = c(-7, 2), 
                      breaks = seq(-6, 2, by = 2)) +
+  guides(fill = guide_legend(override.aes = list(size = 2.5))) +
   coord_geo(xlim = c(150, 0), 
             dat = list("epochs", "periods"),
             pos = list("b", "b"),
@@ -589,9 +602,11 @@ plot_log_hyp <- dat_pred_full %>%
   scale_colour_manual(values = c(colour_purple, 
                                  colour_coral, 
                                  "#4C634C")) +
-  scale_y_continuous(breaks = c(0, -2, -4)) +
+  scale_y_continuous(breaks = c(0, -2, -4), 
+                     limits = c(-5.4, 0)) +
   theme(legend.position = "none", 
-        axis.ticks.x = element_blank())
+        axis.ticks.x = element_blank(), 
+        axis.text.x = element_blank())
 
 # read in second plot for figure c
 plot_thermal <- read_rds(here("data",
@@ -603,7 +618,7 @@ plot_thermal <- read_rds(here("data",
 plot_full <- plot_logit /
   (plot_log_hyp +
   plot_thermal) +
-  plot_layout(heights = c(2.3, 1)) +
+  plot_layout(heights = c(2.2, 1)) +
   plot_annotation(tag_levels = "a")
  
 
