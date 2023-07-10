@@ -164,7 +164,8 @@ plot_thermal <- dat_thermal %>%
                      limits = c(0, 0.55), 
                      name = "Extinction risk [%]") +
   theme(legend.position = "none", 
-        axis.ticks.x = element_blank())
+        axis.ticks.x = element_blank(), 
+        axis.text.x = element_blank())
 
 # save as rds
 plot_thermal %>% 
