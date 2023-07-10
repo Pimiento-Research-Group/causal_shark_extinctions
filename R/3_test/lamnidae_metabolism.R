@@ -2,7 +2,6 @@ library(tidyverse)
 library(here)
 library(brms)
 library(tidybayes)
-library(deeptime)
 
 
 # plotting configurations
@@ -49,6 +48,7 @@ dat_ipcc <- tibble(filename = list.files(here("data",
 
 # reformat
 dat_ipcc <- dat_ipcc %>% 
+  arrange(desc(year)) %>% 
   mutate(temp_st = temp - lead(temp), 
          temp_lt1 = lead(temp_st), 
          temp_lt2 = lead(temp_st, n = 2), 
@@ -93,8 +93,8 @@ dat_new <- tibble(temp = seq(0.5, 1.3, by = 0.1),
                   temp_lt1 = mean(dat_merged$temp_lt1),
                   temp_lt2 = temp_lt1,
                   temp_lt3 = temp_lt1,
-                  temp_lt4 = temp_lt1) %>% 
-  expand_grid(metab = c("mesotherm", 
+                  temp_lt4 = temp_lt1) %>%
+  expand_grid(metab = c("mesotherm",
                         "ectotherm"))
 
 
@@ -103,95 +103,52 @@ dat_av <- pp_average(mod1, mod2,
              mod3, mod4,
              newdata = dat_new,
              seed = 1708,
-             summary = FALSE, 
-             method = "posterior_epred", 
+             summary = FALSE,
+             method = "posterior_epred",
              weights = mod_weights,
-             ndraws = 100)  %>% 
-  as_tibble() %>% 
-  mutate(nr_draw = rownames(.)) %>% 
-  pivot_longer(cols = contains("V")) %>% 
-  add_column(temperature = rep(dat_new$temp, 100), 
-             metab = rep(dat_new$metab, 100)) %>% 
+             ndraws = 100)  %>%
+  as_tibble() %>%
+  mutate(nr_draw = rownames(.)) %>%
+  pivot_longer(cols = contains("V")) %>%
+  add_column(temperature = rep(dat_new$temp, 100),
+             metab = rep(dat_new$metab, 100)) %>%
   group_by(temperature, metab) %>%
-  mean_qi(value) %>% 
-  select(temperature, metab, value, .lower, .upper)  
+  mean_qi(value) %>%
+  select(temperature, metab, value, .lower, .upper)
 
 # save data
-dat_av %>% 
-  write_rds(here("data", 
-                 "predictions", 
+dat_av %>%
+  write_rds(here("data",
+                 "predictions",
                  "pred_trend_metabolism.rds"))
 
-# extract logits
-posterior_average(mod1, mod2,
-           mod3, mod4,
-           seed = 1708,
-           weights = mod_weights, 
-           ndraws = 100) %>% 
+
+# same for logit values
+# extract model averaged estimates
+dat_logit <- posterior_average(mod1, mod2,
+                  mod3, mod4,
+                  weights = mod_weights,
+                  variable = c("b_temp:metabectotherm", 
+                               "b_temp:metabmesotherm"),
+                  seed = 1708,
+                  ndraws = 1000,
+                  missing = NA) %>% 
   as_tibble() %>% 
-  mean_qi() %>% 
-  View()
-
-# visualise ---------------------------------------------------------------
-
-
-dat_av %>%  
-  ggplot(aes(temperature, value)) +
-  geom_ribbon(aes(ymin = .lower, 
-                  ymax = .upper, 
-                  fill = metab), 
-              alpha = 0.3) +
-  geom_line(aes(colour = metab))
+  pivot_longer(cols = everything(), 
+               names_to = "metab", 
+               values_to = ".linpred")
 
 
-
-# r-squared ---------------------------------------------------------------
-
-# estimate r-squared for lamnidae subset
-dat_merged <- dat_merged %>% 
-  filter(metab == "mesotherm")
-
-# average over potential long-term trends
-mod5 <- brm_logistic("ext_signal ~ temp + temp_st:temp_lt1")
-mod6 <- brm_logistic("ext_signal ~ temp + temp_st:temp_lt2")
-mod7 <- brm_logistic("ext_signal ~ temp + temp_st:temp_lt3")
-mod8 <- brm_logistic("ext_signal ~ temp + temp_st:temp_lt4")
-
-# extract R-values
-dat_r_lamn <- list(mod5,
-                   mod6,
-                   mod7,
-                   mod8) %>%
-  map_df(~ .x %>%
-           bayes_R2(summary = FALSE,
-                    ndraws = 1000) %>%
-           as_tibble()) %>%
-  median_qi(R2)
+dat_logit %>% 
+  ggplot(aes(metab, .linpred)) +
+  geom_jitter(width = 0.2) +
+  stat_halfeye(position = position_nudge(x = 0.25))
 
 
-# and for remaining species
-dat_merged <- left_join(dat_iucn, dat_ipcc) %>% 
-  filter(!species %in% c(
-    "Carcharodon carcharias", 
-    "Lamna nasus", 
-    "Lamna ditropis", 
-    "Isurus oxyrinchus", 
-    "Isurus paucus"
-  ))
+# save data
+dat_logit %>% 
+  write_rds(here("data", 
+                 "predictions", 
+                 "pred_logit_metabolism.rds"))
 
-# average over potential long-term trends
-mod9 <- brm_logistic("ext_signal ~ temp + temp_st:temp_lt1")
-mod10 <- brm_logistic("ext_signal ~ temp + temp_st:temp_lt2")
-mod11 <- brm_logistic("ext_signal ~ temp + temp_st:temp_lt3")
-mod12 <- brm_logistic("ext_signal ~ temp + temp_st:temp_lt4")
 
-# extract R-values
-dat_r <- list(mod5,
-              mod6,
-              mod7,
-              mod8) %>%
-  map_df(~ .x %>%
-           bayes_R2(summary = FALSE,
-                    ndraws = 1000) %>%
-           as_tibble()) %>%
-  median_qi(R2)

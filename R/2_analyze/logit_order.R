@@ -183,8 +183,6 @@ dat_pred_ceno %>%
                  "logit_order_ceno.rds"))
 
 
-# visualise ---------------------------------------------------------------
-
 # merge together
 dat_order <- dat_pred_genus %>% 
   add_column(scale = "genus") %>% 
