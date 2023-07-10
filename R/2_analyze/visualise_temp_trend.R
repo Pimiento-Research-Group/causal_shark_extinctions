@@ -1,6 +1,8 @@
 # load packages
 library(tidyverse)
 library(here)
+library(ggdist)
+library(patchwork)
 
 
 # plotting configurations
@@ -67,9 +69,113 @@ plot_temp <- dat_pred %>%
   theme(legend.position = c(0.75, 0.75))
 
 
+
+# logit per order ---------------------------------------------------------
+
+# read in data
+dat_order <- read_rds(here(here("data",
+                                "logits",
+                                "logit_order.rds"))) 
+  
+
+# reformat
+dat_order <- dat_order %>% 
+  filter(order != "incertae sedis") %>% 
+  group_by(scale) %>%
+  mutate(rank_val = rank(value)) %>%
+  group_by(order) %>%
+  mean_qi(rank_val) %>% 
+  # add superorder
+  left_join(read_rds(here("data",
+                          "processed_merged_data.rds")) %>% 
+              drop_na(order) %>% 
+              mutate(superorder = fct_collapse(order,
+                                               Sharks = c("Carcharhiniformes",
+                                                          "Orectolobiformes",
+                                                          "Lamniformes",
+                                                          "Squaliformes",
+                                                          "Hexanchiformes",
+                                                          "Echinorhiniformes",
+                                                          "Heterodontiformes",
+                                                          "Pristiophoriformes",
+                                                          "Squatiniformes",
+                                                          "Synechodontiformes"),
+                                               Rays = c("Myliobatiformes",
+                                                        "Rajiformes",
+                                                        "Rhinopristiformes",
+                                                        "Torpediniformes"))) %>% 
+              count(superorder, order)) %>% 
+  # abbreviate order for nicer plotting
+  mutate(order = str_replace_all(order, "formes", "."), 
+         order = fct_reorder(order, rank_val))
+
+# visualise
+plot_order <- dat_order %>%
+  ggplot(aes(y = order, 
+             x = rank_val)) +
+  geom_linerange(aes(xmin = .lower, 
+                     xmax = .upper), 
+                 linewidth = 0.4, 
+                 colour = "grey70") +
+  geom_point(aes(fill = superorder, 
+                 size = n), 
+             shape = 21, 
+             colour = "grey20") +
+  geom_text(aes(x = .lower,
+                y = order,
+                label = order),
+            position = position_nudge(x = -0.9),
+            size = 10/.pt,
+            colour = "grey20") +
+  annotate("text",
+           y = -1, 
+           x = 2, 
+           colour = "grey40", 
+           size = 10/.pt, 
+           label = "Low susceptibility") +
+  annotate("text",
+           y = -1, 
+           x = 12, 
+           colour = "grey40", 
+           size = 10/.pt, 
+           label = "High susceptibility") +
+  annotate("curve",
+           y = -1, 
+           yend = -1, 
+           x = 4, 
+           xend = 10,
+           colour = "grey50", 
+           curvature = 0,
+           arrow = arrow(length = unit(.2,"cm"), 
+                         ends = "both")) +
+  labs(y = NULL, 
+       x = "Temperature dependancy\n[ranked]") +
+  scale_fill_manual(name = NULL, 
+                    values = c("#EA8778", "#FFBE62"), 
+                    limits = c("Sharks", "Rays")) +
+  scale_x_continuous(breaks = c(1, 5, 10, 15), 
+                     expand = expansion(mult = c(0.1, 0))) +
+  scale_y_discrete(expand = expansion(mult = c(0.25, 0.1))) +
+  guides(size = "none", 
+         fill = guide_legend(override.aes = list(size = 2))) +
+  theme(legend.position = c(0.88, 0.3), 
+        axis.ticks.y = element_blank(), 
+        axis.text.y = element_blank(), 
+        legend.text = element_text(colour = "grey20", size = 9))
+
+
+
+
+# patch together ----------------------------------------------------------
+
+plot_full <- plot_temp / 
+  plot_order +
+  plot_layout(heights = c(1.5, 1)) +
+  plot_annotation(tag_levels = "a")
+
 # save plot
-ggsave(plot_temp, filename = here("figures",
+ggsave(plot_full, filename = here("figures",
                                   "effect_temperature.png"),
-       width = image_width, height = image_height,
+       width = image_width, height = image_height*1.7,
        units = image_units,
        bg = "white", device = ragg::agg_png)
