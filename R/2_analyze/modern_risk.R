@@ -105,7 +105,7 @@ dat_combined <- dat_modern %>%
   left_join(risk_fossil %>%
               filter(genus %in% word(dat_modern$species, 1)) %>% 
               rename(risk_fos = median_risk) %>% 
-              mutate(risk_fos2 = rank(risk_fos))) %>%
+              mutate(risk_fos = rank(risk_fos))) %>%
   left_join(risk_ceno %>% 
               filter(genus %in% word(dat_modern$species, 1)) %>% 
               rename(risk_ceno = median_risk) %>% 
@@ -119,25 +119,19 @@ dat_combined <- dat_modern %>%
                values_to = "median_risk") %>% 
   drop_na(median_risk) 
 
-# save data
-dat_combined %>% 
-  write_rds(here("data", 
-                 "iucn", 
-                 "temp_susceptibility.rds"))
-
 
 
 # visualise ---------------------------------------------------------------
 
 plot_dep <- dat_combined %>%
   ggplot(aes(status, median_risk)) +
-  stat_halfeye(limits = c(1, NA),
-               point_interval = "mean_qi",
-               shape = 21,
-               point_alpha = 1,
-               point_fill = "white",
-               linewidth = 0.5, 
-               .width = 0.55) +
+  stat_pointinterval(limits = c(1, NA),
+                     point_interval = "median_qi",
+                     shape = 21,
+                     point_alpha = 1,
+                     point_fill = "white",
+                     linewidth = 0.5,
+                     .width = 0.3)+
   geom_smooth(aes(as.numeric(status)),
               position = position_nudge(x = -2),
               method = "lm",
@@ -157,14 +151,14 @@ plot_dep <- dat_combined %>%
            size = 10/.pt, 
            label = "Low susceptibility") +
   annotate("text",
-           y = 58, 
+           y = 47, 
            x = 0, 
            colour = "grey40", 
            size = 10/.pt, 
            label = "High susceptibility") +
   annotate("curve",
            y = 17, 
-           yend = 47, 
+           yend = 39, 
            x = 0, 
            xend = 0,
            colour = "grey50", 
@@ -172,22 +166,22 @@ plot_dep <- dat_combined %>%
            arrow = arrow(length = unit(.2,"cm"), 
                          ends = "both")) +
   annotate("text",
-           y = 63, 
-           x = 1.2, 
+           y = 47, 
+           x = 1, 
            colour = "grey40", 
            size = 10/.pt, 
            label = "Low risk") +
   annotate("text",
-           y = 63, 
+           y = 47, 
            x = 5, 
            colour = "grey40", 
            size = 10/.pt, 
            label = "High risk") +
   annotate("curve",
-           y = 63, 
-           yend = 63, 
-           x = 1.5, 
-           xend = 4.7,
+           y = 47, 
+           yend = 47, 
+           x = 2, 
+           xend = 4,
            colour = "grey50", 
            curvature = 0,
            arrow = arrow(length = unit(.2,"cm"), 
@@ -201,7 +195,8 @@ plot_dep <- dat_combined %>%
                                "1myr - Species"), 
                     name = NULL) +
   guides(fill = guide_legend(override.aes = list(alpha = 0.9))) +
-  scale_y_continuous(breaks = c(1, 20, 40, 60)) +
+  scale_y_continuous(breaks = c(1, 20, 40), 
+                     limits = c(1, 53)) +
   labs(x = "IUCN red list status", 
        y = "Fossil temperature dependancy [ranked]") +
   theme(legend.position = "bottom") +
@@ -243,18 +238,39 @@ dat_risk <- posterior_epred(mod1, ndraws = 1000)[,1] %>%
                names_to = "ext_est", 
                values_to = "ext_risk") 
 
+
+# save data
+dat_risk %>% 
+  write_rds(here("data", 
+                 "predictions", 
+                 "change_modern_risk.rds"))
+
 # visualise
 plot_risk <- dat_risk %>%
   ggplot(aes(ext_est, ext_risk)) +
   geom_point(position = position_jitter(width = 0.1, 
-                                        seed = 123), 
+                                        seed = 123),
+             shape = 21, 
+             fill = "grey20", 
+             colour = "white", 
              alpha = 0.1) +
-  stat_halfeye(position = position_nudge(x = 0.15), 
+  stat_pointinterval(position = position_nudge(x = 0.15), 
                limits = c(0, 1),
                shape = 21,
                point_alpha = 1,
-               point_fill = "white", 
-               scale = 0.5) +
+               point_fill = "white") +
+  annotate("text",
+           y = 0.2, 
+           x = 1, 
+           colour = "grey40", 
+           size = 10/.pt, 
+           label = "Empirical") +
+  annotate("text",
+           y = 0.4, 
+           x = 2, 
+           colour = "grey40", 
+           size = 10/.pt, 
+           label = "Without adaptation") +
   scale_y_continuous(breaks = c(0, 0.25, 0.5, 0.75, 1), 
                      labels = c("0", "25", "50", "75", "100"), 
                      limits = c(0, 1), 
@@ -266,10 +282,12 @@ plot_risk <- dat_risk %>%
            y = 0.65, 
            x = 1.55, 
            size = 10/.pt, 
-           label = "+28% [22%, 34%]", 
+           label = "+28pp [22, 34]", 
            colour = colour_yellow, 
            fontface = "bold", 
-           angle = 20) 
+           angle = 20) +
+  theme(axis.ticks.x = element_blank(), 
+        axis.text.x = element_blank())
   
   
 
@@ -279,7 +297,7 @@ plot_risk <- dat_risk %>%
 
 plot_full <- plot_risk /
   plot_dep +
-  plot_layout(heights = c(2, 1)) +
+  plot_layout(heights = c(1.5, 1)) +
   plot_annotation(tag_levels = "a")
 
 # save plot
