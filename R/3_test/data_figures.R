@@ -98,7 +98,7 @@ ggsave(plot_1myr, filename = here("figures",
 
 # sampling bias -----------------------------------------------------------
 
-plot_sampling <- dat_stages %>% 
+plot_sampling <- dat_stages %>%
   distinct(bin,
            n_units_std,
            shark_collections_std, 
@@ -119,9 +119,9 @@ plot_sampling <- dat_stages %>%
                        n_units_std, 
                        shark_collections_std, 
                        pbdb_collections_std) %>% 
-              rename("Marine rock units [std]" = n_units_std, 
-                     "Neoselachian collections [std]" = shark_collections_std, 
-                     "PBDB collections [std]" = pbdb_collections_std) %>%  
+              rename("c) Marine rock units [std]" = n_units_std, 
+                     "b) Neoselachian collections [std]" = shark_collections_std, 
+                     "a) PBDB collections [std]" = pbdb_collections_std) %>%  
               pivot_longer(-age) %>% 
               add_column(temp_scale = "1myr") %>% 
               filter(between(age, 1, 55))) %>% 
@@ -135,7 +135,8 @@ plot_sampling <- dat_stages %>%
   labs(y = NULL) +
   facet_wrap(~ name, 
              scales = "free") +
-  theme(strip.text = element_text(hjust = 0))
+  theme(strip.text = element_text(hjust = 0), 
+        legend.position = "bottom")
 
 
 
