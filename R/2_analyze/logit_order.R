@@ -197,15 +197,5 @@ dat_order %>%
                       "logits", 
                       "logit_order.rds")))
 
-dat_order %>% 
-  filter(order != "incertae sedis") %>% 
-  group_by(scale) %>%
-  mutate(rank_val = rank(value)) %>%
-  group_by(order) %>%
-  mean_qi(rank_val) %>% 
-  ggplot(aes(y = fct_reorder(order, rank_val ), 
-             x = rank_val)) +
-  geom_linerange(aes(xmin = .lower, 
-                     xmax = .upper)) +
-  geom_point()
+
   

@@ -241,4 +241,57 @@ ggsave(p3, filename = here("figures",
          bg = "white", device = ragg::agg_png)
 
 
+# red list status
+p4 <- dat_status %>% 
+  pivot_longer(-species, 
+               names_to = "year", 
+               values_to = "status") %>% 
+  distinct(species, status) %>% 
+  mutate(status = case_when(
+    status == "LR/nt" ~ "NT", 
+    status == "LR/lc" ~ "LC", 
+    status == "LR/cd" ~ "NT", 
+    .default = status)) %>% 
+  filter(!status %in% c("K", "I")) %>% 
+  drop_na() %>% 
+  count(status) %>% 
+  mutate(status = factor(status,
+                         levels = c("LC",
+                                    "NT",
+                                    "VU",
+                                    "EN",
+                                    "CR",
+                                    "DD"))) %>% 
+  arrange(status) %>% 
+  mutate(fraction = n / sum(n), 
+         ymax = cumsum(fraction), 
+         ymin = c(0, lag(ymax)[-1]), 
+         labelPosition = (ymax + ymin) / 2, 
+         label = paste0(status, "\n", 
+                        as.character(n))) %>% 
+  ggplot(aes(
+    ymax = ymax,
+    ymin = ymin,
+    xmax = 4,
+    xmin = 3,
+    fill = status
+  )) +
+  geom_rect() +
+  geom_label(x = 3.5, 
+             aes(y = labelPosition, label = label), 
+             size = 10/.pt) +
+  scale_fill_manual(values = c("#2eb774", "#E7BA29", "#E79609", 
+                               "#DF5436", "darkred", "grey70")) +
+  coord_polar(theta = "y") +
+  xlim(c(2, 4)) +
+  theme_void() +
+  theme(legend.position = "none")
+
+# save
+ggsave(p4, filename = here("figures",
+                           "supplement",
+                           "nr_red_list_status.png"), 
+       width = image_width, height = image_height,
+       units = image_units, 
+       bg = "white", device = ragg::agg_png)
 

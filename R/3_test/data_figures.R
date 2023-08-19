@@ -146,3 +146,57 @@ ggsave(plot_sampling, filename = here("figures",
        width = image_width, height = image_height*1.5,
        units = image_units, 
        bg = "white", device = ragg::agg_png)
+
+
+
+# number of occurrences ---------------------------------------------------
+
+# read in database
+dat_occ <- read_rds(here("data", 
+                         "fossil_occurrences",
+                         "database_occurrences_15_Apr_2023.rds"))
+
+# summarise
+plot_occ <- dat_occ %>% 
+  count(rank, status) %>% 
+  filter(rank %in% c("species", "genus")) %>% 
+  filter(status != "NA") %>% 
+  mutate(across(where(is.character), str_to_sentence)) %>% 
+  ggplot(aes(rank, n, 
+             fill = status)) +
+  geom_col() +
+  scale_fill_manual(values = c(colour_yellow, colour_purple)) +
+  labs(x = NULL, 
+       y = "# Occurrences", 
+       fill = NULL) +
+  theme(legend.position = "top")
+
+# same for latitudinal coverage
+plot_lat <- dat_occ %>% 
+  filter(status != "NA", 
+         rank %in% c("species", "genus")) %>% 
+  ggplot() +
+  geom_linerange(aes(y = paleolat, 
+                     xmin = Min_Ma, 
+                     xmax = Max_Ma,
+                     colour = status), 
+                 alpha = 0.6) +
+  scale_colour_manual(values = c(colour_yellow, colour_purple)) +
+  scale_x_reverse() +
+  labs(x = "Age [myr]", 
+       y = "Paleolatitude") +
+  theme(legend.position = "none") 
+
+# patch together
+plot_occ_final <- plot_lat / 
+  plot_occ +
+  plot_annotation(tag_levels = "a")
+  
+
+# save plot
+ggsave(plot_occ_final, filename = here("figures",
+                                       "supplement",
+                                       "nr_occurrences.png"),
+       width = image_width, height = image_height*1.5,
+       units = image_units,
+       bg = "white", device = ragg::agg_png)
