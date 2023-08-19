@@ -542,11 +542,12 @@ plot_log_hyp <- dat_pred_full %>%
                                 .default = "Background")) %>% 
   group_by(therm_stat, data_set) %>% 
   median_qi(value) %>% 
-  filter(therm_stat != "Background") %>% 
+  filter(therm_stat != "Background") %>%
   # select(therm_stat, value, data_set) %>%
   # pivot_wider(names_from = therm_stat,
   #             values_from = value) %>%
-  # mutate(perc_inc = (Hypothermal - Hyperthermal)/ Hypothermal)
+  # mutate(perc_inc = (Hypothermal - Hyperthermal)/ Hypothermal) %>% 
+  # median_qi(perc_inc)
   ggplot(aes(therm_stat)) +
   geom_linerange(aes(ymin = .lower, 
                      ymax = .upper, 
@@ -560,25 +561,11 @@ plot_log_hyp <- dat_pred_full %>%
              stroke = 0.5, 
              position = position_dodge(width = 0.4)) +
   annotate("text",
-           y = -3, 
-           x = 1.4, 
-           size = 8/.pt, 
-           label = "-67%", 
-           colour = colour_purple, 
-           fontface = "bold") +
-  annotate("text",
            y = -2.3, 
            x = 1.5, 
            size = 8/.pt, 
-           label = "+9%", 
-           colour = colour_coral, 
-           fontface = "bold") +
-  annotate("text",
-           y = -1.5, 
-           x = 1.6, 
-           size = 8/.pt, 
-           label = "+24%", 
-           colour = "#4C634C", 
+           label = "+9%\n[-63%, +23%]", 
+           colour = "grey40", 
            fontface = "bold") +
   annotate("rect", 
            xmin = 0.8, 

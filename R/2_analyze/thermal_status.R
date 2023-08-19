@@ -94,8 +94,10 @@ dat_thermal <- risk_fossil %>%
   # %>% select(therm_stat, .epred, scale) %>%
   # pivot_wider(names_from = therm_stat,
   #             values_from = .epred) %>%
-  # mutate(perc_inc = (Hypothermal - Hyperthermal)/ Hypothermal)
+  # mutate(perc_inc = (Hypothermal - Hyperthermal)/ Hypothermal) %>% 
+  # median_qi(perc_inc)
   
+
 # save data
 dat_thermal %>% 
   write_rds(here("data", 
@@ -117,25 +119,11 @@ plot_thermal <- dat_thermal %>%
              stroke = 0.5, 
              position = position_dodge(width = 0.4)) +
   annotate("text",
-           y = 0.08, 
-           x = 1.4, 
-           size = 8/.pt, 
-           label = "+62%", 
-           colour = colour_purple, 
-           fontface = "bold") +
-  annotate("text",
-           y = 0.18, 
+           y = 0.26, 
            x = 1.5, 
            size = 8/.pt, 
-           label = "+79%", 
-           colour = colour_coral, 
-           fontface = "bold") +
-  annotate("text",
-           y = 0.28, 
-           x = 1.6, 
-           size = 8/.pt, 
-           label = "+56%", 
-           colour = "#4C634C", 
+           label = "+66%\n[+56%, +79%]", 
+           colour = "grey40", 
            fontface = "bold") +
   annotate("rect", 
            xmin = 0.8, 
