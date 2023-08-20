@@ -509,10 +509,10 @@ plot_logit <- dat_pred_full %>%
                                colour_coral, 
                                colour_purple, 
                                "#FF5F1F"), 
-                    labels = c("Stages - Species", 
-                               "Stages - Genus", 
-                               "1myr - Species", 
-                               "Modern - Species"), 
+                    labels = c("Species - Stages", 
+                               "Genera - Stages", 
+                               "Species - Cenozoic subset", 
+                               "Species - Modern"), 
                     name = NULL) +
   scale_y_continuous(limits = c(-7, 2), 
                      breaks = seq(-6, 2, by = 2)) +
