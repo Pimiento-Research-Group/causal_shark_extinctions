@@ -34,7 +34,7 @@ dat_pred <- paste0("pred_temperature_",
 
 # visualise ---------------------------------------------------------------
 
-plot_temp <- dat_pred %>% 
+plot_temp <- dat_pred %>%
   mutate(dataset = case_when(
     dataset == "ceno" ~ "1myr", 
     dataset == "genus" ~ "Genus", 
@@ -53,9 +53,9 @@ plot_temp <- dat_pred %>%
     values = c("#4C634C",
                colour_coral, 
                colour_purple),
-    labels = c("Stages - Species", 
-               "Stages - Genus", 
-               "1myr - Species"),
+    labels = c("Species - Stages", 
+               "Genera - Stages", 
+               "Species - Cenozoic subset"),
     name = NULL
   ) +
   guides(colour = guide_legend(override.aes = list(alpha = 0.9, 
