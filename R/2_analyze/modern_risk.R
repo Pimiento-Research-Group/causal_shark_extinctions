@@ -119,7 +119,11 @@ dat_combined <- dat_modern %>%
                values_to = "median_risk") %>% 
   drop_na(median_risk) 
 
-
+# save data
+dat_combined %>% 
+  write_rds(here("data", 
+                 "predictions", 
+                 "ranked_iucn_risk.rds"))
 
 # visualise ---------------------------------------------------------------
 
@@ -211,6 +215,7 @@ dat_merged <- dat_modern %>%
   filter(!status %in% c("DD", "NE")) %>% 
   mutate(ext_signal = if_else(status %in% c("LC", "NT"),
                               0, 1))
+
 # fit model to estimate average extinction risk in modern ocean
 mod1 <- brm_logistic("ext_signal ~ 1")
 
@@ -266,15 +271,15 @@ plot_risk <- dat_risk %>%
            size = 10/.pt, 
            label = "Empirical") +
   annotate("text",
-           y = 0.4, 
+           y = 0.3, 
            x = 2, 
            colour = "grey40", 
            size = 10/.pt, 
-           label = "Without adaptation") +
+           label = "Without adaptation\n(simulated)") +
   scale_y_continuous(breaks = c(0, 0.25, 0.5, 0.75, 1), 
                      labels = c("0", "25", "50", "75", "100"), 
                      limits = c(0, 1), 
-                     name = "Extinction risk [%]") +
+                     name = "Percentage threatened") +
   scale_x_discrete(labels = c("Empirical", 
                               "Without adaptation"), 
                    name = NULL) +
