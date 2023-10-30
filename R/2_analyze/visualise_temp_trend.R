@@ -79,7 +79,7 @@ dat_order <- read_rds(here(here("data",
   
 
 # reformat
-dat_order <- dat_order %>% 
+dat_order <- dat_order %>%
   filter(order != "incertae sedis") %>% 
   group_by(scale) %>%
   mutate(rank_val = rank(value)) %>%
@@ -87,24 +87,11 @@ dat_order <- dat_order %>%
   mean_qi(rank_val) %>% 
   # add superorder
   left_join(read_rds(here("data",
-                          "processed_merged_data.rds")) %>% 
-              drop_na(order) %>% 
-              mutate(superorder = fct_collapse(order,
-                                               Sharks = c("Carcharhiniformes",
-                                                          "Orectolobiformes",
-                                                          "Lamniformes",
-                                                          "Squaliformes",
-                                                          "Hexanchiformes",
-                                                          "Echinorhiniformes",
-                                                          "Heterodontiformes",
-                                                          "Pristiophoriformes",
-                                                          "Squatiniformes",
-                                                          "Synechodontiformes"),
-                                               Rays = c("Myliobatiformes",
-                                                        "Rajiformes",
-                                                        "Rhinopristiformes",
-                                                        "Torpediniformes"))) %>% 
-              count(superorder, order)) %>% 
+                          "fossil_occurrences",
+                          "database_occurrences_15_Apr_2023.rds")) %>% 
+              count(order, superorder)) %>% 
+  filter(superorder %in% c("Batoidea",
+                           "Galeomorphii")) %>%
   # abbreviate order for nicer plotting
   mutate(order = str_replace_all(order, "formes", "."), 
          order = fct_reorder(order, rank_val))
@@ -152,7 +139,7 @@ plot_order <- dat_order %>%
        x = "Temperature dependancy\n[ranked]") +
   scale_fill_manual(name = NULL, 
                     values = c("#EA8778", "#FFBE62"), 
-                    limits = c("Sharks", "Rays")) +
+                    limits = c("Galeomorphii", "Batoidea")) +
   scale_x_continuous(breaks = c(1, 5, 10, 15), 
                      expand = expansion(mult = c(0.1, 0))) +
   scale_y_discrete(expand = expansion(mult = c(0.25, 0.1))) +
