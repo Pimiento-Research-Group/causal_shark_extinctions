@@ -305,3 +305,13 @@ dat_family %>%
   group_by(family) %>% 
   median_qi(value)
 
+# visualise
+dat_family %>% 
+  ggplot(aes(family, value, 
+             colour = scale)) +
+  geom_hline(yintercept = 0) +
+  geom_pointrange(aes(ymin = .lower,
+                      ymax = .upper), 
+                  position = position_dodge(width = 0.2))
+
+
