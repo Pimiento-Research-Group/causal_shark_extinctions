@@ -301,17 +301,57 @@ dat_family %>%
                       "metabolism", 
                       "metab_family.rds")))
 
+# average change
 dat_family %>% 
   group_by(family) %>% 
   median_qi(value)
 
-# visualise
-dat_family %>% 
-  ggplot(aes(family, value, 
-             colour = scale)) +
-  geom_hline(yintercept = 0) +
-  geom_pointrange(aes(ymin = .lower,
-                      ymax = .upper), 
-                  position = position_dodge(width = 0.2))
 
 
+# visualise ---------------------------------------------------------------
+
+
+plot_metab <- dat_family %>% 
+  left_join(tibble(family = c("alo", 
+                              "lamni", 
+                              "oto"), 
+                   fam_lab = c("Alopiidae", 
+                               "Lamnidae",
+                               "Otodontidae"))) %>% 
+  ggplot(aes(fam_lab, value)) +
+  geom_hline(yintercept = 0, 
+             colour = colour_grey, 
+             linetype = "dashed") +
+  geom_linerange(aes(ymin = .lower,
+                      ymax = .upper, 
+                     group = scale), 
+                 colour = "grey",
+                 position = position_dodge(width = 0.3)) +
+  geom_point(aes(fill = scale), 
+             shape = 21, 
+             position = position_dodge(width = 0.3), 
+             colour = "white", 
+             stroke = 0.8, 
+             size = 6) +
+  scale_fill_manual(
+    values = rev(c("#4C634C",
+               colour_coral, 
+               colour_purple)),
+    labels = rev(c("Species - Stages", 
+               "Genera - Stages", 
+               "Species - Cenozoic subset")),
+    name = NULL
+  ) +
+  scale_y_continuous(labels = function(x) x*100) +
+  labs(y = "Percentage change [%]", 
+       x = NULL) +
+  theme(legend.position = c(0.75, 0.8))
+
+
+# save plot
+ggsave(plot_metab, filename = here("figures",
+                                  "supplement",
+                                  "metabolism_perc_change.png"),
+       width = image_width, height = image_height,
+       units = image_units,
+       bg = "white", device = ragg::agg_png)
