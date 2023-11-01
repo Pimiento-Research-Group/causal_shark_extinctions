@@ -198,4 +198,49 @@ dat_order %>%
                       "logit_order.rds")))
 
 
+# visualise ---------------------------------------------------------------
+
+plot_order <- dat_order %>% 
+  # reorder
+  group_by(order) %>% 
+  mutate(mean_val = mean(value)) %>% 
+  ungroup() %>% 
+  filter(order != "incertae sedis") %>% 
+  # abbreviate order for nicer plotting
+  mutate(order = str_replace_all(order, "formes", "."), 
+         order = fct_reorder(order, mean_val)) %>% 
+  ggplot(aes(value, order)) +
+  geom_vline(xintercept = 0, 
+             colour = "grey20", 
+             linetype = "dashed") +
+  geom_linerange(aes(xmin = .lower, 
+                     xmax = .upper, 
+                     group = scale), 
+                 position = position_dodge(width = 1), 
+                 colour = colour_grey) +
+  geom_point(aes(fill = scale), 
+             shape = 21,
+             size = 2, 
+             stroke = 0.6, 
+             colour = "grey20",
+             position = position_dodge(width = 1)) +
+  scale_fill_manual(values = rev(c("#4C634C",
+                               colour_coral,
+                               colour_purple)),
+                    labels = rev(c("Species - Stages",
+                               "Genera - Stages",
+                               "Species - Cenozoic subset")),
+                    name = NULL) +
+  labs(y = NULL, 
+       x = "Temperature dependancy\n[log-odds]") +
+  theme(legend.position = "top")
+
+# save plot
+ggsave(plot_order, filename = here("figures",
+                                   "supplement",
+                                   "logit_per_order.png"), 
+       width = image_width, height = image_height,
+       units = image_units, 
+       bg = "white", device = ragg::agg_png) 
+
   
