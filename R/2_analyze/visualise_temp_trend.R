@@ -85,13 +85,11 @@ dat_order <- dat_order %>%
   mutate(rank_val = rank(value)) %>%
   group_by(order) %>%
   mean_qi(rank_val) %>% 
-  # add superorder
+  # add number of occurrences and superorder
   left_join(read_rds(here("data",
                           "fossil_occurrences",
-                          "database_occurrences_15_Apr_2023.rds")) %>% 
-              count(order, superorder)) %>% 
-  filter(superorder %in% c("Batoidea",
-                           "Galeomorphii")) %>%
+                          "database_occurrences_01_Nov_2023.rds")) %>%
+              count(order, superorder)) %>%
   # abbreviate order for nicer plotting
   mutate(order = str_replace_all(order, "formes", "."), 
          order = fct_reorder(order, rank_val))
@@ -138,8 +136,9 @@ plot_order <- dat_order %>%
   labs(y = NULL, 
        x = "Temperature dependancy\n[ranked]") +
   scale_fill_manual(name = NULL, 
-                    values = c("#EA8778", "#FFBE62"), 
-                    limits = c("Galeomorphii", "Batoidea")) +
+                    values = c(colour_mint,
+                               "#FFBE62",
+                               "#B75C1B")) +
   scale_x_continuous(breaks = c(1, 5, 10, 15), 
                      expand = expansion(mult = c(0.1, 0))) +
   scale_y_discrete(expand = expansion(mult = c(0.25, 0.1))) +
