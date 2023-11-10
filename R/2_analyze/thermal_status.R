@@ -131,14 +131,14 @@ plot_thermal <- dat_thermal %>%
            ymin = -Inf, 
            ymax = Inf, 
            fill = "#C75E6B", 
-           alpha = 0.07) + 
+           alpha = 0.2) + 
   annotate("rect", 
            xmin = 1.8, 
            xmax = 2.2,
            ymin = -Inf, 
            ymax = Inf, 
-           fill = "#196AA5", 
-           alpha = 0.07) + 
+           fill = "#169199", 
+           alpha = 0.2) + 
   labs(y = "Extinction risk [%]", 
        x = NULL) +
   scale_fill_manual(values = c(colour_purple, 
