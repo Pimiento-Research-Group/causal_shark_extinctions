@@ -186,13 +186,19 @@ dat_pred_ceno %>%
             compress = "gz")
 
 
+
+# merge and summarise -----------------------------------------------------
+
+
 # merge together
 dat_order <- dat_pred_genus %>% 
   add_column(scale = "genus") %>% 
   full_join(dat_pred_deep %>% 
               add_column(scale = "stages")) %>% 
   full_join(dat_pred_ceno %>% 
-              add_column(scale = "ceno")) 
+              add_column(scale = "ceno")) %>% 
+  group_by(order) %>% 
+  median_qi(logit_val)
 
 # save data
 dat_order %>% 
@@ -203,16 +209,23 @@ dat_order %>%
 
 # visualise ---------------------------------------------------------------
 
-plot_order <- dat_order %>% 
+plot_order <- dat_pred_genus %>%
+  add_column(scale = "genus") %>% 
+  full_join(dat_pred_deep %>% 
+              add_column(scale = "stages")) %>% 
+  full_join(dat_pred_ceno %>% 
+              add_column(scale = "ceno")) %>% 
+  group_by(order, scale) %>% 
+  median_qi(logit_val) %>% 
   # reorder
   group_by(order) %>% 
-  mutate(mean_val = mean(value)) %>% 
+  mutate(mean_val = mean(logit_val)) %>% 
   ungroup() %>% 
   filter(order != "incertae sedis") %>% 
   # abbreviate order for nicer plotting
   mutate(order = str_replace_all(order, "formes", "."), 
          order = fct_reorder(order, mean_val)) %>% 
-  ggplot(aes(value, order)) +
+  ggplot(aes(logit_val, order)) +
   geom_vline(xintercept = 0, 
              colour = "grey20", 
              linetype = "dashed") +
