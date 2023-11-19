@@ -61,16 +61,17 @@ dat_pred_deep <- distinct(dat_merged, order) %>%
                            ndraws = nr_draws, 
                            weights = mod_weights) %>% 
            as_tibble() %>% 
-           pivot_longer(cols = contains("V")) %>% 
-           mean_qi(value) %>% 
+           pivot_longer(cols = contains("V"), 
+                        values_to = "logit_val") %>% 
            add_column(order = .x) %>% 
-           select(value, .lower, .upper, order))
+           select(-name))
 
 # save predictions
 dat_pred_deep %>% 
   write_rds(here("data", 
                  "logits", 
-                 "logit_order_deep.rds"))
+                 "logit_order_deep.rds"), 
+            compress = "gz")
 
 
 # genus models --------------------------------------------------------
