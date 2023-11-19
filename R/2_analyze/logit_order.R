@@ -132,7 +132,8 @@ dat_pred_genus <- distinct(dat_merged, order) %>%
 dat_pred_genus %>% 
   write_rds(here("data", 
                  "logits", 
-                 "logit_order_genus.rds"))
+                 "logit_order_genus.rds"), 
+            compress = "gz")
 
 
 # cenozoic models --------------------------------------------------------------
@@ -171,17 +172,18 @@ dat_pred_ceno <- distinct(dat_merged, order) %>%
                            ndraws = nr_draws, 
                            weights = mod_weights) %>% 
            as_tibble() %>% 
-           pivot_longer(cols = contains("V")) %>% 
-           mean_qi(value) %>% 
+           pivot_longer(cols = contains("V"), 
+                        values_to = "logit_val") %>% 
            add_column(order = .x) %>% 
-           select(value, .lower, .upper, order))
+           select(-name))
 
 
 # save predictions
 dat_pred_ceno %>% 
   write_rds(here("data", 
                  "logits", 
-                 "logit_order_ceno.rds"))
+                 "logit_order_ceno.rds"), 
+            compress = "gz")
 
 
 # merge together
