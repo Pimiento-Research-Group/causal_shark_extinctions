@@ -125,86 +125,75 @@ dat_combined %>%
                  "predictions", 
                  "ranked_iucn_risk.rds"))
 
+
+# fit dependency model ----------------------------------------------------
+
+mod_dep <- brm(
+  bf(ext_signal ~ median_risk),
+  family = "bernoulli",
+  data = dat_combined %>% 
+    mutate(ext_signal = if_else(status == "LC",
+                                0, 1)),
+  seed = 1708,
+  iter = 10000,
+  warmup = 2000,
+  chains = 4,
+  cores = 4,
+  threads = threading(4),
+  backend = "cmdstanr"
+  )
+
 # visualise ---------------------------------------------------------------
 
-plot_dep <- dat_combined %>%
-  ggplot(aes(status, median_risk)) +
-  stat_pointinterval(limits = c(1, NA),
-                     point_interval = "median_qi",
-                     shape = 21,
-                     point_alpha = 1,
-                     point_fill = "white",
-                     linewidth = 0.5,
-                     .width = 0.3)+
-  geom_smooth(aes(as.numeric(status)),
-              position = position_nudge(x = -2),
-              method = "lm",
-              se = FALSE,
-              colour = "white",
-              linewidth = 3) +
-  geom_smooth(aes(as.numeric(status)),
-              position = position_nudge(x = -2),
-              method = "lm",
-              se = FALSE,
-              colour = colour_yellow,
-              linewidth = 1) +
+plot_dep <- tibble(median_risk = 1:70) %>%
+  add_epred_draws(mod_dep, 
+                  ndraws = 50, 
+                  seed = 1) %>% 
+  ggplot(aes(median_risk)) +
+  stat_dots(data = dat_combined %>% 
+              mutate(ext_signal = if_else(status == "LC",
+                                          0, 1), 
+                     ext_signal_fct = factor(ext_signal)),
+            aes(y = ext_signal, 
+                side = ifelse(ext_signal == 0, "top", "bottom"), 
+                colour = ext_signal_fct),
+            scale = 0.89,
+            shape = 3, 
+            alpha = 0.2) +
+  geom_line(aes(y = .epred, 
+                group = .draw), 
+            alpha = 0.25,
+            colour = colour_yellow) +
+  scale_color_manual(values = c(colour_grey, "#D55E00")) +
   annotate("text",
-           y = 7, 
-           x = 0, 
+           y = -0.07, 
+           x = 10, 
            colour = "grey40", 
            size = 10/.pt, 
            label = "Low susceptibility") +
   annotate("text",
-           y = 47, 
-           x = 0, 
+           y = -0.07, 
+           x = 55, 
            colour = "grey40", 
            size = 10/.pt, 
            label = "High susceptibility") +
   annotate("curve",
-           y = 17, 
-           yend = 39, 
-           x = 0, 
-           xend = 0,
+           y = -0.07, 
+           yend = -0.07, 
+           x = 20, 
+           xend = 45,
            colour = "grey50", 
            curvature = 0,
            arrow = arrow(length = unit(.2,"cm"), 
                          ends = "both")) +
-  annotate("text",
-           y = 47, 
-           x = 1, 
-           colour = "grey40", 
-           size = 10/.pt, 
-           label = "Low risk") +
-  annotate("text",
-           y = 47, 
-           x = 5, 
-           colour = "grey40", 
-           size = 10/.pt, 
-           label = "High risk") +
-  annotate("curve",
-           y = 47, 
-           yend = 47, 
-           x = 2, 
-           xend = 4,
-           colour = "grey50", 
-           curvature = 0,
-           arrow = arrow(length = unit(.2,"cm"), 
-                         ends = "both")) +
-  scale_x_discrete(expand = expansion(mult = c(0.45, 0))) +
-  scale_fill_manual(values = c("#4C634C", 
-                               colour_coral, 
-                               colour_purple), 
-                    labels = c("Stages - Species", 
-                               "Stages - Genus", 
-                               "1myr - Species"), 
-                    name = NULL) +
-  guides(fill = guide_legend(override.aes = list(alpha = 0.9))) +
-  scale_y_continuous(breaks = c(1, 20, 40), 
-                     limits = c(1, 53)) +
-  labs(x = "IUCN red list status", 
-       y = "Fossil temperature dependancy [ranked]") +
-  theme(legend.position = "bottom") +
-  coord_flip()
+  scale_y_continuous(labels = function(.x) .x*100, 
+                     limits = c(-0.1, 1)) +
+  scale_x_continuous(breaks = c(1, 20, 40, 60)) +
+  labs(y = "Percentage threatened", 
+       x = "Fossil temperature dependancy [ranked]") +
+  theme(legend.position = "none")
+
+
 
 
 

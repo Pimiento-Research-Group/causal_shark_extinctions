@@ -61,16 +61,17 @@ dat_pred_deep <- distinct(dat_merged, order) %>%
                            ndraws = nr_draws, 
                            weights = mod_weights) %>% 
            as_tibble() %>% 
-           pivot_longer(cols = contains("V")) %>% 
-           mean_qi(value) %>% 
+           pivot_longer(cols = contains("V"), 
+                        values_to = "logit_val") %>% 
            add_column(order = .x) %>% 
-           select(value, .lower, .upper, order))
+           select(-name))
 
 # save predictions
 dat_pred_deep %>% 
   write_rds(here("data", 
                  "logits", 
-                 "logit_order_deep.rds"))
+                 "logit_order_deep.rds"), 
+            compress = "gz")
 
 
 # genus models --------------------------------------------------------
@@ -122,16 +123,17 @@ dat_pred_genus <- distinct(dat_merged, order) %>%
                            ndraws = nr_draws, 
                            weights = mod_weights) %>% 
            as_tibble() %>% 
-           pivot_longer(cols = contains("V")) %>% 
-           mean_qi(value) %>% 
+           pivot_longer(cols = contains("V"), 
+                        values_to = "logit_val") %>% 
            add_column(order = .x) %>% 
-           select(value, .lower, .upper, order))
+           select(-name))
 
 # save predictions
 dat_pred_genus %>% 
   write_rds(here("data", 
                  "logits", 
-                 "logit_order_genus.rds"))
+                 "logit_order_genus.rds"), 
+            compress = "gz")
 
 
 # cenozoic models --------------------------------------------------------------
@@ -170,17 +172,22 @@ dat_pred_ceno <- distinct(dat_merged, order) %>%
                            ndraws = nr_draws, 
                            weights = mod_weights) %>% 
            as_tibble() %>% 
-           pivot_longer(cols = contains("V")) %>% 
-           mean_qi(value) %>% 
+           pivot_longer(cols = contains("V"), 
+                        values_to = "logit_val") %>% 
            add_column(order = .x) %>% 
-           select(value, .lower, .upper, order))
+           select(-name))
 
 
 # save predictions
 dat_pred_ceno %>% 
   write_rds(here("data", 
                  "logits", 
-                 "logit_order_ceno.rds"))
+                 "logit_order_ceno.rds"), 
+            compress = "gz")
+
+
+
+# merge and summarise -----------------------------------------------------
 
 
 # merge together
@@ -189,7 +196,9 @@ dat_order <- dat_pred_genus %>%
   full_join(dat_pred_deep %>% 
               add_column(scale = "stages")) %>% 
   full_join(dat_pred_ceno %>% 
-              add_column(scale = "ceno")) 
+              add_column(scale = "ceno")) %>% 
+  group_by(order) %>% 
+  median_qi(logit_val)
 
 # save data
 dat_order %>% 
@@ -197,5 +206,57 @@ dat_order %>%
                       "logits", 
                       "logit_order.rds")))
 
+
+# visualise ---------------------------------------------------------------
+
+plot_order <- dat_pred_genus %>%
+  add_column(scale = "genus") %>% 
+  full_join(dat_pred_deep %>% 
+              add_column(scale = "stages")) %>% 
+  full_join(dat_pred_ceno %>% 
+              add_column(scale = "ceno")) %>% 
+  group_by(order, scale) %>% 
+  median_qi(logit_val) %>% 
+  # reorder
+  group_by(order) %>% 
+  mutate(mean_val = mean(logit_val)) %>% 
+  ungroup() %>% 
+  filter(order != "incertae sedis") %>% 
+  # abbreviate order for nicer plotting
+  mutate(order = str_replace_all(order, "formes", "."), 
+         order = fct_reorder(order, mean_val)) %>% 
+  ggplot(aes(logit_val, order)) +
+  geom_vline(xintercept = 0, 
+             colour = "grey20", 
+             linetype = "dashed") +
+  geom_linerange(aes(xmin = .lower, 
+                     xmax = .upper, 
+                     group = scale), 
+                 position = position_dodge(width = 1), 
+                 colour = colour_grey) +
+  geom_point(aes(fill = scale), 
+             shape = 21,
+             size = 2, 
+             stroke = 0.6, 
+             colour = "grey20",
+             position = position_dodge(width = 1)) +
+  scale_fill_manual(values = rev(c("#4C634C",
+                               colour_coral,
+                               colour_purple)),
+                    labels = rev(c("Species - Stages",
+                               "Genera - Stages",
+                               "Species - Cenozoic subset")),
+                    name = NULL) +
+  labs(y = NULL, 
+       x = "Temperature dependancy\n[log-odds]") +
+  theme(legend.position = "top")
+
+# save plot
+ggsave(plot_order, filename = here("figures",
+                                   "supplement",
+                                   "logit_per_order.png"), 
+       width = image_width, height = image_height,
+       units = image_units, 
+       bg = "white", device = ragg::agg_png) 
 
   

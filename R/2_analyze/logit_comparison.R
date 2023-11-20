@@ -469,29 +469,29 @@ plot_logit <- dat_pred_full %>%
            xmax = stages$top[c(81, 87)], 
            ymin = -Inf, 
            ymax = Inf, 
-           fill = "#196AA5", 
-           alpha = 0.07) + 
+           fill = "#169199", 
+           alpha = 0.2) + 
   annotate("rect", 
            xmin = stages$bottom[c(76, 83, 91)], 
            xmax = stages$top[c(76, 83, 91)], 
            ymin = -Inf, 
            ymax = Inf, 
            fill = "#C75E6B", 
-           alpha = 0.07) + 
+           alpha = 0.2) + 
   annotate("text",
            y = 1.8, 
            x = 112, 
            colour = "#C75E6B", 
            size = 9/.pt, 
            label = "Hyperthermal", 
-           alpha = 0.5) +
+           alpha = 0.9) +
   annotate("text",
            y = 1.8, 
            x = 83, 
-           colour = "#196AA5", 
+           colour = "#169199", 
            size = 9/.pt, 
            label = "Hypothermal", 
-           alpha = 0.4) +
+           alpha = 0.9) +
   geom_hline(yintercept = 0, 
              colour = "grey20") +
   geom_linerange(aes(xmin = xmin,
@@ -573,14 +573,14 @@ plot_log_hyp <- dat_pred_full %>%
            ymin = -Inf, 
            ymax = Inf, 
            fill = "#C75E6B", 
-           alpha = 0.07) + 
+           alpha = 0.2) + 
   annotate("rect", 
            xmin = 1.8, 
            xmax = 2.2,
            ymin = -Inf, 
            ymax = Inf, 
-           fill = "#196AA5", 
-           alpha = 0.07) + 
+           fill = "#169199", 
+           alpha = 0.2) + 
   labs(y = "Temperature dependancy\n[log-odds]", 
        x = NULL) +
   scale_fill_manual(values = c(colour_purple, 
