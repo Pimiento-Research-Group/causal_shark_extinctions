@@ -202,42 +202,5 @@ dat_family %>%
 
 
 
-# percentage change -------------------------------------------------------
-
-# calculate percentage increase of selected families compared to endotherms
-dat_perc <- dat_family %>% 
-  group_by(scale) %>% 
-  nest() %>% 
-  mutate(outcome = map(data, ~ .x %>% 
-                         group_by(metab = if_else(!family %in% c("Lamnidae", "Otodontidae", "Alopiidae"),
-                                                  "meso", family)) %>% 
-                         nest() %>% 
-                         ungroup() %>% 
-                         mutate(value_sample = map(data, 
-                                                   ~ slice_sample(.x, n =  10000, replace = TRUE) %>% 
-                                                     select(value))) %>% 
-                         select(-data) %>% 
-                         pivot_wider(names_from = metab, values_from = value_sample) %>% 
-                         mutate(oto = map2(Otodontidae, meso, 
-                                           ~ (.x - .y)/.y),
-                                oto = map(oto, median_qi),
-                                lamni = map2(Lamnidae, meso, 
-                                             ~ (.x - .y)/.y), 
-                                lamni = map(lamni, median_qi), 
-                                alo = map2(Alopiidae, meso, 
-                                           ~ (.x - .y)/.y), 
-                                alo = map(alo, median_qi))  %>% 
-                         select(oto, lamni, alo) %>% 
-                         unnest(cols = c(oto, lamni, alo), 
-                                names_sep = "_") %>% 
-                         select(where(is.double)) %>% 
-                         pivot_longer(cols = everything(),
-                                      names_to = c("family", "pointval"),
-                                      names_sep = "_") %>% 
-                         pivot_wider(names_from = pointval, 
-                                     values_from = value))) %>% 
-  select(scale, outcome) %>% 
-  unnest(outcome)
-
 
 
