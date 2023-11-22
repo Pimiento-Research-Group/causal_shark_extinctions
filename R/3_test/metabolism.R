@@ -72,42 +72,7 @@ dat_pred_deep <- distinct(dat_merged, family) %>%
            add_column(family = .x) %>% 
            select(value, family))
 
-# calculate percentage increase of selected families compared to endotherms
-dat_pred_deep <- dat_pred_deep %>% 
-  group_by(metab = if_else(!family %in% c("Lamnidae", "Otodontidae", "Alopiidae"),
-                           "meso", family)) %>% 
-  nest() %>% 
-  ungroup() %>% 
-  mutate(value_sample = map(data, 
-                              ~ slice_sample(.x, n =  10000, replace = TRUE) %>% 
-                                select(value))) %>% 
-  select(-data) %>% 
-  pivot_wider(names_from = metab, values_from = value_sample) %>% 
-  mutate(oto = map2(Otodontidae, meso, 
-                    ~ (.x - .y)/.y),
-         oto = map(oto, median_qi),
-         lamni = map2(Lamnidae, meso, 
-                      ~ (.x - .y)/.y), 
-         lamni = map(lamni, median_qi), 
-         alo = map2(Alopiidae, meso, 
-                      ~ (.x - .y)/.y), 
-         alo = map(alo, median_qi))  %>% 
-  select(oto, lamni, alo) %>% 
-  unnest(cols = c(oto, lamni, alo), 
-         names_sep = "_") %>% 
-  select(where(is.double)) %>% 
-  pivot_longer(cols = everything(),
-             names_to = c("family", "pointval"),
-             names_sep = "_") %>% 
-  pivot_wider(names_from = pointval, 
-              values_from = value)
 
-
-# save predictions
-dat_pred_deep %>% 
-  write_rds(here("data", 
-                 "metabolism", 
-                 "metab_family_deep.rds"))
 
 
 # genus models --------------------------------------------------------
@@ -168,42 +133,6 @@ dat_pred_genus <- distinct(dat_merged, family) %>%
            add_column(family = .x) %>% 
            select(value, family))
 
-# calculate percentage increase of selected families compared to endotherms
-dat_pred_genus <- dat_pred_genus %>% 
-  group_by(metab = if_else(!family %in% c("Lamnidae", "Otodontidae", "Alopiidae"),
-                           "meso", family)) %>% 
-  nest() %>% 
-  ungroup() %>% 
-  mutate(value_sample = map(data, 
-                            ~ slice_sample(.x, n =  10000, replace = TRUE) %>% 
-                              select(value))) %>% 
-  select(-data) %>% 
-  pivot_wider(names_from = metab, values_from = value_sample) %>% 
-  mutate(oto = map2(Otodontidae, meso, 
-                    ~ (.x - .y)/.y),
-         oto = map(oto, median_qi),
-         lamni = map2(Lamnidae, meso, 
-                      ~ (.x - .y)/.y), 
-         lamni = map(lamni, median_qi), 
-         alo = map2(Alopiidae, meso, 
-                    ~ (.x - .y)/.y), 
-         alo = map(alo, median_qi))  %>% 
-  select(oto, lamni, alo) %>% 
-  unnest(cols = c(oto, lamni, alo), 
-         names_sep = "_") %>% 
-  select(where(is.double)) %>% 
-  pivot_longer(cols = everything(),
-               names_to = c("family", "pointval"),
-               names_sep = "_") %>% 
-  pivot_wider(names_from = pointval, 
-              values_from = value)
-
-# save predictions
-dat_pred_genus %>% 
-  write_rds(here("data", 
-                 "metabolism", 
-                 "metab_family_genus.rds"))
-
 
 # cenozoic models --------------------------------------------------------------
 
@@ -250,41 +179,10 @@ dat_pred_ceno <- distinct(dat_merged, family) %>%
            add_column(family = .x) %>% 
            select(value, family))
 
-# calculate percentage increase of selected families compared to endotherms
-dat_pred_ceno <- dat_pred_ceno %>% 
-  group_by(metab = if_else(!family %in% c("Lamnidae", "Otodontidae", "Alopiidae"),
-                           "meso", family)) %>% 
-  nest() %>% 
-  ungroup() %>% 
-  mutate(value_sample = map(data, 
-                            ~ slice_sample(.x, n =  10000, replace = TRUE) %>% 
-                              select(value))) %>% 
-  select(-data) %>% 
-  pivot_wider(names_from = metab, values_from = value_sample) %>% 
-  mutate(oto = map2(Otodontidae, meso, 
-                    ~ (.x - .y)/.y),
-         oto = map(oto, median_qi),
-         lamni = map2(Lamnidae, meso, 
-                      ~ (.x - .y)/.y), 
-         lamni = map(lamni, median_qi), 
-         alo = map2(Alopiidae, meso, 
-                    ~ (.x - .y)/.y), 
-         alo = map(alo, median_qi))  %>% 
-  select(oto, lamni, alo) %>% 
-  unnest(cols = c(oto, lamni, alo), 
-         names_sep = "_") %>% 
-  select(where(is.double)) %>% 
-  pivot_longer(cols = everything(),
-               names_to = c("family", "pointval"),
-               names_sep = "_") %>% 
-  pivot_wider(names_from = pointval, 
-              values_from = value)
 
-# save predictions
-dat_pred_ceno %>% 
-  write_rds(here("data", 
-                 "metabolism", 
-                 "metab_family_ceno.rds"))
+
+
+# merge together ----------------------------------------------------------
 
 
 # merge together
@@ -298,60 +196,48 @@ dat_family <- dat_pred_genus %>%
 # save data
 dat_family %>% 
   write_rds(here(here("data", 
-                      "metabolism", 
-                      "metab_family.rds")))
-
-# average change
-dat_family %>% 
-  group_by(family) %>% 
-  median_qi(value)
+                      "logits", 
+                      "logit_family_full.rds")), 
+            compress = "gz")
 
 
 
-# visualise ---------------------------------------------------------------
+# percentage change -------------------------------------------------------
+
+# calculate percentage increase of selected families compared to endotherms
+dat_perc <- dat_family %>% 
+  group_by(scale) %>% 
+  nest() %>% 
+  mutate(outcome = map(data, ~ .x %>% 
+                         group_by(metab = if_else(!family %in% c("Lamnidae", "Otodontidae", "Alopiidae"),
+                                                  "meso", family)) %>% 
+                         nest() %>% 
+                         ungroup() %>% 
+                         mutate(value_sample = map(data, 
+                                                   ~ slice_sample(.x, n =  10000, replace = TRUE) %>% 
+                                                     select(value))) %>% 
+                         select(-data) %>% 
+                         pivot_wider(names_from = metab, values_from = value_sample) %>% 
+                         mutate(oto = map2(Otodontidae, meso, 
+                                           ~ (.x - .y)/.y),
+                                oto = map(oto, median_qi),
+                                lamni = map2(Lamnidae, meso, 
+                                             ~ (.x - .y)/.y), 
+                                lamni = map(lamni, median_qi), 
+                                alo = map2(Alopiidae, meso, 
+                                           ~ (.x - .y)/.y), 
+                                alo = map(alo, median_qi))  %>% 
+                         select(oto, lamni, alo) %>% 
+                         unnest(cols = c(oto, lamni, alo), 
+                                names_sep = "_") %>% 
+                         select(where(is.double)) %>% 
+                         pivot_longer(cols = everything(),
+                                      names_to = c("family", "pointval"),
+                                      names_sep = "_") %>% 
+                         pivot_wider(names_from = pointval, 
+                                     values_from = value))) %>% 
+  select(scale, outcome) %>% 
+  unnest(outcome)
 
 
-plot_metab <- dat_family %>% 
-  left_join(tibble(family = c("alo", 
-                              "lamni", 
-                              "oto"), 
-                   fam_lab = c("Alopiidae", 
-                               "Lamnidae",
-                               "Otodontidae"))) %>% 
-  ggplot(aes(fam_lab, value)) +
-  geom_hline(yintercept = 0, 
-             colour = colour_grey, 
-             linetype = "dashed") +
-  geom_linerange(aes(ymin = .lower,
-                      ymax = .upper, 
-                     group = scale), 
-                 colour = "grey",
-                 position = position_dodge(width = 0.3)) +
-  geom_point(aes(fill = scale), 
-             shape = 21, 
-             position = position_dodge(width = 0.3), 
-             colour = "white", 
-             stroke = 0.8, 
-             size = 6) +
-  scale_fill_manual(
-    values = rev(c("#4C634C",
-               colour_coral, 
-               colour_purple)),
-    labels = rev(c("Species - Stages", 
-               "Genera - Stages", 
-               "Species - Cenozoic subset")),
-    name = NULL
-  ) +
-  scale_y_continuous(labels = function(x) x*100) +
-  labs(y = "Percentage change [%]", 
-       x = NULL) +
-  theme(legend.position = c(0.75, 0.8))
 
-
-# save plot
-ggsave(plot_metab, filename = here("figures",
-                                  "supplement",
-                                  "metabolism_perc_change.png"),
-       width = image_width, height = image_height,
-       units = image_units,
-       bg = "white", device = ragg::agg_png)
