@@ -14,15 +14,7 @@ dat_order <- read_rds(here(here("data",
                       "logits", 
                       "logit_order.rds")))
 
-# metabolism test on family level
-dat_family <- read_rds(here(here("data",
-                                 "metabolism",
-                                 "metab_family.rds"))) %>% 
-  # summarise
-  group_by(family) %>% 
-  ggdist::median_qi(value) %>% 
-  # negate for visualisation
-  mutate(across(2:4, ~ -.x))
+
 
 
 # logit per order ---------------------------------------------------------
@@ -125,3 +117,4 @@ ggsave(plot_order, filename = here("figures",
        width = image_width, height = image_height,
        units = image_units,
        bg = "white", device = ragg::agg_png)
+
