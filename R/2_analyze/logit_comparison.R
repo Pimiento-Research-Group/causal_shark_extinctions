@@ -455,84 +455,12 @@ dat_pred_full %>%
                  "logits", 
                  "logit_full.rds"))
 
-# create plot
-plot_logit <- dat_pred_full %>%
-  filter(data_set != "Future") %>% 
-  mutate(data_set = factor(data_set, 
-                           levels = c("Stages", 
-                                      "Genus", 
-                                      "1myr", 
-                                      "Modern"))) %>% 
-  ggplot(aes(myr, value, group = data_set)) +
-  annotate("rect", 
-           xmin = stages$bottom[c(81, 87)], 
-           xmax = stages$top[c(81, 87)], 
-           ymin = -Inf, 
-           ymax = Inf, 
-           fill = "#169199", 
-           alpha = 0.2) + 
-  annotate("rect", 
-           xmin = stages$bottom[c(76, 83, 91)], 
-           xmax = stages$top[c(76, 83, 91)], 
-           ymin = -Inf, 
-           ymax = Inf, 
-           fill = "#C75E6B", 
-           alpha = 0.2) + 
-  annotate("text",
-           y = 1.8, 
-           x = 112, 
-           colour = "#C75E6B", 
-           size = 9/.pt, 
-           label = "Hyperthermal", 
-           alpha = 0.9) +
-  annotate("text",
-           y = 1.8, 
-           x = 83, 
-           colour = "#169199", 
-           size = 9/.pt, 
-           label = "Hypothermal", 
-           alpha = 0.9) +
-  geom_hline(yintercept = 0, 
-             colour = "grey20") +
-  geom_linerange(aes(xmin = xmin,
-                     xmax = xmax),
-                 colour = "grey75") +
-  geom_linerange(aes(ymin = .lower,
-                     ymax = .upper),
-                 colour = "grey75") +
-  geom_point(aes(fill = data_set), 
-             size = 2, 
-             shape = 21, 
-             colour = "white") +
-  scale_x_reverse() +
-  scale_fill_manual(values = c("#4C634C", 
-                               colour_coral, 
-                               colour_purple, 
-                               "#FF5F1F"), 
-                    labels = c("Species - Stages", 
-                               "Genera - Stages", 
-                               "Species - Cenozoic subset", 
-                               "Species - Modern"), 
-                    name = NULL) +
-  scale_y_continuous(limits = c(-7, 2), 
-                     breaks = seq(-6, 2, by = 2)) +
-  guides(fill = guide_legend(override.aes = list(size = 2.5))) +
-  coord_geo(xlim = c(150, 0), 
-            dat = list("epochs", "periods"),
-            pos = list("b", "b"),
-            alpha = 0.2, 
-            height = unit(0.8, "line"), 
-            size = list(5/.pt, 9/.pt),
-            lab_color = "grey20", 
-            color = "grey50", 
-            abbrv = list(TRUE, FALSE), 
-            fill = "white",
-            expand = TRUE, 
-            lwd = list(0.1, 0.2)) +
-  labs(x = "Million years", 
-       y = "Temperature dependancy\n[log-odds]") +
-  theme(legend.position = "bottom") 
-   
+
+
+
+# supplementary plot ------------------------------------------------------
+
+
 # summarise per hypo- and hyperthermal
 plot_log_hyp <- dat_pred_full %>%
   filter(data_set != "Future") %>% 
@@ -602,19 +530,12 @@ plot_thermal <- read_rds(here("data",
 
 
 # plot_full <- 
-plot_full <- plot_logit /
-  (plot_log_hyp +
-  plot_thermal) +
-  plot_layout(heights = c(2.2, 1)) +
+plot_full <- plot_log_hyp +
+  plot_thermal +
   plot_annotation(tag_levels = "a")
  
 
-# save plot
-ggsave(plot_full, filename = here("figures",
-                                  "logit_over_time.png"), 
-       width = image_width, height = image_height*1.5,
-       units = image_units, 
-       bg = "white", device = ragg::agg_png)    
+ 
 
 
 
