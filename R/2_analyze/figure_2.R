@@ -269,6 +269,23 @@ plot_cons <- dat_temp %>%
             size = 10/.pt, 
             colour = "grey50",
             data = dat_change) +
+  annotate("text", 
+           x = 15, 
+           y = 17.5, 
+           label = "# Extinctions", 
+           colour = "grey70", 
+           size = 10/.pt) +
+  annotate("curve", 
+           x = 25, xend = 4,
+           y = 16, yend = 16, 
+           curvature = 0, 
+           colour = "grey80") +
+  annotate("curve", 
+           x = 25, xend = -2,
+           y = 16, yend = 7, 
+           curvature = -0.2, 
+           arrow = arrow(length = unit(.2,"cm")),
+           colour = "grey80") +
   scale_shape_manual(values = c(25, 24), 
                      name = NULL, 
                      labels = c("Cooling", 
