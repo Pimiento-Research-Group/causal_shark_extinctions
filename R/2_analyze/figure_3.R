@@ -1,113 +1,172 @@
 library(tidyverse)
 library(here)
-library(ggsvg)
-library(patchwork)
-library(ggdist)
-library(ggforce)
+library(readxl)
+library(deeptime)
 
-# plottiggforce# plotting configurations
+
+# plotting configurations
 source(here("R", "config_file.R"))
 
 # read data ---------------------------------------------------------------
 
-# family level logit values (temperature dependancy)
-dat_family <- read_rds(here(here("data",
-                                 "logits", 
-                                 "logit_family_full.rds"))) %>% 
-  group_by(family) %>% 
-  median_qi(value) %>% 
-  # add superorder
-  left_join(read_rds(here("data",
-                          "fossil_occurrences",
-                          "database_occurrences_01_Nov_2023.rds")) %>% 
-              drop_na(family, superorder) %>% 
-              filter(order != "incertae sedis") %>% 
-              count(superorder, family))
-  
+# load data on time of extinction per taxa
+dat_ext <- read_delim(here("data", 
+                           "fossil_occurrences", 
+                           "combined_10_se_est_species_names.txt")) %>% 
+  select(species, te) %>% 
+  mutate(te = abs(te))
 
 
-
-# visualise family --------------------------------------------------------
-
-# batoidea
-svg_bato <- "https://images.phylopic.org/images/465ee9b8-3a2d-4c3d-bf43-6301f50d1f2e/vector.svg" %>%
-  readLines() %>% 
-  str_replace("#000000", "#FFBE62") %>% 
-  paste(collapse = "\n")  
-
-# galeomorphii
-svg_galeo <- "https://images.phylopic.org/images/42135d61-3549-45d2-841c-4147548b0fad/vector.svg" %>%
-  readLines() %>% 
-  str_replace("#000000", "#169199") %>% 
-  paste(collapse = "\n") 
-
-# squalomorphii
-svg_squalo <- "https://images.phylopic.org/images/60e7f957-1137-48db-8e1d-04b1c41c0c18/vector.svg" %>%
-  readLines() %>% 
-  str_replace("#000000", "#BD7CD5") %>% 
-  paste(collapse = "\n") 
+# load temperature data
+dat_temp <- # Phanerozoic deep-ocean and global average temperature from Scotese et al 2021 
+  read_xlsx(here("data",
+                 "raw",
+                 "temperature",
+                 "scotese_et_al_2021.xlsx")) %>% 
+  # clean up colnames
+  select(age = Age,
+         temp = "Deep Ocean") %>% 
+  #Cenozoic deep-ocean temperature  used with equation 7afrom Cramer et al 2011
+  bind_rows(read_xlsx(here("data",
+                           "raw",
+                           "temperature",
+                           "cramer_et_al_2011_7a.xlsx")) %>%
+              # clean up colnames
+              select(age = Age,
+                     temp = Temperature))
 
 
-plot_fam <- dat_family %>%
-  ggplot(aes(y = family, 
-             x = value)) +
-  geom_vline(xintercept = 0, 
-             linetype = "dotted", 
-             colour = colour_grey) +
-  geom_point_svg(aes(size = 20), 
-                 size = 10, 
-                 svg = svg_bato,
-                 data = filter(dat_family, 
-                               superorder == "Batoidea")) +
-  geom_point_svg(aes(size = 20),
-                 size = 10,
-                 svg = svg_galeo,
-                 data = filter(dat_family, 
-                               superorder == "Galeomorphii")) +
-  geom_point_svg(aes(size = 20), 
-                 size = 10,
-                 svg = svg_squalo,
-                 data = filter(dat_family, 
-                               superorder == "Squalomorphii")) +
-  geom_mark_ellipse(aes(label = family), 
-                    label.fontsize = 10, 
-                    label.fill = alpha("white", 0.5),  
-                    label.colour = "grey40",
-                    colour = "grey40",
-                    con.colour = "grey40",
-                    expand = unit(5, "mm"), 
-                    con.cap = 0, 
-                    data = dat_family %>% 
-                      filter(family %in% c("Alopiidae", 
-                                           "Lamnidae", 
-                                           "Otodontidae"))) +
-  annotate("label",
-           y = 83, 
-           x = c(-1.1, -2.1, -3.1), 
-           colour = c("#FFBE62", 
-                      "#169199", 
-                      "#BD7CD5"), 
-           label.size = 0, 
-           size = 11/.pt, 
-           label = c("Batoidea", 
-                     "Galeomorphii", 
-                     "Squalomorphii"), 
-           hjust = 0) +
-  scale_x_continuous("Temperature dependancy [log-odds]", 
-                     expand = expansion(mult = c(0.1, 0)), 
-                     limits = c(-4.5, 1),
-                     breaks = c(-4, -2, 0)) +
-  scale_y_discrete(NULL, 
-                   expand = expansion(mult = c(0.1, 0.2))) +
-  guides(size = "none", 
-         fill = guide_legend(override.aes = list(size = 2))) +
-  theme(legend.position = "none", 
-        axis.ticks.y = element_blank(), 
-        axis.text.y = element_blank())
+# preprocess data ---------------------------------------------------------
+
+
+# extract time of major extinctions from literature
+dat_ext_time <- tibble(age = c((95.95 - 83.35) / 2 + 83.35,
+                               (73.55 - 71.75) / 2 + 71.75,
+                               (66.95 - 65.75) / 2 + 65.75,
+                               (57.05 - 55.65) / 2 + 55.65,
+                               (38.25 - 33.55) / 2 + 33.55,
+                               19,
+                               (3.75 - 0) / 2 + 0), 
+                       ext_event = paste0("event", 1:7)) %>% 
+  # add equally-spaced buffer to calculate number of extinctions
+  mutate(age_min = age - 3, 
+         age_max = age + 3)
+
+# number of extinctions per event
+dat_ext_event <- dat_ext_time %>%
+  # create sequence for fuzzy matching
+  mutate(age_seq = map2(age_min, 
+                        age_max, 
+                        ~seq(.x, .y, by = 0.0001))) %>% 
+  select(ext_event, te = age_seq) %>% 
+  unnest(te) %>% 
+  # match with extinction
+  right_join(mutate(dat_ext, 
+                    te = round(te, 1))) %>% 
+  drop_na(ext_event) %>% 
+  count(ext_event) %>% 
+  # get age of event
+  left_join(dat_ext_time %>% 
+              select(age_ext = age, ext_event)) %>% 
+  # get closest temperature value of event
+  left_join(dat_temp, join_by(closest(age_ext >= age)))
+
+
+# calculate change in temperature to previous bin
+dat_change <- dat_ext_event %>%
+  mutate(age_seq = map(age, 
+                       ~seq(.x+10, .x, by = -0.0001))) %>% 
+  unnest(age_seq) %>% 
+  select(ext_event, age = age_seq) %>% 
+  right_join(dat_temp) %>% 
+  drop_na(ext_event) %>% 
+  group_by(ext_event) %>% 
+  nest() %>% 
+  mutate(temp_change_model = map(data,
+                                 ~ lm(temp ~ age, data = .x)),
+         temp_change = map_dbl(temp_change_model,
+                               ~ -coef(.x)[2])) %>% 
+  select(ext_event, temp_change) %>% 
+  full_join(select(dat_ext_event, 
+                   ext_event, n, temp, age)) %>% 
+  select(ext_event, age, n, temp, temp_change) %>% 
+  ungroup()
+
+
+# visualise consistency ---------------------------------------------------
+
+# create plot
+plot_cons <- dat_temp %>%
+  filter(between(age, 0, 150)) %>% 
+  ggplot(aes(x = age, y = temp)) +
+  geom_line(aes(colour = temp), 
+            linewidth = 1) +
+  geom_point(aes(size = n, 
+                 shape = temp_change >= 0), 
+             data = dat_change, 
+             colour = "grey20", 
+             fill = alpha("white", 0.4)) +
+  geom_text(aes(label = n),
+            position = position_nudge(x = c(3, 1.5, 4, 
+                                            1, -7, 3, 3), 
+                                      y = c(2, 2.2, 2.2, 2, -0.7, 2.1, 3)),
+            size = 10/.pt, 
+            colour = "grey50",
+            data = dat_change) +
+  annotate("text", 
+           x = 15, 
+           y = 17.5, 
+           label = "# Extinctions", 
+           colour = "grey70", 
+           size = 10/.pt) +
+  annotate("curve", 
+           x = 25, xend = 4,
+           y = 16, yend = 16, 
+           curvature = 0, 
+           colour = "grey80") +
+  annotate("curve", 
+           x = 25, xend = -2,
+           y = 16, yend = 7, 
+           curvature = -0.2, 
+           arrow = arrow(length = unit(.2,"cm")),
+           colour = "grey80") +
+  scale_shape_manual(values = c(25, 24), 
+                     name = NULL, 
+                     labels = c("Cooling", 
+                                "Warming")) +
+  scale_color_gradient2(high = "coral", 
+                        mid = "#97B9C1",
+                        low = "#698BAB", 
+                        midpoint = 13, 
+                        guide = "none") +
+  scale_size(range = c(2, 7), 
+             guide = "none") +
+  scale_x_reverse() +  
+  scale_y_continuous(limits = c(-1, 23), 
+                     breaks = seq(0, 20, by = 5)) +
+  labs(x = "Million years", 
+       y = "Global Temperature [°C]") +
+  coord_geo(xlim = c(150, 0), 
+            dat = list("epochs", "periods"),
+            pos = list("b", "b"),
+            alpha = 0.2, 
+            height = unit(0.8, "line"), 
+            size = list(5/.pt, 9/.pt),
+            lab_color = "grey20", 
+            color = "grey50", 
+            abbrv = list(TRUE, FALSE), 
+            fill = "white",
+            expand = TRUE, 
+            lwd = list(0.1, 0.2)) +
+  theme(legend.position = c(0.2, 0.2), 
+        legend.text = element_text(colour = "grey40"))
+
+plot_cons
+
 
 
 # save plot
-ggsave(plot_fam, filename = here("figures",
+ggsave(plot_cons, filename = here("figures",
                                    "figure_3.png"),
        width = image_width, height = image_height,
        units = image_units,
