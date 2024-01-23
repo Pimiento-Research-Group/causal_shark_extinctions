@@ -1,11 +1,8 @@
 # load packages
 library(tidyverse)
 library(here)
-library(ggdist)
-library(ggsvg)
 library(patchwork)
 library(ggdist)
-library(ggforce)
 library(deeptime)
 library(readxl)
 
@@ -209,80 +206,39 @@ plot_logit
 # logit per family --------------------------------------------------------
 
 
-# batoidea
-svg_bato <- "https://images.phylopic.org/images/465ee9b8-3a2d-4c3d-bf43-6301f50d1f2e/vector.svg" %>%
-  readLines() %>% 
-  str_replace("#000000", "#FFBE62") %>% 
-  paste(collapse = "\n")  
-
-# galeomorphii
-svg_galeo <- "https://images.phylopic.org/images/42135d61-3549-45d2-841c-4147548b0fad/vector.svg" %>%
-  readLines() %>% 
-  str_replace("#000000", "#169199") %>% 
-  paste(collapse = "\n") 
-
-# squalomorphii
-svg_squalo <- "https://images.phylopic.org/images/60e7f957-1137-48db-8e1d-04b1c41c0c18/vector.svg" %>%
-  readLines() %>% 
-  str_replace("#000000", "#BD7CD5") %>% 
-  paste(collapse = "\n") 
-
-
+  
 plot_fam <- dat_family %>%
+  mutate(endo = if_else(family %in% c("Alopiidae",
+                                      "Lamnidae",
+                                      "Otodontidae"), 
+                        "Endothermic", 
+                        "Ectothermic")) %>% 
   ggplot(aes(y = family, 
              x = value)) +
   geom_vline(xintercept = 0, 
              linetype = "dotted", 
              colour = colour_grey) +
-  geom_point_svg(aes(size = 20), 
-                 size = 5, 
-                 svg = svg_bato,
-                 data = filter(dat_family, 
-                               superorder == "Batoidea")) +
-  geom_point_svg(aes(size = 20),
-                 size = 5,
-                 svg = svg_galeo,
-                 data = filter(dat_family, 
-                               superorder == "Galeomorphii")) +
-  geom_point_svg(aes(size = 20), 
-                 size = 5,
-                 svg = svg_squalo,
-                 data = filter(dat_family, 
-                               superorder == "Squalomorphii")) +
-  geom_mark_ellipse(aes(label = family), 
-                    label.fontsize = 8, 
-                    label.fill = alpha("white", 0.5),  
-                    label.buffer = unit(5, "mm"),
-                    label.colour = "grey40",
-                    colour = "grey40",
-                    con.colour = "grey40",
-                    expand = unit(3, "mm"), 
-                    con.cap = 0, 
-                    data = dat_family %>% 
-                      filter(family %in% c("Alopiidae", 
-                                           "Lamnidae", 
-                                           "Otodontidae"))) +
-  annotate("label",
-           y = 86, 
-           x = c(-1.1, -2.1, -3.1), 
-           colour = c("#FFBE62", 
-                      "#169199", 
-                      "#BD7CD5"), 
-           label.size = 0, 
-           size = 9/.pt, 
-           label = c("Batoidea", 
-                     "Galeomorphii", 
-                     "Squalomorphii"), 
-           hjust = 0) +
+  geom_linerange(aes(xmin = .lower, 
+                     xmax = .upper), 
+                 alpha = 0.3, 
+                 linewidth = 0.1) +
+  geom_point(aes(fill = endo), 
+             size = 2.5, 
+             shape = 21, 
+             colour = "white") +
+  scale_fill_manual(values = c("grey60", 
+                               "#FFBE62"), 
+                    name = NULL, 
+                    labels = rev) +
   scale_x_continuous("Temperature dependancy [log-odds]", 
                      expand = expansion(mult = c(0.1, 0)), 
-                     limits = c(-4.1, 1),
                      breaks = c(-4, -2, 0)) +
   scale_y_discrete("Families", 
                    expand = expansion(mult = c(0.2, 0.3))) +
   guides(size = "none", 
-         fill = guide_legend(override.aes = list(size = 2))) +
-  theme(legend.position = "none", 
+         fill = guide_legend(nrow = 1, 
+                             reverse = TRUE)) +
+  theme(legend.position = c(0.5, 0.95), 
         axis.ticks.y = element_blank(), 
         axis.text.y = element_blank())
 
