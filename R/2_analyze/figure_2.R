@@ -121,12 +121,13 @@ plot_temp
 
 # create plot
 plot_logit <- dat_pred_full %>%
-  filter(data_set != "Future") %>% 
+  filter(data_set %in% c("Stages", 
+                         "Genus", 
+                         "1myr")) %>% 
   mutate(data_set = factor(data_set, 
                            levels = c("Stages", 
                                       "Genus", 
-                                      "1myr", 
-                                      "Modern"))) %>% 
+                                      "1myr"))) %>% 
   ggplot(aes(myr, value, group = data_set)) +
   annotate("rect", 
            xmin = stages$bottom[c(81, 87)], 
@@ -172,12 +173,10 @@ plot_logit <- dat_pred_full %>%
   scale_x_reverse() +
   scale_fill_manual(values = c("#4C634C", 
                                colour_coral, 
-                               colour_purple, 
-                               "#FF5F1F"), 
+                               colour_purple), 
                     labels = c("Species - Stages", 
                                "Genera - Stages", 
-                               "Species - Cenozoic subset", 
-                               "Species - Modern"), 
+                               "Species - Cenozoic subset"), 
                     name = NULL) +
   scale_y_continuous(limits = c(-8.9, 2), 
                      breaks = seq(-8, 2, by = 2)) +
@@ -208,11 +207,8 @@ plot_logit
 
   
 plot_fam <- dat_family %>%
-  mutate(endo = if_else(family %in% c("Alopiidae",
-                                      "Lamnidae",
-                                      "Otodontidae"), 
-                        "Endothermic", 
-                        "Ectothermic")) %>% 
+  mutate(family = fct_reorder(family, value)) %>% 
+  arrange(endo) %>% 
   ggplot(aes(y = family, 
              x = value)) +
   geom_vline(xintercept = 0, 
@@ -220,27 +216,31 @@ plot_fam <- dat_family %>%
              colour = colour_grey) +
   geom_linerange(aes(xmin = .lower, 
                      xmax = .upper), 
-                 alpha = 0.3, 
+                 colour = "grey75", 
                  linewidth = 0.1) +
   geom_point(aes(fill = endo), 
-             size = 2.5, 
+             size = 2, 
              shape = 21, 
              colour = "white") +
   scale_fill_manual(values = c("grey60", 
                                "#FFBE62"), 
                     name = NULL, 
                     labels = rev) +
-  scale_x_continuous("Temperature dependancy [log-odds]", 
+  scale_x_continuous("Temperature dependancy\n[log-odds]", 
                      expand = expansion(mult = c(0.1, 0)), 
                      breaks = c(-4, -2, 0)) +
   scale_y_discrete("Families", 
-                   expand = expansion(mult = c(0.2, 0.3))) +
+                   expand = expansion(mult = c(0.04, 0.02)), 
+                   limits = rev) +
   guides(size = "none", 
          fill = guide_legend(nrow = 1, 
                              reverse = TRUE)) +
+  coord_flip() +
   theme(legend.position = c(0.5, 0.95), 
-        axis.ticks.y = element_blank(), 
-        axis.text.y = element_blank())
+        axis.ticks.x = element_blank(), 
+        axis.text.x = element_blank(), 
+        legend.text = element_text(colour = "grey20", 
+                                   size = 9))
 
 plot_fam
 
