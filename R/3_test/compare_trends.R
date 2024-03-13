@@ -31,29 +31,8 @@ dat_main <- list.files(here("data",
                                   "Shelf area" = grep("shelf", levels(coef_name), value = TRUE), 
                                   Productivity = grep("std", levels(coef_name), value = TRUE), 
          )) %>% 
-  add_column(data_source = "Stages")
+  add_column(data_source = "Species - Stages")
   
-
-# get data from 10 myr resolution
-dat_10myr <- list.files(here("data",
-                             "predictions"), 
-           full.names = TRUE) %>%
-  str_subset("10myr") %>% 
-  str_subset("trend") %>% 
-  map_df(read_rds) %>% 
-  # for some reason shelf area was entered as NA
-  replace_na(list(coef_name = "b_shelf_area"))  %>% 
-  # join parameters together
-  mutate(coef_name = as.factor(coef_name), 
-         coef_name = fct_collapse(coef_name, 
-                                  Paleotemperature = grep(":", levels(coef_name), value = TRUE), 
-                                  Productivity = grep("std", levels(coef_name), value = TRUE), 
-                                  Temperature = grep("binned", levels(coef_name), value = TRUE), 
-                                  "Sea level" = grep("sea", levels(coef_name), value = TRUE), 
-                                  "Shelf area" = grep("shelf", levels(coef_name), value = TRUE)
-         )) %>% 
-  add_column(data_source = "10myr")
-
 
 # get data from genus resolution
 dat_genus <- list.files(here("data",
@@ -73,7 +52,7 @@ dat_genus <- list.files(here("data",
                                   "Sea level" = grep("sea", levels(coef_name), value = TRUE), 
                                   "Shelf area" = grep("shelf", levels(coef_name), value = TRUE)
          )) %>% 
-  add_column(data_source = "Genus")
+  add_column(data_source = "Genera - Stages")
 
 
 # get data from cenozoic 1myr resolution
@@ -87,12 +66,12 @@ dat_ceno <- list.files(here("data",
   mutate(coef_name = as.factor(coef_name), 
          coef_name = fct_collapse(coef_name, 
                                   Paleotemperature = grep(":", levels(coef_name), value = TRUE), 
-                                  Productivity = grep("std", levels(coef_name), value = TRUE), 
+                                  Productivity = grep("productivity", levels(coef_name), value = TRUE), 
                                   Temperature = grep("binned", levels(coef_name), value = TRUE), 
                                   "Sea level" = grep("sea", levels(coef_name), value = TRUE), 
                                   "Shelf area" = grep("cont", levels(coef_name), value = TRUE)
          )) %>% 
-  add_column(data_source = "Cenozoic/ 1myr")
+  add_column(data_source = "Species - Cenozoic subset")
 
 
 
@@ -100,9 +79,8 @@ dat_ceno <- list.files(here("data",
 
 
 # create plot
-plot_beta <- dat_main %>% 
+plot_beta <- dat_main %>%
   # merge
-  full_join(dat_10myr) %>% 
   full_join(dat_genus) %>%
   full_join(dat_ceno) %>% 
   filter(coef_name != "Paleotemperature") %>% 
@@ -113,10 +91,11 @@ plot_beta <- dat_main %>%
   facet_wrap(~ coef_name, 
              scales = "free") +
   scale_y_discrete(breaks = NULL) +
-  scale_x_continuous(breaks = c(0)) +
+  scale_x_continuous() +
   scale_color_manual(name = NULL,
-                     values = c("#571415", "#C01213", 
-                                "#DEA268", "#5D7A64")) +
+                     values = c(colour_coral, 
+                                colour_purple, 
+                                "#4C634C")) +
   labs(y = NULL, 
        x = NULL) +
   theme(panel.border = element_rect(linewidth = 1, 
