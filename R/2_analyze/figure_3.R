@@ -43,11 +43,10 @@ dat_temp <- # Phanerozoic deep-ocean and global average temperature from Scotese
 dat_ext_time <- tibble(age = c((95.95 - 83.35) / 2 + 83.35,
                                (73.55 - 71.75) / 2 + 71.75,
                                (66.95 - 65.75) / 2 + 65.75,
-                               (57.05 - 55.65) / 2 + 55.65,
                                (38.25 - 33.55) / 2 + 33.55,
                                19,
                                (3.75 - 0) / 2 + 0), 
-                       ext_event = paste0("event", 1:7)) %>% 
+                       ext_event = paste0("event", 1:6)) %>% 
   # add equally-spaced buffer to calculate number of extinctions
   mutate(age_min = age - 3, 
          age_max = age + 3)
@@ -96,7 +95,7 @@ dat_change <- dat_ext_event %>%
 # visualise consistency ---------------------------------------------------
 
 # create plot
-plot_cons <- dat_temp %>%
+plot_cons <-dat_temp %>%
   filter(between(age, 0, 150)) %>% 
   ggplot(aes(x = age, y = temp)) +
   geom_line(aes(colour = temp), 
@@ -108,8 +107,8 @@ plot_cons <- dat_temp %>%
              fill = alpha("white", 0.4)) +
   geom_text(aes(label = n),
             position = position_nudge(x = c(3, 1.5, 4, 
-                                            1, -7, 3, 3), 
-                                      y = c(2, 2.2, 2.2, 2, -0.7, 2.1, 3)),
+                                            -7, 3, 3), 
+                                      y = c(2, 2.2, 2, -0.7, 2.1, 3)),
             size = 10/.pt, 
             colour = "grey50",
             data = dat_change) +
