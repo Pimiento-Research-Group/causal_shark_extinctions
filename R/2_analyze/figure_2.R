@@ -76,6 +76,22 @@ dat_family <- read_rds(here(here("data",
 load(here("data", 
           "stages.Rdata"))
 
+# time of extinction per taxa
+dat_ext <- read_delim(here("data", 
+                           "fossil_occurrences", 
+                           "combined_10_se_est_species_names.txt")) %>% 
+  select(species, te) %>% 
+  mutate(te = abs(te))
+
+
+# type of modern IUCN threat
+dat_threat <- read_rds(here("data",
+                            "iucn",
+                            "threat_per_spp.rds")) %>% 
+  # extract category of threat
+  mutate(threat = word(code, 1, sep = "\\.")) %>% 
+  select(-c(url_id, name, invasive))
+
 
 # temperature-extinction relationship -------------------------------------
 
@@ -202,61 +218,189 @@ plot_logit
 
 
 
-# logit per family --------------------------------------------------------
+
+# major extinctions -------------------------------------------------------
+
+# extract time of major extinctions from literature
+dat_ext_time <- tibble(age = c((95.95 - 83.35) / 2 + 83.35,
+                               (73.55 - 71.75) / 2 + 71.75,
+                               (66.95 - 65.75) / 2 + 65.75,
+                               (38.25 - 33.55) / 2 + 33.55,
+                               19,
+                               (3.75 - 0) / 2 + 0), 
+                       ext_event = paste0("event", 1:6)) %>% 
+  # add equally-spaced buffer to calculate number of extinctions
+  mutate(age_min = age - 3, 
+         age_max = age + 3)
+
+# number of extinctions per event
+dat_ext_event <- dat_ext_time %>%
+  # create sequence for fuzzy matching
+  mutate(age_seq = map2(age_min, 
+                        age_max, 
+                        ~seq(.x, .y, by = 0.0001))) %>% 
+  select(ext_event, te = age_seq) %>% 
+  unnest(te) %>% 
+  # match with extinction
+  right_join(mutate(dat_ext, 
+                    te = round(te, 1))) %>% 
+  drop_na(ext_event) %>% 
+  count(ext_event) %>% 
+  # get age of event
+  left_join(dat_ext_time %>% 
+              select(age_ext = age, ext_event)) %>% 
+  # get closest temperature value of event
+  left_join(dat_temp, join_by(closest(age_ext >= age)))
 
 
-  
-plot_fam <- dat_family %>%
-  mutate(family = fct_reorder(family, value)) %>% 
-  arrange(endo) %>% 
-  ggplot(aes(y = family, 
-             x = value)) +
-  geom_vline(xintercept = 0, 
-             linetype = "dotted", 
-             colour = colour_grey) +
-  geom_linerange(aes(xmin = .lower, 
-                     xmax = .upper), 
-                 colour = "grey75", 
-                 linewidth = 0.1) +
-  geom_point(aes(fill = endo), 
-             size = 2, 
-             shape = 21, 
-             colour = "white") +
-  scale_fill_manual(values = c("grey60", 
-                               "#FFBE62"), 
-                    name = NULL, 
-                    labels = rev) +
-  scale_x_continuous("Temperature dependancy\n[log-odds]", 
-                     expand = expansion(mult = c(0.1, 0)), 
-                     breaks = c(-4, -2, 0)) +
-  scale_y_discrete("Families", 
-                   expand = expansion(mult = c(0.04, 0.02)), 
-                   limits = rev) +
-  guides(size = "none", 
-         fill = guide_legend(nrow = 1, 
-                             reverse = TRUE)) +
-  coord_flip() +
-  theme(legend.position = c(0.5, 0.95), 
-        axis.ticks.x = element_blank(), 
-        axis.text.x = element_blank(), 
-        legend.text = element_text(colour = "grey20", 
-                                   size = 9))
+# calculate change in temperature to previous bin
+dat_change <- dat_ext_event %>%
+  mutate(age_seq = map(age, 
+                       ~seq(.x+10, .x, by = -0.0001))) %>% 
+  unnest(age_seq) %>% 
+  select(ext_event, age = age_seq) %>% 
+  right_join(dat_temp) %>% 
+  drop_na(ext_event) %>% 
+  group_by(ext_event) %>% 
+  nest() %>% 
+  mutate(temp_change_model = map(data,
+                                 ~ lm(temp ~ age, data = .x)),
+         temp_change = map_dbl(temp_change_model,
+                               ~ -coef(.x)[2])) %>% 
+  select(ext_event, temp_change) %>% 
+  full_join(select(dat_ext_event, 
+                   ext_event, n, temp, age)) %>% 
+  select(ext_event, age, n, temp, temp_change) %>% 
+  ungroup()
 
-plot_fam
+
+
+# create plot
+plot_cons <-dat_temp %>%
+  filter(between(age, 0, 150)) %>% 
+  ggplot(aes(x = age, y = temp)) +
+  geom_line(aes(colour = temp), 
+            linewidth = 1) +
+  geom_point(aes(size = n, 
+                 shape = temp_change >= 0), 
+             data = dat_change, 
+             colour = "grey20", 
+             fill = alpha("white", 0.4)) +
+  geom_text(aes(label = n),
+            position = position_nudge(x = c(3, 1.5, 4, 
+                                            -7, 3, 3), 
+                                      y = c(2, 2.2, 2, -0.7, 2.1, 3)),
+            size = 10/.pt, 
+            colour = "grey50",
+            data = dat_change) +
+  annotate("text", 
+           x = 115, 
+           y = 8, 
+           label = "# Extinctions", 
+           colour = "grey70", 
+           size = 10/.pt) +
+  scale_shape_manual(values = c(25, 24), 
+                     name = NULL, 
+                     labels = c("Cooling", 
+                                "Warming")) +
+  scale_color_gradient2(high = "coral", 
+                        mid = "#97B9C1",
+                        low = "#698BAB", 
+                        midpoint = 13, 
+                        guide = "none") +
+  scale_size(range = c(2, 7), 
+             guide = "none") +
+  scale_x_reverse() +  
+  scale_y_continuous(limits = c(-1, 23), 
+                     breaks = seq(0, 20, by = 5)) +
+  labs(x = "Million years", 
+       y = "Global Temperature [°C]") +
+  coord_geo(xlim = c(150, 0), 
+            dat = list("epochs", "periods"),
+            pos = list("b", "b"),
+            alpha = 0.2, 
+            height = unit(0.8, "line"), 
+            size = list(5/.pt, 9/.pt),
+            lab_color = "grey20", 
+            color = "grey50", 
+            abbrv = list(TRUE, FALSE), 
+            fill = "white",
+            expand = TRUE, 
+            lwd = list(0.1, 0.2)) +
+  theme(legend.position = c(0.2, 0.2), 
+        legend.text = element_text(colour = "grey40"))
+
+plot_cons
+
+
+# modern threats ----------------------------------------------------------
+
+
+# set up vector
+vec_prop <- vector("double", 11)
+
+for (i in 1:11) {
+  vec_prop[[i]] <- dat_threat %>% 
+    group_by(scientific_name) %>% 
+    distinct(threat) %>% 
+    filter(threat == i) %>% 
+    {{ nrow(.) / length(unique(dat_threat$scientific_name))}} 
+}
+
+# make to dataframe
+dat_prop <- vec_prop %>% 
+  enframe(name = "threat", 
+          value = "perc_af") %>%
+  # https://www.iucnredlist.org/resources/threat-classification-scheme
+  mutate(threat_str = case_when(
+    threat == 1 ~ "Habitat loss", 
+    threat == 5 ~ "Exploitation",
+    threat == 9 ~ "Pollution",
+    threat == 11 ~ "Climate change",
+    .default = "other"
+  ))
+
+# plot
+plot_prop <- dat_prop %>%
+  filter(threat_str != "other") %>% 
+  mutate(threat_str = fct_reorder(threat_str, perc_af)) %>% 
+  ggplot(aes(threat_str, perc_af, 
+             fill = threat == 11)) +
+  geom_col() +
+  geom_text(aes(label = threat_str, 
+                colour = threat_str), 
+            angle = 90, 
+            size = 8/.pt, 
+            position = position_nudge(y = c(0.3, -0.5, 0.21, 0.35))) +
+  labs(y = "Modern Threats", 
+       x = NULL) +
+  scale_y_continuous(breaks = c(0, 0.5, 1), 
+                     labels = c("0", 
+                                "50", 
+                                "100")) +
+  scale_fill_manual(values = c("grey", "#138086ff")) +
+  scale_colour_manual(values = c("grey", "#138086ff", "grey", "white")) +
+  theme(axis.text.x = element_blank(),
+        legend.position = "none", 
+        panel.background = element_rect(colour = "grey40", 
+                                        fill = NULL))
+
+plot_prop
 
 # patch together and save -------------------------------------------------
 
 plot_full <- plot_temp /
   plot_logit /
-  plot_fam +
+  (plot_cons +
+  inset_element(plot_prop, 0.7, 0.65, 1, 1)) +
   plot_annotation(tag_levels = "a")
 
 
 # save plot
 ggsave(plot_full, filename = here("figures",
-                                  "figure_2.png"),
+                                  "figure_2.svg"),
        width = image_width, height = image_height*2,
        units = image_units,
-       bg = "white", device = ragg::agg_png)
+       bg = "white")
 
 
