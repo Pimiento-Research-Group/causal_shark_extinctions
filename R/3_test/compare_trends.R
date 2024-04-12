@@ -2,7 +2,7 @@
 library(tidyverse)
 library(here)
 library(tidybayes)
-
+library(patchwork)
 
 # plotting configurations
 source(here("R", "config_file.R"))
@@ -77,13 +77,15 @@ dat_ceno <- list.files(here("data",
 
 # visualise ---------------------------------------------------------------
 
-
-# create plot
-plot_beta <- dat_main %>%
+# prepare data
+dat_plot <- dat_main %>%
   # merge
   full_join(dat_genus) %>%
   full_join(dat_ceno) %>% 
-  filter(coef_name != "Paleotemperature") %>% 
+  filter(coef_name != "Paleotemperature")
+
+# create plot
+plot_beta <- dat_plot %>%
   ggplot(aes(y = data_source, coef_val, 
              colour = data_source)) +
   geom_vline(xintercept = 0) +
@@ -101,13 +103,43 @@ plot_beta <- dat_main %>%
   theme(panel.border = element_rect(linewidth = 1, 
                                     colour = "grey80", 
                                     fill = NA), 
-        legend.position = "bottom")
+        legend.position = "top")
 
+
+
+# second plot -------------------------------------------------------------
+
+# averaged effect
+plot_smr <- dat_plot %>% 
+  ggplot(aes(y = coef_name, coef_val)) +
+  geom_vline(xintercept = 0) +
+  stat_pointinterval(shape = 21, 
+                     point_fill = "white", 
+                     point_size = 3) +
+  geom_label(aes(label = coef_name, 
+                x = median_point, 
+                y = coef_name),
+             size = 10/.pt,
+            position = position_nudge(y = 0.4), 
+            data = dat_plot %>% 
+              group_by(coef_name) %>% 
+              summarise(median_point = median(coef_val, 
+                                           na.rm = TRUE))) +
+  scale_y_discrete(breaks = NULL) +
+  scale_x_continuous() +
+  expand_limits(y = c(0, 5)) +
+  labs(y = NULL, 
+       x = NULL) 
+
+
+# patch together
+plot_final <- plot_beta/ plot_smr + plot_annotation(tag_levels = "a")
 
 # save plot
-ggsave(plot_beta, filename = here("figures",
+ggsave(plot_final, filename = here("figures",
+                                   "supplement",
                                    "beta_plot.png"), 
-       width = image_width, height = image_height,
+       width = image_width, height = image_height*1.5,
        units = image_units, 
        bg = "white", device = ragg::agg_png)
 
