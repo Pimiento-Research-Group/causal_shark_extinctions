@@ -95,7 +95,7 @@ plot_2 <- dat_occurrences %>%
 # add as inset
 plot_final <- plot_1 +
   inset_element(plot_2, -0.02, 0, 1.035, 0.26) +
-  plot_annotation(tag_level = "a")
+  plot_annotation(tag_level = "A")
 
 # save plot
 ggsave(plot_final, filename = here("figures",

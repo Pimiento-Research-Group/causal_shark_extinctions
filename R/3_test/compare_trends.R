@@ -133,7 +133,7 @@ plot_smr <- dat_plot %>%
 
 
 # patch together
-plot_final <- plot_beta/ plot_smr + plot_annotation(tag_levels = "a")
+plot_final <- plot_beta/ plot_smr + plot_annotation(tag_levels = "A")
 
 # save plot
 ggsave(plot_final, filename = here("figures",
