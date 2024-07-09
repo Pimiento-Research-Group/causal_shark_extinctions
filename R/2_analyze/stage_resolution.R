@@ -54,12 +54,14 @@ mod7 <- brm_logistic("ext_signal ~ temp_gat_binned + temp_gat_st:temp_gat_lt3")
 mod8 <- brm_logistic("ext_signal ~ temp_gat_binned + temp_gat_st:temp_gat_lt4")
 
 
-# save global average temperature models for reuse later
-list(mod5, mod6, 
-     mod7, mod8) %>% 
-  write_rds(here("data", 
-                 "fossil_temp_models.rds"), 
-            compress = "gz")
+# # save global average temperature models for reuse later
+# list(mod1, mod2, 
+#      mod3, mod4,
+#      mod5, mod6, 
+#      mod7, mod8) %>% 
+#   write_rds(here("data", 
+#                  "fossil_temp_models.rds"), 
+#             compress = "gz")
 
 
 
@@ -109,6 +111,33 @@ dat_pred %>%
                  "pred_temperature_stage.rds"), 
             compress = "gz")
 
+# calculate marginal effect by model stacking
+dat_deep <- posterior_average(mod1, mod2, mod3, mod4, 
+                              seed = 1708,
+                              ndraws = nr_draws)
+
+dat_gat <- posterior_average(mod5, mod6, mod7, mod8, 
+                             seed = 1708,
+                             ndraws = nr_draws)
+# average
+dat_change <- dat_deep %>% 
+  as_tibble() %>% 
+  rename(b_temp = b_temp_deep_binned) %>% 
+  bind_rows(dat_gat %>% 
+              as_tibble() %>% 
+              rename(b_temp = b_temp_gat_binned)) %>% 
+  mutate(prob_change = plogis(b_temp  + 1) - plogis(b_temp)) %>% 
+  mean_qi(prob_change)
+
+
+
+dat_gat_change <- dat_gat %>% 
+  as_tibble() %>% 
+  mutate(prob_change = plogis(b_temp_gat_binned  + 1) - plogis(b_temp_gat_binned)) %>% 
+  summarise(avg_change = mean(prob_change)) %>% 
+  pull(avg_change)
+
+(dat_deep_change + dat_gat_change)/ 2
 
 # average over posterior draws
 dat_pred_av <- dat_pred %>% 
