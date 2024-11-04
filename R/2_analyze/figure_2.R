@@ -146,15 +146,15 @@ plot_logit <- dat_pred_full %>%
                                       "1myr"))) %>% 
   ggplot(aes(myr, value, group = data_set)) +
   annotate("rect", 
-           xmin = stages$bottom[c(81, 87)], 
-           xmax = stages$top[c(81, 87)], 
+           xmin = stages$bottom[c(82, 88, 90)], 
+           xmax = stages$top[c(82, 88, 90)], 
            ymin = -Inf, 
            ymax = Inf, 
            fill = "#169199", 
            alpha = 0.2) + 
   annotate("rect", 
-           xmin = stages$bottom[c(76, 83, 91)], 
-           xmax = stages$top[c(76, 83, 91)], 
+           xmin = stages$bottom[c(74, 76, 84)], 
+           xmax = stages$top[c(74, 76, 84)], 
            ymin = -Inf, 
            ymax = Inf, 
            fill = "#C75E6B", 

@@ -16,8 +16,8 @@ data(stages, package = "divDyn")
 dat_fossil <- read_rds(here("data",
                             "processed_merged_data.rds")) %>% 
   # assign thermal status
-  mutate(therm_stat = case_when(bin %in% c(81, 87) ~ "Hypothermal",
-                                bin %in% c(76, 83, 91) ~ "Hyperthermal",
+  mutate(therm_stat = case_when(bin %in% c(82, 88, 90) ~ "Hypothermal",
+                                bin %in% c(74, 76, 84) ~ "Hyperthermal",
                                 .default = "Background")) %>% 
   filter(therm_stat != "Background")
 
@@ -25,8 +25,8 @@ dat_fossil <- read_rds(here("data",
 dat_genus <- read_rds(here("data",
                            "processed_fossil_data_genus.rds")) %>% 
   # assign thermal status
-  mutate(therm_stat= case_when(bin %in% c(81, 87) ~ "Hypothermal",
-                               bin %in% c(76, 83, 91) ~ "Hyperthermal",
+  mutate(therm_stat= case_when(bin %in% c(82, 88, 90) ~ "Hypothermal",
+                               bin %in% c(74, 76, 84) ~ "Hyperthermal",
                                .default = "Background")) %>% 
   filter(therm_stat != "Background")
 
@@ -35,8 +35,8 @@ dat_genus <- read_rds(here("data",
 dat_ceno <- read_rds(here("data",
                           "processed_fossil_data_cenozoic.rds")) %>% 
   # assign thermal status
-  mutate(therm_stat = case_when(bin %in% c(66:72, 34:38) ~ "Hypothermal",
-                                 bin %in% c(94:101, 56:62, 12:16) ~ "Hyperthermal",
+  mutate(therm_stat = case_when(bin %in% c(27:34, 15:23) ~ "Hypothermal",
+                                 bin %in% c(61:66, 93:100, 114:121) ~ "Hyperthermal",
                                  .default = "Background")) %>% 
   filter(therm_stat != "Background")
 
@@ -88,15 +88,22 @@ risk_ceno <- tibble(therm_stat = c("Hypothermal",
 
 # visualise ---------------------------------------------------------------
 
-dat_thermal <- risk_fossil %>% 
-  bind_rows(risk_genera) %>% 
-  bind_rows(risk_ceno) 
-  # %>% select(therm_stat, .epred, scale) %>%
-  # pivot_wider(names_from = therm_stat,
-  #             values_from = .epred) %>%
-  # mutate(perc_inc = (Hypothermal - Hyperthermal)/ Hypothermal) %>% 
-  # median_qi(perc_inc)
+dat_thermal <- risk_fossil %>%
+  bind_rows(risk_genera) %>%
+  bind_rows(risk_ceno) %>% 
+  select(therm_stat, .epred, scale) %>%
+  pivot_wider(names_from = therm_stat,
+              values_from = .epred) %>%
+  mutate(perc_inc = (Hypothermal - Hyperthermal)/ Hypothermal) %>%
+  median_qi(perc_inc)
   
+
+# change in logit
+-((fixef(mod_fossil)[2, ] +  fixef(mod_fossil)[1, ]) -  fixef(mod_fossil)[1, ])/ (fixef(mod_fossil)[2, ] +  fixef(mod_fossil)[1, ])
+
+-((fixef(mod_genus)[2, ] +  fixef(mod_genus)[1, ]) -  fixef(mod_genus)[1, ])/ (fixef(mod_genus)[2, ] +  fixef(mod_genus)[1, ])
+
+-((fixef(mod_ceno)[2, ] +  fixef(mod_ceno)[1, ]) -  fixef(mod_ceno)[1, ])/ (fixef(mod_ceno)[2, ] +  fixef(mod_ceno)[1, ])
 
 # save data
 dat_thermal %>% 
@@ -105,7 +112,8 @@ dat_thermal %>%
                  "thermal_plot_data.rds"))
   
 # plot
-plot_thermal <- dat_thermal %>% 
+# plot_thermal <-
+dat_thermal %>% 
   ggplot(aes(therm_stat)) +
   geom_linerange(aes(ymin = .lower, 
                      ymax = .upper, 
