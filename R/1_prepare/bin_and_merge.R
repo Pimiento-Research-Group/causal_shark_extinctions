@@ -270,7 +270,7 @@ dat_ext <- read_delim(here("data",
 # load occurrence database
 dat_occurrences <- read_rds(here("data",
                                  "fossil_occurrences",
-                                 "database_occurrences_15_Apr_2023.rds"))
+                                 "database_occurrences_13_Sept_2024.rds"))
 
 # bin the occurrences to stages
 dat_occ_binned <- dat_occurrences %>% 
