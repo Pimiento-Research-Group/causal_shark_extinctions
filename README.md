@@ -3,7 +3,7 @@ This is the repo for the current project from the Pimiento lab under the lead of
 
 ## To do  
 
-- [ ] Update data readme
+- [X] Update data readme
 - [X] Calculate geographic range per bin
 - [X] Repeat analysis with 1 myr bins
 - [X] Use unambiguous taxonomic names
@@ -13,4 +13,4 @@ This is the repo for the current project from the Pimiento lab under the lead of
 - [X] Repeat analysis with Superorders
 - [X] Omit the last temporal stage 
 - [X] Calculate log-odds for temperature per bin by using a mixed effect model
-- [ ] Clean-up and streamline according to temperature analysis
+- [X] Clean-up and streamline according to temperature analysis
