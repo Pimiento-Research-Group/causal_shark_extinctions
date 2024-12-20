@@ -1,6 +1,14 @@
 # Environmental shark extinction drivers
 This is the repo for the current project from the Pimiento lab under the lead of G. Mathes, where we try to estimate the true (unbiased) effect of various environmental parameters on shark extinction risk using a newly compiled database of fossil shark occurrences. 
 
+## Related manuscript
+**Climate change drives neoselachian extinctions over geological timescales**  
+
+*Gregor H. Mathes<sup>1</sup>, Daniele Silvestro, Kristína Kocáková, Jaime Villafaña, Catalina Pimiento*
+  
+<sup>1</sup>Corresponding author
+
+
 ## To do  
 
 - [X] Update data readme
