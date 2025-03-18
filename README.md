@@ -8,6 +8,40 @@ This is the repo for the current project from the Pimiento lab under the lead of
   
 <sup>1</sup>Corresponding author
 
+# Causal Shark Extinctions Analysis
+
+## Software Dependencies and Operating Systems
+The analyses in this study were conducted in **R version 4.2.2**. The primary statistical modeling was performed using the **brms R package (version 2.19.0)** for Bayesian regression modeling. Other R packages used include:
+- **dagitty (version 0.3.1)** for causal diagram analysis.
+- **ggm (version 2.5)** for partial correlation testing.
+- **PyRate** for estimating preservation potential and extinction risk.
+
+**Operating system:**  
+The code has been tested on **Windows 10 and 11**.
+
+## Versions the Software Has Been Tested On
+- **R version:** 4.2.2  
+- **brms:** 2.19.0  
+- **dagitty:** 0.3.1  
+- **ggm:** 2.5  
+- **PyRate:** Latest stable release (2024)  
+
+## Required Non-Standard Hardware
+- No non-standard hardware is required. The analysis can be run on a standard personal computer with **at least 8GB of RAM**.
+
+## Installation Guide
+1. Install **R (4.2.2 or higher)** from [CRAN](https://cran.r-project.org/).
+2. Install **Stan** backend for Bayesian modeling if not already installed.
+3. Install the necessary R packages by running the following commands:
+   ```r
+   install.packages("brms")
+   install.packages("dagitty")
+   install.packages("ggm")
+   ```
+
+Install PyRate following instructions from [PyRate's official repository](https://github.com/dsilvestro/PyRate).
+
+
 
 ## To do  
 
